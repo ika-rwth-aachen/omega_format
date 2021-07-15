@@ -1,0 +1,6 @@
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - -e .[complete]
+      - pydantic

@@ -1,0 +1,72 @@
+import numpy as np
+import pyqtgraph as pg
+from PyQt5 import QtWidgets, QtGui
+
+from .base import VisualizationModule, SnippetContainer
+from ...perception import Sensor
+from ...timestamps import Timestamps
+
+
+class VisualizePercSensors(VisualizationModule):
+
+    def __init__(self, **kwargs):
+        super().__init__("Perception: Sensors FOV", **kwargs)
+        self.requires = [SnippetContainer.REQ_PERCEPTION]
+
+    def visualize_dynamics(self, snip, timestamp: Timestamps, visualizer):
+        if snip.identifier != 'only_perception' and not snip.reference.ego_vehicle.in_timespan(timestamp, timestamp):
+            return []
+
+        items = []
+
+        if snip.identifier != 'only_perception':
+            ego_obj = snip.reference.ego_vehicle
+            ego_index = timestamp - ego_obj.birth
+
+            ego_x = ego_obj.tr.pos_x[ego_index]
+            ego_y = ego_obj.tr.pos_y[ego_index]
+            ego_h = ego_obj.tr.heading[ego_index]
+
+        for id_, sensor in snip.perception.sensors.items():  # type: int, Sensor
+            offset_x = sensor.sensor_pos_lateral
+            offset_y = sensor.sensor_pos_longitudinal
+
+            heading = sensor.sensor_heading
+            dist_min = sensor.min_range
+            dist_max = sensor.max_range
+            fov_horizontal = sensor.fov_horizontal
+            fov_vertical = sensor.fov_vertical
+
+            start_angle = -fov_horizontal
+            span_angle = fov_horizontal * 2
+
+            artist = QtWidgets.QGraphicsEllipseItem(-dist_max / 2, -dist_max / 2, dist_max, dist_max)
+            artist.setStartAngle(start_angle * 16)
+            artist.setSpanAngle(span_angle * 16)
+
+            color = '#ffffff'
+            pen = pg.mkPen(color, width=1)
+            brush = pg.mkBrush(color + '44')
+
+            artist.setPen(pen)
+            artist.setBrush(brush)
+
+            center_point = artist.boundingRect().center()
+            artist.translate(-center_point.x(), -center_point.y())
+            if snip.identifier != 'only_perception':
+                artist.setRotation(heading + ego_h);
+            else:
+                artist.setRotation(heading);
+            artist.translate(center_point.x(), center_point.y())
+
+            if snip.identifier != 'only_perception':
+                new_x = np.multiply(offset_x, np.cos(np.deg2rad(ego_h))) - np.multiply(offset_y, np.sin(np.deg2rad(ego_h))) + ego_x
+                new_y = np.multiply(offset_x, np.sin(np.deg2rad(ego_h))) + np.multiply(offset_y, np.cos(np.deg2rad(ego_h))) + ego_y
+                artist.translate(new_x, new_y)
+            else:
+                artist.translate(offset_x, offset_y)
+
+            items.append(artist)
+
+
+        return items

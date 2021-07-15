@@ -523,3 +523,10 @@ def get_versions():
     return {"version": "0+unknown", "full-revisionid": None,
             "dirty": None,
             "error": "unable to compute version", "date": None}
+
+
+def get_versions_with_clean():
+    ret = get_versions()
+    ret['clean_version'] = ret['version'].split('+')[0]
+    # TODO: In production set clean version to version
+    return ret

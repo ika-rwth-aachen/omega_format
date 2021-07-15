@@ -3,12 +3,13 @@ import os
 from enum import Enum, IntEnum
 from pathlib import Path
 
-import perception_types as PerceptionTypes
-import reference_types as ReferenceTypes
+from . import perception_types as PerceptionTypes
+from . import reference_types as ReferenceTypes
+
 
 def relevant_enum_classes(module):
     return [getattr(module, cls_name) for cls_name in dir(module)
-            if not cls_name.startswith('_') and not cls_name in ['Enum', 'IntEnum'] and issubclass(getattr(module, cls_name), Enum)]
+            if not cls_name.startswith('_') and not cls_name in ['Enum', 'IntEnum', 'get_versions_with_clean'] and issubclass(getattr(module, cls_name), Enum)]
 
 
 def enum2c(obj, c_name='VVM'):
@@ -46,7 +47,7 @@ def save_as_json_file(module, filename):
     print('saved {} file'.format(filename))
 
 
-def main():
+def generate_enums():
     save_as_json_file(PerceptionTypes, 'perception_types.json')
     save_as_json_file(ReferenceTypes, 'reference_types.json')
     save_as_c(PerceptionTypes, 'perception_types.h')

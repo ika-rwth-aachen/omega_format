@@ -1,19 +1,23 @@
 from enum import Enum, IntEnum
+from .._version import get_versions_with_clean
 
 
 class ReferenceTypesSpecification(Enum):
-    FORMAT_VERSION = 'v3.0'  # todo: use __clean_version_ here
+    FORMAT_VERSION = get_versions_with_clean()['clean_version']
+
 
 class RecorderNumber(IntEnum):
     AVL = 1
     IKA = 2
     DLR = 3
 
+
 class RoadLocation(IntEnum):
         TODO = 0
         URBAN = 1
         NON_URBAN = 2
         HIGHWAY = 3
+
 
 class LaneType(IntEnum):
     TODO = 0
@@ -34,6 +38,7 @@ class LaneType(IntEnum):
     VEGETATION = 15
     FREESPACE = 16
 
+
 class LaneSubType(IntEnum):
     TODO = 0
     BRIDGE = 1
@@ -44,6 +49,7 @@ class LaneClass(IntEnum):
     NONE = 0
     INTERSECTION = 1
     ROUNDABOUT = 2
+
 
 class BoundaryType(IntEnum):
     TODO = 0

@@ -25,8 +25,6 @@ visualization_available = importlib.util.find_spec("PyQt5") is not None and \
 if visualization_available:
     from . import visualization as vis
 
-
-from ._version import get_versions
-__version__ = get_versions()['version']
-__clean_version__ = __version__.split('+')[0]
-del get_versions
+from ._version import get_versions_with_clean
+__version__, __clean_version__ = [get_versions_with_clean()[v] for v in ['version', 'clean_version']]
+del get_versions_with_clean

@@ -7,6 +7,7 @@ import typer
 sys.path.append(str(Path(__file__).parent.parent.resolve()))
 from omega_format.reference_recording import ReferenceRecording
 from omega_format.perception_recording import PerceptionRecording
+from omega_format.enums import generate_enums
 from pathlib import Path
 
 import importlib.util
@@ -90,6 +91,7 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
         else: 
             typer.echo(typer.style(f'The OMEGA Format perception file {reference} conforms to the specification and passes basic sanity checks.', fg=typer.colors.GREEN, bold=True))
 
+
 @app.command("version")
 def version():
     """
@@ -99,6 +101,7 @@ def version():
     print(omega_format.__version__)
     return omega_format.__version__
 
+
 @app.command("clean-version")
 def version():
     """
@@ -107,6 +110,12 @@ def version():
     import omega_format
     print(omega_format.__clean_version__)
     return omega_format.__clean_version__
+
+
+@app.command('generate_c_headers_and_json', help='Generate .h and .json from python enums.')
+def _generate_enums():
+    generate_enums()
+
 
 if __name__ == "__main__":
     app()

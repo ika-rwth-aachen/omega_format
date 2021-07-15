@@ -1,6 +1,6 @@
 ---
 
-# Specification OMEGA Format - Reference Datagit 
+# Specification OMEGA Format - Reference Data 
 
 ---
 
@@ -16,7 +16,6 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 
 ## Inhaltsverzeichnis
 
-[[_TOC_]]
 
 **Versionen**
 | Name | Datum | Version | Kurzbeschreibung |

@@ -3,14 +3,13 @@ This module is developed by [ika - RWTH Aachen](https://www.ika.rwth-aachen.de/d
 
 As part of the project a data format for storing reference and perception data from pilotings, test drives and simulation in urban traffic is developed. This module enables the creation, reading and visualization of data conforming to this data format. Additionally, it can check files for conformance and perform basic sanity checks on the data.
 
-[[_TOC_]]
 
 # Data Format
 The base of both, the reference data format and the perception data format is the [HDF5](https://www.hdfgroup.org/solutions/hdf5) file format. This library utilizes [h5py](https://www.h5py.org/) to interact with those.
 
 ## Reference Data
 The `OMEGA Format reference recording` format is used to store data that represents the 'true' state of road users, infrastructure information, weather and more during a piloting, testing or simulation. The representation is on an object list basis.
-The following diagram shows an overview of the hierarchy in the `OMEGA Format reference recording` format. A more detailed description can be found in the [specification document](./doc/specification.md) and the [signal list](./doc/signal_list_reference.md)
+The following diagram shows an overview of the hierarchy in the `OMEGA Format reference recording` format. A more detailed description can be found in the [specification document](./doc/specification.md) and the [signal list](./doc/signal_list_reference.md).
 
 ![](./reference_hierarchy.PNG)
 
@@ -90,8 +89,6 @@ rr.road_users[0] = omega_format.RoadUser(type=omega_format.ReferenceTypes.RoadUs
                                     tr=omega_format.Trajectory(pos_x=np.array([0]),pos_y=np.array([0]),pos_z=np.array([0]),
                                                           roll=np.array([0]),pitch=np.array([0]),heading=np.array([0])))
 rr.roads[0] = omega_format.Road(location=omega_format.ReferenceTypes.RoadLocation.URBAN)
-...
-# This is just an example, `to_hdf5` will not work since the data is not complete
 rr.to_hdf5('test.hdf5')
 ```
 # Further Help

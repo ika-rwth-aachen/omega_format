@@ -51,7 +51,7 @@ add_library(omega_cpp_lib
 target_include_directories(omega_cpp_lib PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
-        PUBLIC src ../vvm_rec/enums)
+        PUBLIC src ../omega_format/enums)
 
 # If we have compiler requirements for this library, list them
 # here
@@ -79,7 +79,7 @@ install(EXPORT omega_cpp_lib-config DESTINATION share/OmegaCppLib/cmake)
 export(TARGETS omega_cpp_lib FILE omega_cpp_lib-config.cmake)
 
 # example usage
-add_executable(omega_cpp_example example.cpp)
-target_link_libraries(omega_cpp_example
-        omega_cpp_lib
-        h5cpp)
+# add_executable(omega_cpp_example example.cpp)
+# target_link_libraries(omega_cpp_example
+#        omega_cpp_lib
+#        h5cpp)

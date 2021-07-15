@@ -11,37 +11,13 @@ The base of both, the reference data format and the perception data format is th
 ## Reference Data
 The `OMEGA Format reference recording` format is used to store data that represents the 'true' state of road users, infrastructure information, weather and more during a piloting, testing or simulation. The representation is on an object list basis.
 The following diagram shows an overview of the hierarchy in the `OMEGA Format reference recording` format. A more detailed description can be found in the [specification document](./doc/specification.md) and the [signal list](./doc/signal_list_reference.md)
-```mermaid
-classDiagram
-    ReferenceRecording <-- "*" RoadUser
-    ReferenceRecording <-- "*" Road
-    ReferenceRecording <-- "*" MiscObject
-    ReferenceRecording <-- "*" State
-    ReferenceRecording <-- "0..1" Weather
 
-    Road <-- "*" Lane
-    Road <-- "*" LateralMarking
-    Road <-- "*" Border
-    Road <-- "*" RoadObject
-    Road <-- "*" StructuralObject
-    Road <-- "*" Sign
-
-    Lane <-- "*" Boundary
-    Lane <-- "*" FlatMarking
-    Lane <-- "0..1" Surface
-
-```
+![](./reference_hierarchy.PNG)
 
 ## Perception Data
 The `PerceptionRecording` format is used to store data that represents what a vehicle under test, sensor under test or similar perceives from its surroundings. It is designed to be compared against the `ReferenceRecording` format. The following diagram shows an overview of the hierarchy in the `PerceptionRecording` format. A more detailed description is coming soon.
-```mermaid
-classDiagram
-    PerceptionRecording <-- "1" MetaObject
-    PerceptionRecording <-- "*" Object
-    PerceptionRecording <-- "*" Sensor
-    PerceptionRecording <-- "*" MiscObject
 
-```
+![](./perception_hierarchy.PNG)
 
 # Installation
 The dependencies are managed with [conda environments](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html). Conda can be installed following the [conda installation instructions](https://docs.conda.io/en/latest/miniconda.html).

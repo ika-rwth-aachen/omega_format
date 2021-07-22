@@ -20,7 +20,7 @@
 #include "perception_types.h"
 
 #else
-#error Generated headers are missing. Generate them be executing the generate_enums.py in the vvm_recording_format/vvm_rec/enums directory.
+#error Generated headers are missing. Generate them be executing the generate_enums.py in the omega_format/enums directory.
 #endif
 
 #endif //VVM_DEFINITIONS_H

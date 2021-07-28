@@ -25,7 +25,9 @@ class ObjectClassification(BaseModel):
 
     @validator('confidence')
     def check_array_length(cls, v, values):
-        assert len(v) == len(values.get('val')), f"length of confidence array does not match classifications array"
+        if len(v) != len(values.get('val')):
+            warn('length of confidence array does not match array length for classification. This is only possible if confidence is of type not_provided')
+        # assert len(v) == len(values.get('val')), f"length of confidence array does not match classifications array"
         return v
 
     @classmethod

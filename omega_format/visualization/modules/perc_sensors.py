@@ -38,8 +38,8 @@ class VisualizePercSensors(VisualizationModule):
             fov_horizontal = sensor.fov_horizontal
             fov_vertical = sensor.fov_vertical
 
-            start_angle = -fov_horizontal
-            span_angle = fov_horizontal * 2
+            start_angle = -fov_horizontal/2
+            span_angle = fov_horizontal
 
             artist = QtWidgets.QGraphicsEllipseItem(-diameter / 2, -diameter / 2, diameter, diameter)
             artist.setStartAngle(start_angle * 16)

@@ -6,7 +6,7 @@ from h5py import Group
 
 from ..reference_resolving import raise_not_resolved
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from warnings import warn
 
 class Trajectory(BaseModel):
     class Config(PydanticConfig):
@@ -30,17 +30,13 @@ class Trajectory(BaseModel):
     heading_der: Optional[np.ndarray]
 
     @validator('*')  # the '*' means that this validator is applied to each member of Trajectory
-    def check_array_length(cls, v, values):
-
-        if not len(v) > 0:
-            raise ValueError('received trajectory with empty array')
-
+    def check_array_length(cls, v, values, **kwargs):
         if len(values) > 0:
             # first array would be validated if len(values)=0 -> no length to compare against
             # use the length of pos_x to check equality with other array length
             length = len(values.get('pos_x'))
             if len(v) != length:
-                raise ValueError(f'length of all trajectory arrays must match, expected len {len(v)}, actual len {length}')
+                raise ValueError(f'length of all trajectory arrays must match, expected len {length}, actual len {len(v)}')
         return v
 
     @validator('vel_longitudinal', 'vel_lateral')

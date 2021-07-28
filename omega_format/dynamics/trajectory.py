@@ -35,7 +35,7 @@ class Trajectory(BaseModel):
             # first array would be validated if len(values)=0 -> no length to compare against
             # use the length of pos_x to check equality with other array length
             length = len(values.get('pos_x'))
-            if len(v) != length:
+            if len(v) != length and len(v) > 0:
                 raise ValueError(f'length of all trajectory arrays must match, expected len {length}, actual len {len(v)}')
         return v
 

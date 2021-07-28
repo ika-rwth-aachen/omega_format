@@ -47,6 +47,7 @@ class SnippetContainer():
         elif self.perception is not None:
             self.timestamps = perception.timestamps.val
             self.identifier = 'only_perception'
+            self.convert_perception_coordinates_to_plot_coordinates()
         else:
             raise ValueError('Either `reference` or `perception` has to be set')
 
@@ -63,6 +64,18 @@ class SnippetContainer():
                 raise ValueError('`reference` and `perception` must be of the same length!')
         else:
             return [cls(reference=references, perception=perceptions)]
+
+    def convert_perception_coordinates_to_plot_coordinates(self):
+        for obj in self.perception.objects.values():  # type: Object
+            h = obj.heading.val
+            x = obj.dist_lateral.val
+            y = obj.dist_longitudinal.val
+            heading = 90
+            obj.heading.val += heading
+            obj.dist_lateral.val = np.multiply(x, np.cos(np.deg2rad(-heading))) - np.multiply(y, np.sin(np.deg2rad(-heading)))
+            obj.dist_longitudinal.val = np.multiply(x, np.sin(np.deg2rad(-heading))) + np.multiply(y, np.cos(np.deg2rad(-heading)))
+            obj.dist_longitudinal.val *= -1.
+            obj.dist_lateral.val *= -1.
 
     def convert_perception_coordinates_to_reference_coordinates(self):
          for obj in self.perception.objects.values():  # type: Object

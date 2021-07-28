@@ -1,4 +1,4 @@
-from pydantic.fields import Field
+from pydantic.fields import Field, Any
 
 from .dynamic_object import DynamicObject
 from .vehicle_lights import VehicleLights
@@ -11,8 +11,8 @@ from h5py import Group
 
 
 class RoadUser(DynamicObject):
-    type: ReferenceTypes.RoadUserType
-    sub_type: ReferenceTypes._RoadUserSubType
+    type: ReferenceTypes.RoadUserType = ReferenceTypes.RoadUserType.REGULAR
+    sub_type: Any = None # ReferenceTypes.RoadUserSubType
     connected_to: ReferenceElement = None
     is_data_recorder: bool = False
     vehicle_lights: VehicleLights = Field(default_factory=VehicleLights)
@@ -53,7 +53,8 @@ class RoadUser(DynamicObject):
         group.attrs.create('subtype', data=self.sub_type)
         if self.connected_to is not None:
             group.attrs.create('connectedTo', data=self.connected_to.reference)
-
+        else:
+            group.attrs.create('connectedTo', data=-1)
         self.bb.to_hdf5(group.create_group('boundBox'))
         self.tr.to_hdf5(group.create_group('trajectory'))
         self.vehicle_lights.to_hdf5(group.create_group('vehicleLights'))

@@ -11,12 +11,12 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 class Trajectory(BaseModel):
     class Config(PydanticConfig):
         pass
-    pos_x: np.ndarray
-    pos_y: np.ndarray
-    pos_z: np.ndarray
-    roll: np.ndarray
-    pitch: np.ndarray
-    heading: np.ndarray
+    pos_x: np.ndarray = np.array([], dtype=np.float64)
+    pos_y: np.ndarray = np.array([], dtype=np.float64)
+    pos_z: np.ndarray = np.array([], dtype=np.float64)
+    roll: np.ndarray = np.array([], dtype=np.float64)
+    pitch: np.ndarray = np.array([], dtype=np.float64)
+    heading: np.ndarray = np.array([], dtype=np.float64)
 
     vel_longitudinal: Optional[np.ndarray]
     vel_lateral: Optional[np.ndarray]

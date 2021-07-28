@@ -25,7 +25,7 @@ class ReferenceRecording(InputClassBase):
     Class that represents the OMEGA Format Reference Recording in an object-oriented manner.
     """
     meta_data: MetaData = Field(default_factory=MetaData)
-    timestamps: Timestamps = None
+    timestamps: Timestamps = Field(default_factory=Timestamps)
     ego_id: Optional[int] = None
     ego_vehicle: Optional[RoadUser] = None
     weather: Weather = None

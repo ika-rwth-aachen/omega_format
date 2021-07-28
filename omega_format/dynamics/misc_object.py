@@ -1,4 +1,5 @@
 from h5py import Group
+from pydantic.fields import Field
 
 from .dynamic_object import DynamicObject
 from ..enums import ReferenceTypes
@@ -8,8 +9,8 @@ from .bounding_box import BoundingBox
 
 
 class MiscObject(DynamicObject):
-    type: ReferenceTypes.MiscObjectType
-    sub_type: ReferenceTypes.MiscObjectSubType
+    type: ReferenceTypes.MiscObjectType = Field(default_factory=ReferenceTypes.MiscObjectType)
+    sub_type: ReferenceTypes.MiscObjectSubType = Field(default_factory=ReferenceTypes.MiscObjectSubType)
 
     @classmethod
     def from_hdf5(cls, group: Group, validate=True):

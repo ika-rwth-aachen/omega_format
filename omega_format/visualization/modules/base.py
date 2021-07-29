@@ -87,8 +87,9 @@ class SnippetContainer():
             x = obj.dist_lateral.val
             y = obj.dist_longitudinal.val
             obj.heading.val = h+ego_h
-            obj.dist_lateral.val = np.multiply(x, np.cos(np.deg2rad(ego_h))) - np.multiply(y, np.sin(np.deg2rad(ego_h)))+ego_x
-            obj.dist_longitudinal.val = np.multiply(x, np.sin(np.deg2rad(ego_h))) + np.multiply(y, np.cos(np.deg2rad(ego_h)))+ego_y
+            heading = ego_h + 270
+            obj.dist_lateral.val = np.multiply(x, np.cos(np.deg2rad(heading))) - np.multiply(y, np.sin(np.deg2rad(heading)))+ego_x
+            obj.dist_longitudinal.val = np.multiply(x, np.sin(np.deg2rad(heading))) + np.multiply(y, np.cos(np.deg2rad(heading)))+ego_y
 
     def adjust_perception_object_birth_stamps(self):
         ego_time_offset = self.reference.ego_vehicle.birth

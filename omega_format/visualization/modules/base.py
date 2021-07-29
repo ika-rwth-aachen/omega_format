@@ -70,12 +70,10 @@ class SnippetContainer():
             h = obj.heading.val
             x = obj.dist_lateral.val
             y = obj.dist_longitudinal.val
-            heading = 90
-            obj.heading.val += heading
-            obj.dist_lateral.val = np.multiply(x, np.cos(np.deg2rad(-heading))) - np.multiply(y, np.sin(np.deg2rad(-heading)))
-            obj.dist_longitudinal.val = np.multiply(x, np.sin(np.deg2rad(-heading))) + np.multiply(y, np.cos(np.deg2rad(-heading)))
-            obj.dist_longitudinal.val *= -1.
-            obj.dist_lateral.val *= -1.
+            heading = 180
+            obj.heading.val += heading/2
+            obj.dist_lateral.val = - np.multiply(x, np.cos(np.deg2rad(heading))) + np.multiply(y, np.sin(np.deg2rad(heading)))
+            obj.dist_longitudinal.val = - np.multiply(x, np.sin(np.deg2rad(heading))) - np.multiply(y, np.cos(np.deg2rad(heading)))
 
     def convert_perception_coordinates_to_reference_coordinates(self):
          for obj in self.perception.objects.values():  # type: Object

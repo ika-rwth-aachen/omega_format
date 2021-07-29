@@ -246,9 +246,11 @@ def visualize_traffic_participant(input_recording, index: tuple, tp, text: str =
 
         if tp.bb.length == 0 or tp.bb.width == 0:
             if tp.type is ReferenceTypes.RoadUserType.PEDESTRIAN:
-                tp.bb = BoundingBox(DefaultValues.pedestrian)
+                tp.bb = BoundingBox()
+                tp.bb.vec = DefaultValues.pedestrian
             elif tp.type is ReferenceTypes.RoadUserType.BICYCLE:
-                tp.bb = BoundingBox(DefaultValues.bicycle)
+                tp.bb = BoundingBox()
+                tp.bb.vec = DefaultValues.bicycle
 
         length = tp.bb.length
         width = tp.bb.width

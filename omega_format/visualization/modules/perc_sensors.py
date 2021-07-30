@@ -18,6 +18,7 @@ class VisualizePercSensors(VisualizationModule):
             return []
 
         items = []
+        ego_offset = snip.perception.ego_offset
 
         if snip.identifier != 'only_perception':
             ego_obj = snip.reference.ego_vehicle
@@ -29,7 +30,7 @@ class VisualizePercSensors(VisualizationModule):
 
         for id_, sensor in snip.perception.sensors.items():  # type: int, Sensor
             offset_x = sensor.sensor_pos_lateral
-            offset_y = sensor.sensor_pos_longitudinal
+            offset_y = sensor.sensor_pos_longitudinal + ego_offset
 
             heading = sensor.sensor_heading
             dist_min = sensor.min_range
@@ -61,8 +62,8 @@ class VisualizePercSensors(VisualizationModule):
             artist.translate(center_point.x(), center_point.y())
 
             if snip.identifier != 'only_perception':
-                new_x = np.multiply(offset_x, np.cos(np.deg2rad(ego_h))) - np.multiply(offset_y, np.sin(np.deg2rad(ego_h))) + ego_x
-                new_y = np.multiply(offset_x, np.sin(np.deg2rad(ego_h))) + np.multiply(offset_y, np.cos(np.deg2rad(ego_h))) + ego_y
+                new_x = np.multiply(offset_y, np.cos(np.deg2rad(ego_h))) - np.multiply(offset_x, np.sin(np.deg2rad(ego_h))) + ego_x
+                new_y = np.multiply(offset_y, np.sin(np.deg2rad(ego_h))) + np.multiply(offset_x, np.cos(np.deg2rad(ego_h))) + ego_y
                 artist.translate(new_x, new_y)
             else:
                 artist.translate(offset_x, offset_y)

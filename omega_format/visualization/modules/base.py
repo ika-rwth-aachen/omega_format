@@ -78,7 +78,7 @@ class SnippetContainer():
     def convert_perception_coordinates_to_reference_coordinates(self):
          for obj in self.perception.objects.values():  # type: Object
             death = obj.birth_stamp+len(obj.heading.val)
-            obj.dist_lateral.val -= self.perception.ego_offset # adjust ego offset
+            obj.dist_longitudinal.val += self.perception.ego_offset # adjust ego offset
 
             ego_h = self.reference.ego_vehicle.tr.heading[obj.birth_stamp:death]
             ego_x = self.reference.ego_vehicle.tr.pos_x[obj.birth_stamp:death]

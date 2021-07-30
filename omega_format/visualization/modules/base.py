@@ -68,7 +68,7 @@ class SnippetContainer():
     def convert_perception_coordinates_to_plot_coordinates(self):
         for obj in self.perception.objects.values():  # type: Object
             h = obj.heading.val
-            x = obj.dist_lateral.val
+            x = -obj.dist_lateral.val
             y = obj.dist_longitudinal.val
             heading = 180
             obj.heading.val += heading/2
@@ -84,7 +84,7 @@ class SnippetContainer():
             ego_x = self.reference.ego_vehicle.tr.pos_x[obj.birth_stamp:death]
             ego_y = self.reference.ego_vehicle.tr.pos_y[obj.birth_stamp:death]
             h = obj.heading.val
-            x = obj.dist_lateral.val
+            x = -obj.dist_lateral.val
             y = obj.dist_longitudinal.val
             obj.heading.val = h+ego_h
             heading = ego_h + 270

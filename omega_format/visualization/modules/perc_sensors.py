@@ -56,9 +56,9 @@ class VisualizePercSensors(VisualizationModule):
             center_point = artist.boundingRect().center()
             artist.translate(-center_point.x(), -center_point.y())
             if snip.identifier != 'only_perception':
-                artist.setRotation(heading + ego_h);
+                artist.setRotation(heading + ego_h)
             else:
-                artist.setRotation(heading + 90);
+                artist.setRotation(heading + 90)
             artist.translate(center_point.x(), center_point.y())
 
             if snip.identifier != 'only_perception':

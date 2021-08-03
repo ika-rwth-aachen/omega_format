@@ -100,11 +100,11 @@ class Trajectory(BaseModel):
 
     @cached_property
     def vel(self):
-        return np.sqrt(np.power(self.vel_lateral, 2) + np.power(self.vel_longitudinal, 2) + np.power(self.vel_z, 2))
+        return np.sqrt(np.power(self.vel_lateral, 2) + np.power(self.vel_longitudinal, 2))# + np.power(self.vel_z, 2))
 
     @cached_property
     def acc(self):
-        return np.sqrt(np.power(self.acc_lateral, 2) + np.power(self.acc_longitudinal, 2) + np.power(self.acc_z, 2))
+        return np.sqrt(np.power(self.acc_lateral, 2) + np.power(self.acc_longitudinal, 2))# + np.power(self.acc_z, 2))
 
     @cached_property
     def is_still(self, vel_thresh=0.1, acc_thresh=0.1):

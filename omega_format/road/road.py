@@ -10,7 +10,7 @@ from .structural_object import StructuralObject
 from ..enums import ReferenceTypes
 from ..reference_resolving import DictWithProperties, raise_not_resolved, InputClassBase
 
-@dataclass
+
 class Road(InputClassBase):
     location: ReferenceTypes.RoadLocation = None
     num_lanes: int = None

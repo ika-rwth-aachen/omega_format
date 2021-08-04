@@ -12,10 +12,10 @@ from ..reference_resolving import InputClassBase, ReferenceDict, ReferenceElemen
 
 
 class Lane(InputClassBase):
-    border_right: ReferenceElement
-    border_left: ReferenceElement
-    type: ReferenceTypes.LaneType
-    sub_type: ReferenceTypes.LaneSubType
+    border_right: ReferenceElement = None
+    border_left: ReferenceElement = None
+    type: ReferenceTypes.LaneType = None
+    sub_type: ReferenceTypes.LaneSubType = None
     boundaries: DictWithProperties = Field(default_factory=DictWithProperties)
     predecessors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     successors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))

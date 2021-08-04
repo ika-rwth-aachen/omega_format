@@ -10,9 +10,10 @@ from .structural_object import StructuralObject
 from ..enums import ReferenceTypes
 from ..reference_resolving import DictWithProperties, raise_not_resolved, InputClassBase
 
-
+@dataclass
 class Road(InputClassBase):
-    location: ReferenceTypes.RoadLocation
+    location: ReferenceTypes.RoadLocation = None
+    num_lanes: int = None
     lateral_markings: DictWithProperties = Field(default_factory=DictWithProperties)
     lanes: DictWithProperties = Field(default_factory=DictWithProperties)
     borders: DictWithProperties = Field(default_factory=DictWithProperties)
@@ -23,6 +24,10 @@ class Road(InputClassBase):
     @property
     def num_lanes(self):
         return len(self.lanes)
+
+    @num_lanes.setter
+    def num_lanes(self, value):
+        self._num_lanes = value
 
     @classmethod
     @raise_not_resolved

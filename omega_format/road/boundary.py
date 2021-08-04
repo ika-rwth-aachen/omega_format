@@ -7,13 +7,13 @@ from ..reference_resolving import InputClassBase, ReferenceDict, raise_not_resol
 
 
 class Boundary(InputClassBase):
-    color: ReferenceTypes.BoundaryColor
-    condition: ReferenceTypes.BoundaryCondition
-    poly_index_start: conint(ge=0)
-    poly_index_end: conint(ge=0)
-    type: ReferenceTypes.BoundaryType
-    sub_type: ReferenceTypes.BoundarySubType
-    is_right_boundary: bool
+    color: ReferenceTypes.BoundaryColor = None
+    condition: ReferenceTypes.BoundaryCondition = None
+    poly_index_start: conint(ge=0) = 0
+    poly_index_end: conint(ge=0) = 0
+    type: ReferenceTypes.BoundaryType = None
+    sub_type: ReferenceTypes.BoundarySubType = None
+    is_right_boundary: bool  = None
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Boundary))
     overrides: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Boundary))
     height: confloat(ge=0) = 0

@@ -49,7 +49,8 @@ class Wind(InputClassBase):
     @property
     def is_windy(self):
         most_frequent_type = max(set(self.type), key=self.type.count, default=None)
-        return most_frequent_type in [ReferenceTypes.Wind.MODERATE_BREEZE,
+        return most_frequent_type in [ReferenceTypes.Wind.GENTLE_BREEZE,
+                                      ReferenceTypes.Wind.MODERATE_BREEZE,
                                       ReferenceTypes.Wind.FRESH_BREEZE,
                                       ReferenceTypes.Wind.STRONG_BREEZE,
                                       ReferenceTypes.Wind.NEAR_GALE,

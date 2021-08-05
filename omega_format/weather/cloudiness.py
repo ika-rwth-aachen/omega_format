@@ -33,4 +33,4 @@ class Cloudiness(InputClassBase):
     @property
     def is_cloudy(self):
         degree = np.mean(self.degree)
-        return degree >= 3
+        return degree >= 2

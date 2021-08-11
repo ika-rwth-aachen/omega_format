@@ -1,6 +1,6 @@
 from pydantic.fields import Field
 from warnings import warn
-
+import numpy as np
 from h5py import Group
 from pydantic import validator
 from pydantic import BaseModel
@@ -15,7 +15,7 @@ class EgoPosition(BaseModel):
     heading: ValVar = Field(default_factory=ValVar)
     pos_longitude: ValVar = Field(default_factory=ValVar)
     pos_latitude: ValVar = Field(default_factory=ValVar)
-    pos_z: float = 0.0
+    pos_z: np.ndarray = np.array([])
 
     @validator('heading', 'pos_longitude', 'pos_latitude')
     def check_array_length(cls, v, values):

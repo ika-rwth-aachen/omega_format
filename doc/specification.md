@@ -335,11 +335,11 @@ List:
 - solid_dashed = 4 (first mentioned type of line is the one on the inside of the lane, i.e. the one valid for the driver)
   - (vehicle driving on right hand side)
 
-	<img src="images/6-1_solid_dashed.jpg" alt="solid_dashed" width="200"/>
+	<img src="images/6-1_dashed_solid.png" alt="dashed_solid" width="200"/>
 - dashed_solid = 5 (first mentioned type of line is the one on the inside of the lane, i.e. the one valid for the driver)
   - (vehicle driving on right hand side)
 
-	<img src="images/6-1_dashed_solid.png" alt="dashed_solid" width="200"/>
+	<img src="images/6-1_solid_dashed.jpg" alt="solid_dashed" width="200"/>
 - dashed_changeDirectionLane = 6
   - Lanes that can be used for both directions (permission displayed on changable signs) are divided by double dashed lines.
 

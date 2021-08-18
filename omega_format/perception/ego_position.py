@@ -15,7 +15,9 @@ class EgoPosition(BaseModel):
     heading: ValVar = Field(default_factory=ValVar)
     pos_longitude: ValVar = Field(default_factory=ValVar)
     pos_latitude: ValVar = Field(default_factory=ValVar)
-    pos_z: np.ndarray = np.array([])
+    pos_z: ValVar = Field(default_factory=ValVar)
+    yaw_rate: np.array([], dtype=np.float64)
+    pitch: np.array([], dtype=np.float64)
 
     @validator('heading', 'pos_longitude', 'pos_latitude')
     def check_array_length(cls, v, values):
@@ -59,7 +61,9 @@ class EgoPosition(BaseModel):
             heading=ValVar.from_hdf5(group['heading'], validate=validate),
             pos_longitude=ValVar.from_hdf5(group['posLongitude'], validate=validate),
             pos_latitude=ValVar.from_hdf5(group['posLatitude'], validate=validate),
-            pos_z=group['posZ'][()].astype(float),
+            pos_z=ValVar.from_hdf5(group['posZ'], validate=validate),
+            yaw_rate=group['yawRate'][()].astype(float),
+            pitch=group['pitch'][()].astype(float),
         )
         return self
 
@@ -67,4 +71,6 @@ class EgoPosition(BaseModel):
         self.heading.to_hdf5(group.create_group('heading'))
         self.pos_longitude.to_hdf5(group.create_group('posLongitude'))
         self.pos_latitude.to_hdf5(group.create_group('posLatitude'))
-        group.create_dataset('posZ', data=self.pos_z)
+        self.pos_z.to_hdf5(group.create_group('posZ'))
+        group.create_dataset('yawRate', data=self.yaw_rate)
+        group.create_dataset('pitch', data=self.pitch)

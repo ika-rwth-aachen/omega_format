@@ -19,7 +19,7 @@ app = typer.Typer()
 
 
 def get_snippets_for_vis(reference, perception, snip, max_snippets):
-    validate = False
+    validate = True
     if reference is not None:
         rr = ReferenceRecording.from_hdf5(reference, validate)
         if snip and perception is None:

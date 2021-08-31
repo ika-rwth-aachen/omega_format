@@ -6,6 +6,7 @@ from ..enums import ReferenceTypes
 from ..reference_resolving import *
 from .trajectory import Trajectory
 from .bounding_box import BoundingBox
+from typing import Optional
 
 from h5py import Group
 
@@ -13,7 +14,7 @@ from h5py import Group
 class RoadUser(DynamicObject):
     type: ReferenceTypes.RoadUserType = ReferenceTypes.RoadUserType.REGULAR
     sub_type: Any = None # ReferenceTypes.RoadUserSubType
-    connected_to: ReferenceElement = None
+    connected_to: Optional[ReferenceElement] = None
     is_data_recorder: bool = False
     vehicle_lights: VehicleLights = Field(default_factory=VehicleLights)
     id: int = -1

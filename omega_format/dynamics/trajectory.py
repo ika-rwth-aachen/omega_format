@@ -100,18 +100,26 @@ class Trajectory(BaseModel):
 
     @cached_property
     def vel(self):
+        if self.vel_lateral is None or self.vel_longitudinal is None:
+            return None
         return np.sqrt(np.power(self.vel_lateral, 2) + np.power(self.vel_longitudinal, 2))# + np.power(self.vel_z, 2))
 
     @cached_property
     def acc(self):
+        if self.acc_lateral is None or self.acc_longitudinal is None:
+            return None
         return np.sqrt(np.power(self.acc_lateral, 2) + np.power(self.acc_longitudinal, 2))# + np.power(self.acc_z, 2))
 
     @cached_property
     def is_still(self, vel_thresh=0.1, acc_thresh=0.1):
+        if self.vel is None or self.acc is None:
+            return None
         return np.logical_and(self.vel <= vel_thresh, self.acc <= acc_thresh)
 
     @cached_property
     def is_static(self):
+        if self.is_still is None:
+            return None
         return np.all(self.is_still)
 
     @cached_property

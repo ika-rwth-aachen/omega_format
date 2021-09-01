@@ -28,23 +28,23 @@ class Sensor(BaseModel):
     fov_vertical: confloat(ge=0) = 0.
     fov_horizontal: confloat(ge=0) = 0.
     max_velocity: confloat(ge=0) = 0.
-    min_velocity: confloat(ge=0) = 0.
+    min_velocity: float = 0.
     angle_resolution_vertical: confloat(ge=0) = 0.
     angle_resolution_horizontal: confloat(ge=0) = 0.
     range_resolution: confloat(ge=0) = 0.
     vertical_resolution: confloat(ge=0) = 0.
     velocity_resolution: confloat(ge=0) = 0.
-    angle_accuracy: confloat(ge=0, le=1) = 0.
-    vertical_accuracy: confloat(ge=0, le=1) = 0.
-    range_accuracy: confloat(ge=0, le=1) = 0.
-    velocity_accuracy: confloat(ge=0, le=1) = 0.
-    angle_precision: confloat(ge=0, le=1) = 0.
-    range_precision: confloat(ge=0, le=1) = 0.
-    vertical_precision: confloat(ge=0, le=1) = 0.
-    velocity_precision: confloat(ge=0, le=1) = 0.
-    track_confirmation_latency: confloat(ge=0, le=1) = 0.
-    track_drop_latency: confloat(ge=0, le=1) = 0.
-    max_object_tracks: confloat(ge=0, le=1) = 0.
+    angle_accuracy: confloat(ge=0) = 0.
+    vertical_accuracy: confloat(ge=0) = 0.
+    range_accuracy: confloat(ge=0) = 0.
+    velocity_accuracy: confloat(ge=0) = 0.
+    angle_precision: confloat(ge=0) = 0.
+    range_precision: confloat(ge=0) = 0.
+    vertical_precision: confloat(ge=0) = 0.
+    velocity_precision: confloat(ge=0) = 0.
+    track_confirmation_latency: confloat(ge=0) = 0.
+    track_drop_latency: confloat(ge=0) = 0.
+    max_object_tracks: confloat(ge=0) = 0.
 
     @validator('sensor_heading', 'sensor_pitch', 'sensor_roll')
     def check_angle(cls, v):

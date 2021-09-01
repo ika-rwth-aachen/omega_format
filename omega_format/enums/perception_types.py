@@ -2,7 +2,7 @@ from enum import Enum, IntEnum
 
 
 class PerceptionTypeSpecification(Enum):
-    FORMAT_VERSION = 'v1.2'
+    FORMAT_VERSION = 'v1.3'
 
 class PerceptionType(IntEnum):
     NOT_PROVIDED = 0

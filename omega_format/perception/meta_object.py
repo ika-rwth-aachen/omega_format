@@ -117,8 +117,6 @@ class MetaObject(BaseModel):
         group.attrs.create('absAccLongitudinalVarType', data=self.abs_acc_longitudinal_var_type)
         group.attrs.create('absAccLateralValType', data=self.abs_acc_lateral_val_type)
         group.attrs.create('absAccLateralVarType', data=self.abs_acc_lateral_var_type)
-        group.attrs.create('azimuthValType', data=self.azimuth_val_type)
-        group.attrs.create('azimuthVarType', data=self.azimuth_var_type)
         group.attrs.create('objectClassificationValType', data=self.object_classification_val_type)
         group.attrs.create('objectClassificationConfidenceValType', data=self.object_classification_confidence_val_type)
 

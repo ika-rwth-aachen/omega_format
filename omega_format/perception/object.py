@@ -160,7 +160,7 @@ class Object(BaseModel):
         self.birth_stamp += birth
 
         for k, v in vars(self).items():
-            if isinstance(v, ValVar) or isinstance(v, ObjectClassification) or isinstance(v, TrackingPoint):
+            if isinstance(v, ValVar) or isinstance(v, ObjectClassification):
                 v.cut_to_timespan(birth, death)
             elif isinstance(v, np.ndarray) or isinstance(v, list):
                 setattr(self, k, v[birth:death + 1])

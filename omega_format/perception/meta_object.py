@@ -30,8 +30,6 @@ class MetaObject(BaseModel):
     abs_acc_longitudinal_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     abs_acc_lateral_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     abs_acc_lateral_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    azimuth_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    azimuth_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     object_classification_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     object_classification_confidence_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
 
@@ -76,8 +74,6 @@ class MetaObject(BaseModel):
             abs_acc_longitudinal_var_type=PerceptionTypes.PerceptionType(group.attrs['absAccLongitudinalVarType']),
             abs_acc_lateral_val_type=PerceptionTypes.PerceptionType(group.attrs['absAccLateralValType']),
             abs_acc_lateral_var_type=PerceptionTypes.PerceptionType(group.attrs['absAccLateralVarType']),
-            azimuth_val_type=PerceptionTypes.PerceptionType(group.attrs['azimuthValType']),
-            azimuth_var_type=PerceptionTypes.PerceptionType(group.attrs['azimuthVarType']),
             object_classification_val_type=PerceptionTypes.PerceptionType(group.attrs['objectClassificationValType']),
             object_classification_confidence_val_type=PerceptionTypes.PerceptionType(group.attrs['objectClassificationConfidenceValType']),
 

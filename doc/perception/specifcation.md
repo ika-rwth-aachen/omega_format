@@ -246,8 +246,8 @@ Figure 1 shows the ego coordinate system used in the perception database
 along with a detected sensor object (green) as well as the coordinate
 system used for the scenario database (black axis labelled UTM).
 
-![](images/image_0.png){width="5.895833333333333in"
-height="5.291666666666667in"}
+![](images/image_0.png)
+[//]: # width="5.895833333333333in" height="5.291666666666667in"
 
 Figure 1 - Different coordinate systems of perception and scenario
 format
@@ -615,7 +615,7 @@ in percent.
 
 If the sensor provides the probability separated into several groups,
 but no exact percentage, this can be transformed into a percentage. E.g.
-a sensor provides a '1' if the probability of existence is \<25%. If
+a sensor provides a '1' if the probability of existence is \< 25%. If
 this is the case use a 25 in the input format.
 
 Please note that this is the probability of existence, if the sensor
@@ -671,8 +671,8 @@ can become important to know from which feature the lidar sensor has
 calculated this information. The different points in the grid can be
 referenced by integer values found in the following lookup table:
 
-![](images/image_1.jpg){width="2.3958333333333335in"
-height="2.28125in"}
+![](images/image_1.png)
+[//]: # width="2.3958333333333335in" height="2.28125in"
 
 -   0 = unknown
 
@@ -844,7 +844,8 @@ similar result each time, if the precision is high. Those measurements
 can be off from the ground truth by a lot and still have a high
 precision, but not a high trueness.
 
-![](images/image_2.png){width="4.5in" height="3.0in"}
+![](images/image_2.png)
+[//]: # width="4.5in" height="3.0in"
 
 Figure 2 - Accuracy - Combination of trueness and precision \[Source:
 [link](https://en.wikipedia.org/wiki/Accuracy_and_precision)\]

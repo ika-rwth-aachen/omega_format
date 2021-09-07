@@ -671,14 +671,14 @@ can become important to know from which feature the lidar sensor has
 calculated this information. The different points in the grid can be
 referenced by integer values found in the following lookup table:
 
-![]](media/image_1.jpg){width="2.3958333333333335in"
+![](images/image_1.jpg){width="2.3958333333333335in"
 height="2.28125in"}
 
 -   0 = unknown
 
 -   1 = front right corner
 
--   2 = center of front edge
+-   2 = center of front edg
 
 -   3 = front left corner
 

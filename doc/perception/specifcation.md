@@ -20,7 +20,7 @@
 | Datum: 01.09.2021                                       |
 +---------------------------------------------------------+
 
-# Inhaltsverzeichnis {#inhaltsverzeichnis .TOC-Heading}
+# Inhaltsverzeichnis 
 
 [1. Introduction and Information on this Document
 5](#introduction-and-information-on-this-document)
@@ -121,38 +121,15 @@
 
 [9. Additional Sensors 17](#additional-sensors)
 
-**[Versionen]{.smallcaps}**
+##Versionen
 
-+----------------+------------+---------+---------------------+
 | Name           | Datum      | Version | Kurzbeschreibung    |
-+================+============+=========+=====================+
+|:---------------|:-----------|:--------|:--------------------|
 | Maike Scholtes | 25.06.2020 | V0.1    | Initial Document    |
-+----------------+------------+---------+---------------------+
-| Maike Scholtes | 05.11.2020 | V1.1    | Changing for some   |
-|                |            |         | signal names,       |
-|                |            |         | introduction of     |
-|                |            |         | more groups and     |
-|                |            |         | subgroups           |
-+----------------+------------+---------+---------------------+
-| Maike Scholtes | 18.03.2021 | V1.2    | Major updates       |
-|                |            |         |                     |
-|                |            |         | Restructuring of    |
-|                |            |         | metainformation     |
-|                |            |         |                     |
-|                |            |         | Introduction of     |
-|                |            |         | attributes          |
-|                |            |         |                     |
-|                |            |         | Error corrections   |
-+----------------+------------+---------+---------------------+
-| Maike Scholtes | 02.08.2021 | V1.2    | Update of           |
-|                |            |         | documentation\      |
-|                |            |         | Additional          |
-|                |            |         | information on      |
-|                |            |         | coordinate systems  |
-+----------------+------------+---------+---------------------+
-| Maike Scholtes | 18.08.2021 | V1.3    | Version update, see |
-|                |            |         | change log          |
-+----------------+------------+---------+---------------------+
+| Maike Scholtes | 05.11.2020 | V1.1    | Changing for some <br/> signal names, introcuction of <br/> more groups and subgroups |
+| Maike Scholtes | 18.03.2021 | V1.2    | Major updates <br/> Restructuring of metainformation <br/> Introduction of attributes <br/> Error corrections   |
+| Maike Scholtes | 02.08.2021 | V1.2    | Update of documentation\ <br/> Additional information on <br/> coordinate systems <br/> |
+| Maike Scholtes | 18.08.2021 | V1.3    | Version update,<br/> see change log          |
 
 # Introduction and Information on this Document
 
@@ -247,7 +224,6 @@ along with a detected sensor object (green) as well as the coordinate
 system used for the scenario database (black axis labelled UTM).
 
 ![](images/image_0.png)
-[//]: # width="5.895833333333333in" height="5.291666666666667in"
 
 Figure 1 - Different coordinate systems of perception and scenario
 format
@@ -672,7 +648,6 @@ calculated this information. The different points in the grid can be
 referenced by integer values found in the following lookup table:
 
 ![](images/image_1.png)
-[//]: # width="2.3958333333333335in" height="2.28125in"
 
 -   0 = unknown
 
@@ -845,7 +820,6 @@ can be off from the ground truth by a lot and still have a high
 precision, but not a high trueness.
 
 ![](images/image_2.png)
-[//]: # width="4.5in" height="3.0in"
 
 Figure 2 - Accuracy - Combination of trueness and precision \[Source:
 [link](https://en.wikipedia.org/wiki/Accuracy_and_precision)\]

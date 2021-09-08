@@ -136,13 +136,13 @@ When describing height information of buildings etc. and other objects the heigh
 **The position of each object is described relative to the one absolute point described in the previous section.** The previously described UTM coordinate system is used to describe the axis. **For all road users or misc objects the geometrical center of the object is taken to describe the position.** The z-position is equivalent to the altitude.
 
 #### 2.9.2 Heading
-**The heading angle is defined as the angle around the z-axis.** This is true for the UTM coordinate system and the vehicle coordinate system. Therefore, the heading angle can be used to transform from one system into the other. Heading angles are provided in the mathematically positive direction (counter clockwise). **A heading angle of zero corresponds with the east direction (x-axis in UTM coordinate system).**
 
-In the area of normal driving dynamics (which we expect in the data) it is assumed that heading and yaw are equivalent. Therefore, it is enough to save the heading angle of road users.
+**The heading angle is defined as the angle around the z-axis.** This is true for the UTM coordinate system and the vehicle coordinate system. Therefore, the heading angle can be used to transform from one system into the other. Heading angles are provided in the mathematically positive direction (counter clockwise). **A heading angle of zero corresponds with the east direction (x-axis in UTM coordinate system). The heading angle is NOT given in the vehicle coordinate system, but in the UTM coordinate system. The heading angle is between 0 and 360 degree.**
+
+ In the area of normal driving dynamics (which we expect in the data) it is assumed that heading and yaw are equivalent. Therefore, it is enough to save the heading angle of road users
 
 #### 2.9.3 Pitch
-The pitch angle is provided in the vehicles coordinate system. It is the angle in respect to the y-axis in the vehicle coordinate system. It is also provided in mathematically positive direction. An angle of zero corresponds to the x-y-plane.
-
+The pitch angle is provided in the vehicles coordinate system. It is the angle in respect to the y-axis in the vehicle coordinate system. It is also provided in mathematically positive direction. An angle of zero corresponds to the x-y-plane. The pitch angle is defined in the mathematical positive sense, i.e., it is positive when stopping.It is given in degrees and is between 0 and +/-180. 
 #### 2.9.4 Roll
 The roll angle is provided in the vehicles coordinate system. It is the angle in respect to the x-axis in the vehicle coordinate system. It is also provided in mathematically positive direction. An angle of zero corresponds to the x-y-plane.
 

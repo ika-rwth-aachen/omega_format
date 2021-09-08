@@ -647,7 +647,8 @@ can become important to know from which feature the lidar sensor has
 calculated this information. The different points in the grid can be
 referenced by integer values found in the following lookup table:
 
-![](images/image_1.png)
+![](images/IMG_1.png)
+Source: https://unsplash.com/photos/YU9rbNLQxSY
 
 -   0 = unknown
 

@@ -37,7 +37,7 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 | Maike Scholtes | 02.12.2020 | V2.4 | Added “Sinnbilder” for markings |
 | Maike Scholtes | 17.03.2021 | V2.5 | Added different converter numbers. <br /> Made changes to what needs to be provided instead if something can not be provided. |
 | Maike Scholtes | 23.03.2021 | V3.0 | Introduction of attributes in hdf5 for scalar metainformation |
-
+| Maike Scholtes | 18.08.2021 | V3.0 | Provide information on the direction of the pitch angle. <br /> Clarify information on the heading angle and on which signals are provided in utm coordinate systems <br /> and which in the vehicle coordinate system. <br /> Included Image of global coordinate system. |
 
 ## 1. Introduction and Information on this Document
 This document functions as a specification document that goes along with the proposed input data format in VVM. Please also refer to the other documents provided regarding the input data format. Those documents include a detailed report on the data format and its purpose as well as a signal list in excel and an exemplary hdf5 file (Older Version on Sharepoint Version 4 [link](https://sharepoint.cloud4partner.com/websites/vvnational/Freigegebene%20Dokumente/10_Teilprojekte/08_TP8%20Datenbanken/01_AP8.1%20Anforderungsanalyse%20u.%20Datenbankdefinition/Eingangsdatenformat_Szenariendatenbank/Version%204 "Older Version on Sharepoint Version 4"), current Version in Confluence [link](https://confluence.vdali.de/login.action?os_destination=%2Fpages%2Fviewpage.action%3FspaceKey%3DVVM%26title%3DEingangsdatenformat%2BSzenarienDB&permissionViolation=true "current Version in Confluence")).

@@ -100,7 +100,7 @@
 
 | Name                   |Type (Group)          |Attribute         |Group          |Subgroup    |Signal Class            |Description                                                                                                                                                                                     |Data type                                             |unit     |Data rate           |Comment
 |:-----------------------|:---------------------|:-----------------|:--------------|:-----------|:-----------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:--------|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Metainformation? Lists of different sensors possible in case of fusion or combined LR/SR sensors||||||||||Spezifikation sollte zusätzlich abgelegt werden|||||||||||
+|Metainformation on sensor||||||||||Spezifikation sollte zusätzlich abgelegt werden|||||||||||
 |sensorModality|sensor/{id}|yes|||Enriched|"Radar| Camera| Lidar| Fusion etc."|int|-|-|Lookup Table will be provided|||||||||||
 |fusionInformation|sensor/{id}|yes|||Enriched|In case of fusion you can provide information on the used sensor modalities here as a list|string|-|-||||||||||||
 |sensorName|sensor/{id}|yes|||Enriched|Exact name of sensor|string|-|-||||||||||||

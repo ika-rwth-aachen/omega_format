@@ -100,8 +100,8 @@
 
 | Name                   |Type (Group)          |Attribute         |Group          |Subgroup    |Signal Class            |Description                                                                                                                                                                                     |Data type                                             |unit     |Data rate           |Comment
 |:-----------------------|:---------------------|:-----------------|:--------------|:-----------|:-----------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:--------|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Metainformation on sensor||||||||||Spezifikation sollte zusätzlich abgelegt werden|||||||||||
-|sensorModality|sensor/{id}|yes|||Enriched|"Radar| Camera| Lidar| Fusion etc."|int|-|-|Lookup Table will be provided|||||||||||
+|Metainformation on sensor||||||||||Sensorspecification should also be provided|||||||||||
+|sensorModality|sensor/{id}|yes|||Enriched|"Radar Camera Lidar Fusion etc."|int|-|-|Lookup Table will be provided|||||||||||
 |fusionInformation|sensor/{id}|yes|||Enriched|In case of fusion you can provide information on the used sensor modalities here as a list|string|-|-||||||||||||
 |sensorName|sensor/{id}|yes|||Enriched|Exact name of sensor|string|-|-||||||||||||
 |_sensorID_|_sensor_||||_Enriched_|_Id of sensor in order to couple metainformation and object data_|_int_|-|-||||||||||||
@@ -113,24 +113,24 @@
 |sensorHeading|sensor/{id}|yes|||Measured|Orientation of the sensor in the ego coordinate system|double|degree|-||||||||||||
 |sensorPitch|sensor/{id}|yes|||Measured|Orientation of the sensor in the ego coordinate system|double|degree|-||||||||||||
 |sensorRoll|sensor/{id}|yes|||Measured|Orientation of the sensor in the ego coordinate system|double|degree|-||||||||||||
-|maxRange|sensor/{id}|yes|||Enriched|Maximum range of sensor in short range|double|m|-|"If no speration between SR und LR for sensor| fill in LR values"|||||||||||
+|maxRange|sensor/{id}|yes|||Enriched|Maximum range of sensor in short range|double|m|-||||||||||||
 |minRange|sensor/{id}|yes|||Enriched|minimum range of sensor in short range|double|m|-||||||||||||
 |foVVertical|sensor/{id}|yes|||Enriched|Vertical field of view|double|degree|-||||||||||||
-|foVHorizontal|sensor/{id}|yes|||Enriched|Horizontal field of view|double|degree|-|measured from line pointing straight ahead from sensor. Description can be interpreted as +/- the provided angle|||||||||||
+|foVHorizontal|sensor/{id}|yes|||Enriched|Horizontal field of view|double|degree|-|Complete angle. Angle is assumed to extent equally to the left and the right hand side|||||||||||
 |minVelocity|sensor/{id}|yes|||Enriched|Minimum velocity sensor can measure|double|m/s|-||||||||||||
 |maxVelocity|sensor/{id}|yes|||Enriched|Maximum velocity sensor can measure|doubble|m/s|-||||||||||||
 |angleResolutionVertical|sensor/{id}|yes|||Enriched|Angle resolution in vertical direction|double|degree|-||||||||||||
 |angleResolutionHorizontal|sensor/{id}|yes|||Enriched|Angle resolution in horizontal direction|double|degree|-||||||||||||
-|rangeResolution|sensor/{id}|yes|||Enriched|horizontal distance resolution|double|m|-|if only one value is given for distance resolution use horizontal entry|||||||||||
-|verticalResolution|sensor/{id}|yes|||Enriched|vertical distance resolution|double|m|-|if only one value is given for distance resolution use horizontal entry|||||||||||
+|rangeResolution|sensor/{id}|yes|||Enriched|horizontal distance resolution|double|m|-|if only one value is given for distance resolution use range entry|||||||||||
+|verticalResolution|sensor/{id}|yes|||Enriched|vertical distance resolution|double|m|-|if only one value is given for distance resolution use range entry|||||||||||
 |velocityResolution|sensor/{id}|yes|||Enriched|velocity resolution|double|m/s|-||||||||||||
 |angleAccuracy|sensor/{id}|yes|||Enriched|angel accuracy|double|degree|-||||||||||||
-|verticalAccuracy|sensor/{id}|yes|||Enriched|vertical distance accuracy|double|m|-|if only one value is given for distance accuracy use horizontal entry|||||||||||
-|rangeAccuracy|sensor/{id}|yes|||Enriched|horizontal distance accuracy|double|m|-|if only one value is given for distance accuracy use horizontal entry|||||||||||
+|verticalAccuracy|sensor/{id}|yes|||Enriched|vertical distance accuracy|double|m|-|if only one value is given for distance accuracy use range entry|||||||||||
+|rangeAccuracy|sensor/{id}|yes|||Enriched|horizontal distance accuracy|double|m|-|if only one value is given for distance accuracy use range entry|||||||||||
 |velocityAccuracy|sensor/{id}|yes|||Enriched|velocity distance accuracy|double|m/s|-||||||||||||
 |anglePrecision|sensor/{id}|yes|||Enriched|angle precision|double|degree|-||||||||||||
-|rangePrecision|sensor/{id}|yes|||Enriched|horizontal distance precision|double|m|-|if only one value is given for distance precission use horizontal entry|||||||||||
-|verticalPrecision|sensor/{id}|yes|||Enriched|vertical distance precision|double|m|-|if only one value is given for distance precission use horizontal entry|||||||||||
+|rangePrecision|sensor/{id}|yes|||Enriched|horizontal distance precision|double|m|-|if only one value is given for distance precission use range entry|||||||||||
+|verticalPrecision|sensor/{id}|yes|||Enriched|vertical distance precision|double|m|-|if only one value is given for distance precission use range entry|||||||||||
 |velocityPrecision|sensor/{id}|yes|||Enriched|velocity precision|double|m/s|-||||||||||||
 |trackConfirmationLatency|sensor/{id}|yes|||Enriched|Time until track of new object is outputed|double|ms|-||||||||||||
 |trackDropLatency|sensor/{id}|yes|||Enriched|Time until track of an object previously tracked is deleted|double|ms|-||||||||||||
@@ -152,6 +152,6 @@
 
 | Name                   |Type (Group)          |Attribute         |Group          |Subgroup    |Signal Class            |Description                                                                                                                                                                                     |Data type                                             |unit     |Data rate           |Comment
 |:-----------------------|:---------------------|:-----------------|:--------------|:-----------|:-----------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:--------|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Additional Sensors (if vehicle equipped with such)||||||Additional distance additional sensors (if vehicle equipped with such for short range||||AVL considers equiping the vehicle with additional sensors for the sensor under test setup|||||||||||
+|Additional Sensors (if vehicle equipped with such)||||||Additional sensors (if vehicle equipped with such)||||AVL considers equiping the vehicle with additional sensors for the sensor under test setup|||||||||||
 |lightIntensity|MiscInfo||||Measured|light distance intensity for short range|double|lux|25Hz/10Hz|information will follow once sensor has been specified and output of it is clear|||||||||||
 |acoustics|MiscInfo||||Measured|acoustics distance s for short range|double|dB|25Hz/10Hz|information will follow once sensor has been specified and output of it is clear|||||||||||

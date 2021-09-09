@@ -121,7 +121,7 @@
 
 [9. Additional Sensors 17](#additional-sensors)
 
-##Versionen
+## Versionen
 
 | Name           | Datum      | Version | Kurzbeschreibung    |
 |:---------------|:-----------|:--------|:--------------------|
@@ -689,8 +689,8 @@ impossible.
 
 All information is saved as metadata (attributes in hdf5). The
 information is saved as follows:\
-*sensor/id/...\
-*Each sensor used for the perception file is contained and identifiable
+*sensor/id/...*\
+Each sensor used for the perception file is contained and identifiable
 through its id. I.e., the sensor group can contain a list of different
 sensors. This can be necessary if the perception data is gathered by a
 sensor featuring different modi for long range, short range etc. or has

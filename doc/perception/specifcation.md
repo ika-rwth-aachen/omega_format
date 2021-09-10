@@ -20,7 +20,7 @@
 | Datum: 01.09.2021                                       |
 +---------------------------------------------------------+
 
-# Inhaltsverzeichnis 
+# Table of Contents 
 
 [1. Introduction and Information on this Document
 5](#introduction-and-information-on-this-document)
@@ -121,7 +121,7 @@
 
 [9. Additional Sensors](#additional-sensors)
 
-## Versionen
+## Versions
 
 | Name           | Datum      | Version | Kurzbeschreibung    |
 |:---------------|:-----------|:--------|:--------------------|

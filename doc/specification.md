@@ -38,6 +38,7 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 | Maike Scholtes | 17.03.2021 | V2.5 | Added different converter numbers. <br /> Made changes to what needs to be provided instead if something can not be provided. |
 | Maike Scholtes | 23.03.2021 | V3.0 | Introduction of attributes in hdf5 for scalar metainformation |
 | Maike Scholtes | 18.08.2021 | V3.0 | Provide information on the direction of the pitch angle. <br /> Clarify information on the heading angle and on which signals are provided in utm coordinate systems <br /> and which in the vehicle coordinate system. <br /> Included Image of global coordinate system. |
+| Maike Scholtes | 10.09.2021 | V3.1 | Added customInformation and referenceModality field. Change naming of merger version. |
 
 ## 1. Introduction and Information on this Document
 This document functions as a specification document that goes along with the proposed input data format in VVM. Please also refer to the other documents provided regarding the input data format. Those documents include a detailed report on the data format and its purpose as well as a signal list in excel and an exemplary hdf5 file (Older Version on Sharepoint Version 4 [link](https://sharepoint.cloud4partner.com/websites/vvnational/Freigegebene%20Dokumente/10_Teilprojekte/08_TP8%20Datenbanken/01_AP8.1%20Anforderungsanalyse%20u.%20Datenbankdefinition/Eingangsdatenformat_Szenariendatenbank/Version%204 "Older Version on Sharepoint Version 4"), current Version in Confluence [link](https://confluence.vdali.de/login.action?os_destination=%2Fpages%2Fviewpage.action%3FspaceKey%3DVVM%26title%3DEingangsdatenformat%2BSzenarienDB&permissionViolation=true "current Version in Confluence")).
@@ -172,19 +173,35 @@ The filename needs to be provided in order to be able to couple the data provide
 
 The numbers of the individual recordings can be chosen by the partner providing the data. It is important that those numbers are unique and that the ground truth recording and the corresponding sensor under test recording from the same drive get the same number.
 
-### 3.4 mergerVersion
+### 3.4 converterVersion
+The field converterVersion in the top level refers to the version number of the tool used to merge all data together (if this was the case)
+
 Version number of merger used to merge map data, dynamic information and weather data. Can be provided as string in the format “x.y”.
 
-### 3.5 Natural Behavior
+### 3.5 referenceModality
+
+Please provide the method used to gather the reference / ground truth data. This can e.g. be the use of infrastructure sensors, a measuring vehicle equipped with high class sensors (with and without human annotations), RTK GNSS system or drones. If the method that was used for the data is not contained in the list below, please select other and give some information in the customInformation field.
+
+- 1: Measuring vehicle equipped with sensors and additional human labelling
+- 2: Measuring vehicle equipped with sensors without any additional human labelling
+- 3: Use of drones
+- 4: Infrastructure sensors
+- 5: RTK GNSS system
+- 6: Other
+
+### 3.6 customInformation
+Please provide any additional information that you want the user / the analyst to have that does not fit into any other signal.
+
+### 3.7 Natural Behavior
 In order to be able to judge the extracted scenarios, it is important to note down if the data at hand was recorded during a purposely, planned and staged scenario or if the data represents naturalistic driving data. If the data represents non naturalistic driving data please set the flag to false otherwise it is set to true. If the recording is only performed via button push after witnessing an “interesting” situation, this would also be non-naturalistic data. The information is saved as an attribute. The flag is set as an attribute.
 
-### 3.6 Natural Exposure
+### 3.8 Natural Exposure
 In order to calculate true exposure it is important to know if the scenario was purposely staged (see above) or naturalistic. If it was purposely staged, it can not have true exposure in the data, therefore, this flag needs to be set to false. If the recording is only performed via button push after witnessing an “interesting” situation, this would also be non natural exposure (set flag to false). Furthermore, the flag needs to be set to false if the data has been preprocessed to only upload “interesting” scenarios. The flag is set as an attribute.
 
-### 3.7 Reference Point (refPointLat/refPointLong)
+### 3.9 Reference Point (refPointLat/refPointLong)
 The two data fields are used to note down the latitudinal and longitudinal values of the chosen reference point. More information regarding the coordinate systems can be found in chapter 2.7. The information is saved as an attribute.
 
-### 3.8 Daytime
+### 3.10 Daytime
 The exact date and time at the beginning of the recording. The date needs to be saved in the format: yyyymmddhhmmss. It is saved as an attribute.
 
 

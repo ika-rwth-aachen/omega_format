@@ -12,6 +12,8 @@ namespace omega {
         refPointLat = 0.0;
         recorderNumber = VVMRecorderNumber::IKA;
         recordingNumber = 0;
+        referenceModality = 3;
+        customInformation = "";
         naturalBehavior = true;
         naturalExposure = true;
         daytime = "";
@@ -29,6 +31,9 @@ namespace omega {
 
         omega::add_attribute_to_group(parent_group, "refPointLat", this->refPointLat);
         omega::add_attribute_to_group(parent_group, "refPointLong", this->refPointLong);
+
+        omega::add_attribute_to_group(parent_group, "referenceModality", this->referenceModality);
+        omega::add_attribute_to_group(parent_group, "customInformation", this->customInformation);
 
         omega::add_attribute_to_group(parent_group, "daytime", this->daytime);
 
@@ -70,6 +75,9 @@ namespace omega {
 
         read_attribute(parent_group, "refPointLat", meta_data.refPointLat);
         read_attribute(parent_group, "refPointLong", meta_data.refPointLong);
+
+        read_attribute(parent_group, "referenceModality", meta_data.referenceModality);
+        read_attribute(parent_group, "customInformation", meta_data.customInformation);
 
         read_attribute(parent_group, "daytime", meta_data.daytime);
 

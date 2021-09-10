@@ -8,7 +8,7 @@ Art: Dokumentation/Bericht <br /> <br /> Ersteller: Maike Scholtes (ika)
 
 ---
 
-Version 3.0
+Version 3.1
 
 ---
 

@@ -34,6 +34,9 @@ class MetaData(InputClassBase):
     state_converter_version: str = None
     misc_object_converter_version: str = None
 
+    custom_information: str = None
+    reference_modality:int = None
+
     @property
     def version_identifier(self):
         none2string = lambda x: "0.0" if x is None else x
@@ -89,6 +92,8 @@ class MetaData(InputClassBase):
             weather_converter_version=get_converter_version(file, "weather"),
             state_converter_version=get_converter_version(file, "state"),
             misc_object_converter_version=get_converter_version(file, "miscObject"),
+            custom_information=cls.get_attribute(file, 'customInformation'),
+            reference_modality=cls.get_attribute(file, 'referenceModality'),
         )
         return self
 
@@ -119,6 +124,9 @@ class MetaData(InputClassBase):
         self.write_converter_version(group, "weather", self.weather_converter_version)
         self.write_converter_version(group, "state", self.state_converter_version)
         self.write_converter_version(group, "miscObject", self.misc_object_converter_version)
+
+        group.attrs.create("customInformation", data=self.custom_information)
+        group.attrs.create("referenceModality", data=self.reference_modality)
 
     @classmethod
     def assure_string(cls, byte_array):

@@ -35,7 +35,7 @@ class MetaData(InputClassBase):
     misc_object_converter_version: str = None
 
     custom_information: str = None
-    reference_modality:int = None
+    reference_modality: int = None
 
     @property
     def version_identifier(self):

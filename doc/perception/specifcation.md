@@ -22,8 +22,7 @@
 
 # Table of Contents 
 
-[1. Introduction and Information on this Document
-5](#introduction-and-information-on-this-document)
+[1. Introduction and Information on this Document](#introduction-and-information-on-this-document)
 
 [2. General Information](#general-information)
 
@@ -37,8 +36,7 @@
 
 [2.5 Type](#type)
 
-[2.6 Compulsory Fields and non compulsory fields
-7](#compulsory-fields-and-non-compulsory-fields)
+[2.6 Compulsory Fields and non compulsory fields](#compulsory-fields-and-non-compulsory-fields)
 
 [2.7 Variances](#variances)
 
@@ -72,8 +70,7 @@
 
 [5.4.1 Object Classification](#object-classification)
 
-[5.4.2 Confidence (of object classification)
-11](#confidence-of-object-classification)
+[5.4.2 Confidence (of object classification)](#confidence-of-object-classification)
 
 [5.4.3 heading](#heading)
 

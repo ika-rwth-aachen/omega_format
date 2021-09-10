@@ -28,6 +28,9 @@ namespace omega {
         std::string weatherConverterVersion;
         std::string stateConverterVersion;
         std::string miscObjectConverterVersion;
+        std::string customInformation;
+
+        int referenceModality;
 
     public:
         // default constructor creates "empty" object

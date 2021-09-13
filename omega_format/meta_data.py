@@ -34,7 +34,7 @@ class MetaData(InputClassBase):
     state_converter_version: str = None
     misc_object_converter_version: str = None
 
-    custom_information: str = None
+    custom_information: str = ""
     reference_modality: int = None
 
     @property

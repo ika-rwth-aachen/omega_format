@@ -1,24 +1,14 @@
-+---------------------------------------------------------+
 | DOKUMENTATION                                           |
-+---------------------------------------------------------+
-|                                                         |
-+---------------------------------------------------------+
+|:--------------------------------------------------------|
 | **Specification Input Data Format Perception Database** |
-+---------------------------------------------------------+
 |                                                         |
-+---------------------------------------------------------+
 | Art: Dokumentation/Bericht                              |
 |                                                         |
 | Ersteller: Maike Scholtes (ika)                         |
-+---------------------------------------------------------+
 |                                                         |
-+---------------------------------------------------------+
 | Version 1.3                                             |
-+---------------------------------------------------------+
 |                                                         |
-+---------------------------------------------------------+
 | Datum: 01.09.2021                                       |
-+---------------------------------------------------------+
 
 # Table of Contents 
 
@@ -168,9 +158,9 @@ perception database (i.e. the data stored in the format described in
 this document) is gathered from the so called sensors under test (SeUT)
 or perception under test (PeUT) that are installed around the vehicle.
 
-While the PeUT, as described above, can consist of data from different
+**While the PeUT, as described above, can consist of data from different
 sensor modalities (e.g. object list of lidar and object list of radar
-sensor), one separate file is needed for the different modalities. For
+sensor), one separate file is needed for the different modalities.** For
 instance, if one recording was made providing reference data, radar data
 and lidar data, the reference data would be saved in the scenario input
 format. The lidar and radar object data would be saved in two individual
@@ -181,8 +171,8 @@ will be put into one perception file. The sensor group (see Section 6),
 however, could contain information on every single sensor used in the
 fusion.
 
-Leave fields empty if you do not have the information. Do not put in
-zeros as those can be mistaken for "real zeros".
+**Leave fields empty if you do not have the information. Do not put in
+zeros as those can be mistaken for "real zeros".**
 
 ## Sensor Coordinate System
 

@@ -40,6 +40,48 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 | Maike Scholtes | 18.08.2021 | V3.0 | Provide information on the direction of the pitch angle. <br /> Clarify information on the heading angle and on which signals are provided in utm coordinate systems <br /> and which in the vehicle coordinate system. <br /> Included Image of global coordinate system. |
 | Maike Scholtes | 10.09.2021 | V3.1 | Added customInformation and referenceModality field. Change naming of merger version. |
 
+# Table of Contents
+
+[1. Introduction and Information on this Document](#1-introduction-and-information-on-this-document)
+
+[2. General Information](#2-general-information)
+
+[2.1 Attributes](#21-attributes)
+
+[2.2 Lookup Tables](#22-lookup-tables)
+
+[2.3 IDs](#23-ids)
+
+[2.4 Temporary Modifications](#24-temporary-modifications)
+
+[2.5 Mark something as invalid or empty](#25-mark-something-as-invalid-or-empty)
+
+[2.6 Polyline](#26-polyline)
+
+[2.6.1 Intersection](#261-intersection)
+
+[2.7 Timestamps](#27-timestamps)
+
+[2.8 Coordinate System](#28-coordinate-system)
+
+[2.8.1 Altitude](#281-altitude)
+
+[2.9 Trajectory](#29-trajectory)
+
+[2.9.1 Position](#291-position)
+
+[2.9.2 Heading](#292-heading)
+
+[2.9.3 Pitch](#293-pitch)
+
+[2.9.4 Roll](#294-roll)
+
+[2.9.5 Velocity](#295-velocity)
+
+[2.9.6 Acceleration](#296-acceleration)
+
+
+
 ## 1. Introduction and Information on this Document
 This document functions as a specification document that goes along with the proposed input data format in VVM. Please also refer to the other documents provided regarding the input data format. Those documents include a detailed report on the data format and its purpose as well as a signal list in excel and an exemplary hdf5 file (Older Version on Sharepoint Version 4 [link](https://sharepoint.cloud4partner.com/websites/vvnational/Freigegebene%20Dokumente/10_Teilprojekte/08_TP8%20Datenbanken/01_AP8.1%20Anforderungsanalyse%20u.%20Datenbankdefinition/Eingangsdatenformat_Szenariendatenbank/Version%204 "Older Version on Sharepoint Version 4"), current Version in Confluence [link](https://confluence.vdali.de/login.action?os_destination=%2Fpages%2Fviewpage.action%3FspaceKey%3DVVM%26title%3DEingangsdatenformat%2BSzenarienDB&permissionViolation=true "current Version in Confluence")).
 

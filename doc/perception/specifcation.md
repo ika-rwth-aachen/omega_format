@@ -628,13 +628,14 @@ Lidar sensors can provide which tracking point (feature) of an object
 has been detected. This can be imagined as a 3x3 grid on top of the
 vehicle, i.e. describing all four corners, the centers of the edges and
 the center of the vehicle. Even though the object data described in
-[Chapter Object](#object) uses the
+[Chapter 5](#object) uses the
 center of the vehicle as a reference point, for certain evaluations it
 can become important to know from which feature the lidar sensor has
 calculated this information. The different points in the grid can be
 referenced by integer values found in the following lookup table:
 
-![](images/image_1_fin.jpg)
+<img src="images/image_1_fin.jpg" width="400"/>
+
 Source: https://unsplash.com/photos/YU9rbNLQxSY
 
 -   0 = unknown

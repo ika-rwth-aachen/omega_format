@@ -80,6 +80,29 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 
 [2.9.6 Acceleration](#296-acceleration)
 
+[3. Attributes on Top Level](#3-attributes-on-top-level)
+
+[3.1 formatVersion](#31-formatversion)
+
+[3.2 RecorderNumber](#32-recordernumber)
+
+[3.3 RecordingNumber](#33-recordingnumber)
+
+[3.4 converterVersion](#34-converterversion)
+
+[3.5 referenceModality](#35-referencemodality)
+
+[3.6 customInformation](#36-custominformation)
+
+[3.7 Natural Behavior](#37-natural-behavior)
+
+[3.8 Natural Exposure](#38-natural-exposure)
+
+[3.9 Reference Point (refPointLat/refPointLong)](#39-reference-point)
+
+[3.10 Daytime](#310-daytime)
+
+
 
 
 ## 1. Introduction and Information on this Document

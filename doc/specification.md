@@ -40,68 +40,129 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 | Maike Scholtes | 18.08.2021 | V3.0 | Provide information on the direction of the pitch angle. <br /> Clarify information on the heading angle and on which signals are provided in utm coordinate systems <br /> and which in the vehicle coordinate system. <br /> Included Image of global coordinate system. |
 | Maike Scholtes | 10.09.2021 | V3.1 | Added customInformation and referenceModality field. Change naming of merger version. |
 
-# Table of Contents
-
-[1. Introduction and Information on this Document](#1-introduction-and-information-on-this-document)
-
-[2. General Information](#2-general-information)
-
-[2.1 Attributes](#21-attributes)
-
-[2.2 Lookup Tables](#22-lookup-tables)
-
-[2.3 IDs](#23-ids)
-
-[2.4 Temporary Modifications](#24-temporary-modifications)
-
-[2.5 Mark something as invalid or empty](#25-mark-something-as-invalid-or-empty)
-
-[2.6 Polyline](#26-polyline)
-
-[2.6.1 Intersection](#261-intersection)
-
-[2.7 Timestamps](#27-timestamps)
-
-[2.8 Coordinate System](#28-coordinate-system)
-
-[2.8.1 Altitude](#281-altitude)
-
-[2.9 Trajectory](#29-trajectory)
-
-[2.9.1 Position](#291-position)
-
-[2.9.2 Heading](#292-heading)
-
-[2.9.3 Pitch](#293-pitch)
-
-[2.9.4 Roll](#294-roll)
-
-[2.9.5 Velocity](#295-velocity)
-
-[2.9.6 Acceleration](#296-acceleration)
-
-[3. Attributes on Top Level](#3-attributes-on-top-level)
-
-[3.1 formatVersion](#31-formatversion)
-
-[3.2 RecorderNumber](#32-recordernumber)
-
-[3.3 RecordingNumber](#33-recordingnumber)
-
-[3.4 converterVersion](#34-converterversion)
-
-[3.5 referenceModality](#35-referencemodality)
-
-[3.6 customInformation](#36-custominformation)
-
-[3.7 Natural Behavior](#37-natural-behavior)
-
-[3.8 Natural Exposure](#38-natural-exposure)
-
-[3.9 Reference Point (refPointLat/refPointLong)](#39-reference-point)
-
-[3.10 Daytime](#310-daytime)
-
+-   [Specification OMEGA Format - Reference
+    Data](#specification-omega-format---reference-data)
+    -   [Inhaltsverzeichnis](#inhaltsverzeichnis)
+-   [Table of Contents](#table-of-contents)
+    -   [1. Introduction and Information on this
+        Document](#introduction-and-information-on-this-document)
+    -   [Introduction and Information on this
+        Document](#introduction-and-information-on-this-document-1)
+        -   [Used Input](#used-input)
+    -   [2. General Information](#general-information)
+        -   [2.1 Attributes](#attributes)
+        -   [2.2 Lookup Tables](#lookup-tables)
+        -   [2.3 IDs](#ids)
+        -   [2.4 Temporary Modifications](#temporary-modifications)
+        -   [2.5 Mark something as invalid or
+            empty](#mark-something-as-invalid-or-empty)
+        -   [2.6 Polyline](#polyline)
+        -   [2.7 Timestamps](#timestamps)
+        -   [2.8 Coordinate System](#coordinate-system)
+        -   [2.9 Trajectory](#trajectory)
+    -   [3. Attributes on Top Level](#attributes-on-top-level)
+        -   [3.1 formatVersion](#formatversion)
+        -   [3.2 RecorderNumber](#recordernumber)
+        -   [3.3 RecordingNumber](#recordingnumber)
+        -   [3.4 converterVersion](#converterversion)
+        -   [3.5 referenceModality](#referencemodality)
+        -   [3.6 customInformation](#custominformation)
+        -   [3.7 Natural Behavior](#natural-behavior)
+        -   [3.8 Natural Exposure](#natural-exposure)
+        -   [3.9 Reference Point
+            (refPointLat/refPointLong)](#reference-point-refpointlatrefpointlong)
+        -   [3.10 Daytime](#daytime)
+    -   [4. Road](#road)
+        -   [4.1 converterVersion](#converterversion-1)
+        -   [4.2 Location](#location)
+        -   [4.3 Border](#border)
+    -   [5 Lane](#lane)
+        -   [5.1 Type](#type)
+        -   [5.2 Sub Type](#sub-type)
+        -   [5.3 Class](#class)
+        -   [5.4 BorderRight/Left](#borderrightleft)
+        -   [5.5 invertedRight/Left](#invertedrightleft)
+        -   [5.6 Predecessor/Successor](#predecessorsuccessor)
+    -   [6. Boundary](#boundary)
+        -   [6.1 Type](#type-1)
+        -   [6.2 Sub Type](#sub-type-1)
+        -   [6.3 Right](#right)
+        -   [6.4
+            polyIndexStart/polyIndexEnd](#polyindexstartpolyindexend)
+        -   [6.5 Height](#height)
+        -   [6.6 Color](#color)
+        -   [6.7 Condition](#condition)
+    -   [7. Sign](#sign)
+        -   [7.1 Type](#type-2)
+        -   [7.2 Value](#value)
+        -   [7.3 Size Class](#size-class)
+        -   [7.4 History](#history)
+        -   [7.5
+            Timedependent/Weatherdependent](#timedependentweatherdependent)
+        -   [7.6 Applicable Lanes](#applicable-lanes)
+        -   [7.7 Connected To](#connected-to)
+        -   [7.8 Fallback](#fallback)
+        -   [7.9 Polyline](#polyline-1)
+        -   [7.10 Heading](#heading-1)
+    -   [8. Flat Marking](#flat-marking)
+        -   [8.1 Type](#type-3)
+        -   [8.2 Value](#value-1)
+        -   [8.3 Polyline](#polyline-2)
+        -   [8.4 Color](#color-1)
+        -   [8.5 Condition](#condition-1)
+    -   [9. Lateral Marking](#lateral-marking)
+        -   [9.1 Type](#type-4)
+        -   [9.2 Polyline](#polyline-3)
+        -   [9.3 LongSize](#longsize)
+        -   [9.4 ApplicableLanes](#applicablelanes)
+        -   [9.5 Color](#color-2)
+        -   [9.6 Condition](#condition-2)
+    -   [10. Surface](#surface)
+        -   [10.1 Material](#material)
+        -   [10.2 Color](#color-3)
+        -   [10.3 Condition](#condition-3)
+    -   [11 Road Object](#road-object)
+        -   [11.1 Type](#type-5)
+        -   [11.2 Polyline](#polyline-4)
+        -   [11.3 Height](#height-1)
+        -   [11.4 Driveable/walkable](#driveablewalkable)
+    -   [12 Structural Object](#structural-object)
+        -   [12.1 Type](#type-6)
+        -   [12.2 Polyline](#polyline-5)
+        -   [12.3 Height](#height-2)
+    -   [13 Road User](#road-user)
+        -   [13.1 converterVersion](#converterversion-2)
+        -   [13.2 Type](#type-7)
+        -   [13.3 Sub Type](#sub-type-2)
+        -   [13.5 birthStamp](#birthstamp)
+        -   [13.6 Trajectory](#trajectory-1)
+        -   [13.7 isDataRecorder](#isdatarecorder)
+        -   [13.8 Bounding Box](#bounding-box)
+        -   [13.9 Vehicle Lights](#vehicle-lights)
+    -   [14. Misc Object](#misc-object)
+        -   [14.1 Type](#type-8)
+        -   [14.2 Sub Type](#sub-type-3)
+        -   [14.3 Trajectory](#trajectory-2)
+        -   [14.4 birthStamp](#birthstamp-1)
+        -   [14.5 Bounding Box](#bounding-box-1)
+    -   [15. State](#state)
+        -   [15.1 ReferenceID](#referenceid)
+        -   [15.2 Value](#value-2)
+    -   [16. weather](#weather)
+        -   [16.1 converterVersion](#converterversion-3)
+        -   [16.2 Source](#source)
+        -   [16.3 Weather Sation ID](#weather-sation-id)
+        -   [16.4 Precipitation](#precipitation)
+        -   [16.5 Wind](#wind)
+        -   [16.6 Gust of Wind](#gust-of-wind)
+        -   [16.7 Cloudiness](#cloudiness)
+        -   [16.8 Road Condition](#road-condition)
+        -   [16.9 Temperature](#temperature)
+        -   [16.10 Humidity](#humidity)
+        -   [16.11 Air Pressure](#air-pressure)
+        -   [16.12 Visibility](#visibility)
+        -   [16.13](#section)
+    -   [17. Literaturverzeichnis](#literaturverzeichnis)
 
 
 

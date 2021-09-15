@@ -238,6 +238,8 @@ The whole description features two coordinate systems. One is the main, absolute
 
 All positions are described relative to this one absolute point and its UTM coordinate system. This is the case for the complete description of the road and its components as well as for the position of road users and misc objects.
 
+<img src="images/2-8_global_coords.jpg" alt="Global coordinate system" width="200">
+
 **For such objects, however, velocity and acceleration are described in the vehicle coordinate system (ISO 8855, see Figure 1).** This allows for defining velocity and acceleration in longitudinal and lateral (in the sense of automotive engineering not geodetically) direction (z-direction is constant). The coordinate systems can be transformed into each other using the heading angle. Please note that in the geodetical coordinate system the “east-west axis” (x-axis) points to the right while in the automotive coordinate system (y-axis) it points to the left.
 
 <img src="images/2-8_vehicle.png" alt="Vehicle coordinate system" width="200"/>

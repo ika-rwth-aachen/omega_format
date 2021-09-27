@@ -179,7 +179,7 @@ class Object(BaseModel):
             length=ValVar.from_hdf5(group['length'], validate=validate),
             rcs=group['rcs'][()],
             age=group['age'][()],
-            tracking_point=group['trackingPoint'][()],
+            tracking_point=group['trackingPoint'][()].tolist(),
             confidence_of_existence=group['confidenceOfExistence'][()],
 
             movement_classification=list(map(PerceptionTypes.MovementClassification,

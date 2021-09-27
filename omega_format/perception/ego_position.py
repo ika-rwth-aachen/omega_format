@@ -19,22 +19,23 @@ class EgoPosition(BaseModel):
     yaw_rate: np.ndarray = np.array([], dtype=np.float64)
     pitch: np.ndarray = np.array([], dtype=np.float64)
 
-    @validator('heading', 'pos_longitude', 'pos_latitude')
-    def check_array_length(cls, v, values):
-        if isinstance(v, ValVar):
-            assert len(v.val) == len(v.var), f'length of val {len(v.val)} and length of var {len(v.var)} are not the same'
-            return v
-        else:
-            if not len(v) > 0:
-                warn('received trajectory with empty array')
+    if False:
+        @validator('heading', 'pos_longitude', 'pos_latitude')
+        def check_array_length(cls, v, values):
+            if isinstance(v, ValVar):
+                assert len(v.val) == len(v.var), f'length of val {len(v.val)} and length of var {len(v.var)} are not the same'
+                return v
+            else:
+                if not len(v) > 0:
+                    warn('received trajectory with empty array')
 
-            if len(values) > 0:
-                # first array would be validated if len(values)=0 -> no length to compare against
-                # use the length of pos_x to check equality with other array length
-                length = len(values.get('heading'))
-                if len(v) != length:
-                    raise ValueError(f'length of all EgoPosition arrays must match, expected len {len(v)}, actual len {length}')
-        return v
+                if len(values) > 0:
+                    # first array would be validated if len(values)=0 -> no length to compare against
+                    # use the length of pos_x to check equality with other array length
+                    length = len(values.get('heading'))
+                    if len(v) != length:
+                        raise ValueError(f'length of all EgoPosition arrays must match, expected len {len(v)}, actual len {length}')
+            return v
 
     @validator('heading')
     def check_angle(cls, v):

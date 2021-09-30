@@ -2,3 +2,4 @@ include omega_format/visualization/ui/main.ui
 include omega_format/visualization/ui/icon.svg
 include versioneer.py
 include omega_format/_version.py
+include omega_format/perception/config.json

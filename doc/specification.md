@@ -8,13 +8,12 @@ Art: Dokumentation/Bericht <br /> <br /> Ersteller: Maike Scholtes (ika)
 
 ---
 
-Version 3.0
+Version 3.1
 
 ---
 
 Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 
-## Inhaltsverzeichnis
 
 
 **Versionen**
@@ -37,6 +36,132 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 | Maike Scholtes | 02.12.2020 | V2.4 | Added “Sinnbilder” for markings |
 | Maike Scholtes | 17.03.2021 | V2.5 | Added different converter numbers. <br /> Made changes to what needs to be provided instead if something can not be provided. |
 | Maike Scholtes | 23.03.2021 | V3.0 | Introduction of attributes in hdf5 for scalar metainformation |
+| Maike Scholtes | 18.08.2021 | V3.0 | Provide information on the direction of the pitch angle. <br /> Clarify information on the heading angle and on which signals are provided in utm coordinate systems <br /> and which in the vehicle coordinate system. <br /> Included Image of global coordinate system. |
+| Maike Scholtes | 10.09.2021 | V3.1 | Added customInformation and referenceModality field. |
+
+-   [Specification OMEGA Format - Reference
+    Data](#specification-omega-format---reference-data)
+-   [Table of Contents](#table-of-contents)
+    -   [1. Introduction and Information on this
+        Document](#1-introduction-and-information-on-this-document)
+    -   [Introduction and Information on this
+        Document](#introduction-and-information-on-this-document-1)
+        -   [Used Input](#used-input)
+    -   [2. General Information](#2-general-information)
+        -   [2.1 Attributes](#21-attributes)
+        -   [2.2 Lookup Tables](#22-lookup-tables)
+        -   [2.3 IDs](#23-ids)
+        -   [2.4 Temporary Modifications](#24-temporary-modifications)
+        -   [2.5 Mark something as invalid or
+            empty](#25-mark-something-as-invalid-or-empty)
+        -   [2.6 Polyline](#26-polyline)
+        -   [2.7 Timestamps](#27-timestamps)
+        -   [2.8 Coordinate System](#28-coordinate-system)
+        -   [2.9 Trajectory](#29-trajectory)
+    -   [3. Attributes on Top Level](#3-attributes-on-top-level)
+        -   [3.1 formatVersion](#31-formatversion)
+        -   [3.2 RecorderNumber](#32-recordernumber)
+        -   [3.3 RecordingNumber](#33-recordingnumber)
+        -   [3.4 converterVersion](#34-converterversion)
+        -   [3.5 referenceModality](#35-referencemodality)
+        -   [3.6 customInformation](#36-custominformation)
+        -   [3.7 Natural Behavior](#37-natural-behavior)
+        -   [3.8 Natural Exposure](#38-natural-exposure)
+        -   [3.9 Reference Point
+            (refPointLat/refPointLong)](#39-reference-point-refpointlatrefpointlong)
+        -   [3.10 Daytime](#310-daytime)
+    -   [4. Road](#4-road)
+        -   [4.1 converterVersion](#41-converterversion-1)
+        -   [4.2 Location](#42-location)
+        -   [4.3 Border](#43-border)
+    -   [5 Lane](#5-lane)
+        -   [5.1 Type](#51-type)
+        -   [5.2 Sub Type](#52-sub-type)
+        -   [5.3 Class](#53-class)
+        -   [5.4 BorderRight/Left](#54-borderrightleft)
+        -   [5.5 invertedRight/Left](#55-invertedrightleft)
+        -   [5.6 Predecessor/Successor](#56-predecessorsuccessor)
+    -   [6. Boundary](#6-boundary)
+        -   [6.1 Type](#61-type-1)
+        -   [6.2 Sub Type](#62-sub-type-1)
+        -   [6.3 Right](#63-right)
+        -   [6.4
+            polyIndexStart/polyIndexEnd](#64-polyindexstartpolyindexend)
+        -   [6.5 Height](#65-height)
+        -   [6.6 Color](#66-color)
+        -   [6.7 Condition](#67-condition)
+    -   [7. Sign](#7-sign)
+        -   [7.1 Type](#71-type-2)
+        -   [7.2 Value](#72-value)
+        -   [7.3 Size Class](#73-size-class)
+        -   [7.4 History](#74-history)
+        -   [7.5
+            Timedependent/Weatherdependent](#75-timedependentweatherdependent)
+        -   [7.6 Applicable Lanes](#76-applicable-lanes)
+        -   [7.7 Connected To](#77-connected-to)
+        -   [7.8 Fallback](#78-fallback)
+        -   [7.9 Polyline](#79-polyline-1)
+        -   [7.10 Heading](#710-heading-1)
+    -   [8. Flat Marking](#8-flat-marking)
+        -   [8.1 Type](#81-type-3)
+        -   [8.2 Value](#82-value-1)
+        -   [8.3 Polyline](#83-polyline-2)
+        -   [8.4 Color](#84-color-1)
+        -   [8.5 Condition](#85-condition-1)
+    -   [9. Lateral Marking](#9-lateral-marking)
+        -   [9.1 Type](#91-type-4)
+        -   [9.2 Polyline](#92-polyline-3)
+        -   [9.3 LongSize](#93-longsize)
+        -   [9.4 ApplicableLanes](#94-applicablelanes)
+        -   [9.5 Color](#95-color-2)
+        -   [9.6 Condition](#96-condition-2)
+    -   [10. Surface](#10-surface)
+        -   [10.1 Material](#101-material)
+        -   [10.2 Color](#102-color-3)
+        -   [10.3 Condition](#103-condition-3)
+    -   [11 Road Object](#11-road-object)
+        -   [11.1 Type](#111-type-5)
+        -   [11.2 Polyline](#112-polyline-4)
+        -   [11.3 Height](#113-height-1)
+        -   [11.4 Driveable/walkable](#114-driveablewalkable)
+    -   [12 Structural Object](#12-structural-object)
+        -   [12.1 Type](#121-type-6)
+        -   [12.2 Polyline](#122-polyline-5)
+        -   [12.3 Height](#123-height-2)
+    -   [13 Road User](#13-road-user)
+        -   [13.1 converterVersion](#131-converterversion-2)
+        -   [13.2 Type](#132-type-7)
+        -   [13.3 Sub Type](#133-sub-type-2)
+        -   [13.5 birthStamp](#135-birthstamp)
+        -   [13.6 Trajectory](#136-trajectory-1)
+        -   [13.7 isDataRecorder](#137-isdatarecorder)
+        -   [13.8 Bounding Box](#138-bounding-box)
+        -   [13.9 Vehicle Lights](#139-vehicle-lights)
+    -   [14. Misc Object](#14-misc-object)
+        -   [14.1 Type](#141-type-8)
+        -   [14.2 Sub Type](#142-sub-type-3)
+        -   [14.3 Trajectory](#143-trajectory-2)
+        -   [14.4 birthStamp](#144-birthstamp-1)
+        -   [14.5 Bounding Box](#145-bounding-box-1)
+    -   [15. State](#15-state)
+        -   [15.1 ReferenceID](#151-referenceid)
+        -   [15.2 Value](#152-value-2)
+    -   [16. weather](#16-weather)
+        -   [16.1 converterVersion](#161-converterversion-3)
+        -   [16.2 Source](#162-source)
+        -   [16.3 Weather Sation ID](#163-weather-sation-id)
+        -   [16.4 Precipitation](#164-precipitation)
+        -   [16.5 Wind](#165-wind)
+        -   [16.6 Gust of Wind](#166-gust-of-wind)
+        -   [16.7 Cloudiness](#167-cloudiness)
+        -   [16.8 Road Condition](#168-road-condition)
+        -   [16.9 Temperature](#169-temperature)
+        -   [16.10 Humidity](#1610-humidity)
+        -   [16.11 Air Pressure](#1611-air-pressure)
+        -   [16.12 Visibility](#1612-visibility)
+        -   [16.13](#1613-section)
+    -   [17. Literaturverzeichnis](#17-literaturverzeichnis)
+
 
 
 ## 1. Introduction and Information on this Document
@@ -113,6 +238,8 @@ The whole description features two coordinate systems. One is the main, absolute
 
 All positions are described relative to this one absolute point and its UTM coordinate system. This is the case for the complete description of the road and its components as well as for the position of road users and misc objects.
 
+<img src="images/2-8_global_coords.jpg" alt="Global coordinate system" width="200">
+
 **For such objects, however, velocity and acceleration are described in the vehicle coordinate system (ISO 8855, see Figure 1).** This allows for defining velocity and acceleration in longitudinal and lateral (in the sense of automotive engineering not geodetically) direction (z-direction is constant). The coordinate systems can be transformed into each other using the heading angle. Please note that in the geodetical coordinate system the “east-west axis” (x-axis) points to the right while in the automotive coordinate system (y-axis) it points to the left.
 
 <img src="images/2-8_vehicle.png" alt="Vehicle coordinate system" width="200"/>
@@ -136,13 +263,13 @@ When describing height information of buildings etc. and other objects the heigh
 **The position of each object is described relative to the one absolute point described in the previous section.** The previously described UTM coordinate system is used to describe the axis. **For all road users or misc objects the geometrical center of the object is taken to describe the position.** The z-position is equivalent to the altitude.
 
 #### 2.9.2 Heading
-**The heading angle is defined as the angle around the z-axis.** This is true for the UTM coordinate system and the vehicle coordinate system. Therefore, the heading angle can be used to transform from one system into the other. Heading angles are provided in the mathematically positive direction (counter clockwise). **A heading angle of zero corresponds with the east direction (x-axis in UTM coordinate system).**
 
-In the area of normal driving dynamics (which we expect in the data) it is assumed that heading and yaw are equivalent. Therefore, it is enough to save the heading angle of road users.
+**The heading angle is defined as the angle around the z-axis.** This is true for the UTM coordinate system and the vehicle coordinate system. Therefore, the heading angle can be used to transform from one system into the other. Heading angles are provided in the mathematically positive direction (counter clockwise). **A heading angle of zero corresponds with the east direction (x-axis in UTM coordinate system). The heading angle is NOT given in the vehicle coordinate system, but in the UTM coordinate system. The heading angle is between 0 and 360 degree.**
+
+ In the area of normal driving dynamics (which we expect in the data) it is assumed that heading and yaw are equivalent. Therefore, it is enough to save the heading angle of road users
 
 #### 2.9.3 Pitch
-The pitch angle is provided in the vehicles coordinate system. It is the angle in respect to the y-axis in the vehicle coordinate system. It is also provided in mathematically positive direction. An angle of zero corresponds to the x-y-plane.
-
+The pitch angle is provided in the vehicles coordinate system. It is the angle in respect to the y-axis in the vehicle coordinate system. It is also provided in mathematically positive direction. An angle of zero corresponds to the x-y-plane. The pitch angle is defined in the mathematical positive sense, i.e., it is positive when stopping.It is given in degrees and is between 0 and +/-180. 
 #### 2.9.4 Roll
 The roll angle is provided in the vehicles coordinate system. It is the angle in respect to the x-axis in the vehicle coordinate system. It is also provided in mathematically positive direction. An angle of zero corresponds to the x-y-plane.
 
@@ -172,19 +299,35 @@ The filename needs to be provided in order to be able to couple the data provide
 
 The numbers of the individual recordings can be chosen by the partner providing the data. It is important that those numbers are unique and that the ground truth recording and the corresponding sensor under test recording from the same drive get the same number.
 
-### 3.4 mergerVersion
+### 3.4 converterVersion
+The field converterVersion in the top level refers to the version number of the tool used to merge all data together (if this was the case)
+
 Version number of merger used to merge map data, dynamic information and weather data. Can be provided as string in the format “x.y”.
 
-### 3.5 Natural Behavior
+### 3.5 referenceModality
+
+Please provide the method used to gather the reference / ground truth data. This can e.g. be the use of infrastructure sensors, a measuring vehicle equipped with high class sensors (with and without human annotations), RTK GNSS system or drones. If the method that was used for the data is not contained in the list below, please select other and give some information in the customInformation field.
+
+- 1: Measuring vehicle equipped with sensors and additional human labelling
+- 2: Measuring vehicle equipped with sensors without any additional human labelling
+- 3: Use of drones
+- 4: Infrastructure sensors
+- 5: RTK GNSS system
+- 6: Other
+
+### 3.6 customInformation
+Please provide any additional information that you want the user / the analyst to have that does not fit into any other signal.
+
+### 3.7 Natural Behavior
 In order to be able to judge the extracted scenarios, it is important to note down if the data at hand was recorded during a purposely, planned and staged scenario or if the data represents naturalistic driving data. If the data represents non naturalistic driving data please set the flag to false otherwise it is set to true. If the recording is only performed via button push after witnessing an “interesting” situation, this would also be non-naturalistic data. The information is saved as an attribute. The flag is set as an attribute.
 
-### 3.6 Natural Exposure
+### 3.8 Natural Exposure
 In order to calculate true exposure it is important to know if the scenario was purposely staged (see above) or naturalistic. If it was purposely staged, it can not have true exposure in the data, therefore, this flag needs to be set to false. If the recording is only performed via button push after witnessing an “interesting” situation, this would also be non natural exposure (set flag to false). Furthermore, the flag needs to be set to false if the data has been preprocessed to only upload “interesting” scenarios. The flag is set as an attribute.
 
-### 3.7 Reference Point (refPointLat/refPointLong)
+### 3.9 Reference Point (refPointLat/refPointLong)
 The two data fields are used to note down the latitudinal and longitudinal values of the chosen reference point. More information regarding the coordinate systems can be found in chapter 2.7. The information is saved as an attribute.
 
-### 3.8 Daytime
+### 3.10 Daytime
 The exact date and time at the beginning of the recording. The date needs to be saved in the format: yyyymmddhhmmss. It is saved as an attribute.
 
 
@@ -335,11 +478,11 @@ List:
 - solid_dashed = 4 (first mentioned type of line is the one on the inside of the lane, i.e. the one valid for the driver)
   - (vehicle driving on right hand side)
 
-	<img src="images/6-1_solid_dashed.jpg" alt="solid_dashed" width="200"/>
+	<img src="images/6-1_dashed_solid.png" alt="dashed_solid" width="200"/>
 - dashed_solid = 5 (first mentioned type of line is the one on the inside of the lane, i.e. the one valid for the driver)
   - (vehicle driving on right hand side)
 
-	<img src="images/6-1_dashed_solid.png" alt="dashed_solid" width="200"/>
+	<img src="images/6-1_solid_dashed.jpg" alt="solid_dashed" width="200"/>
 - dashed_changeDirectionLane = 6
   - Lanes that can be used for both directions (permission displayed on changable signs) are divided by double dashed lines.
 

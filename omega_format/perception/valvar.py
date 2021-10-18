@@ -20,8 +20,9 @@ class ValVar(BaseModel):
 
         length = len(values.get('val'))
         if len(v) != length:
-            raise ValueError(
-                f'length of var array must match with val array, expected len {len(v)}, actual len {length}')
+            warn('lenght of var does not match length of val. This is only possible if var is of type not_provided')
+            # raise ValueError(
+            #     f'length of var array must match with val array, expected len {len(v)}, actual len {length}')
         return v
 
     @classmethod

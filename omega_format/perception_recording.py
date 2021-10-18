@@ -21,12 +21,13 @@ class PerceptionRecording(BaseModel):
     """
     class Config(PydanticConfig):
         pass
-    format_version: str = "1.2"
+    format_version: str = "1.3"
     converter_version: str = ""
     recorder_number: int = 0
     recording_number: int = 0
     ego_id: int = 0
     ego_offset: float = 0.
+    custom_information: str = ""
 
     timestamps: Timestamps = Field(default_factory=Timestamps)
     meta_object: MetaObject = Field(default_factory=MetaObject)
@@ -48,6 +49,7 @@ class PerceptionRecording(BaseModel):
                     recording_number=file.attrs['recordingNumber'],
                     ego_id=int(file.attrs['egoID']),
                     ego_offset=file.attrs['egoOffset'],
+                    custom_information=file.attrs['customInformation'],
                     timestamps=tfunc(val=file['timestamps'][()]),
                     meta_object=MetaObject.from_hdf5(file['object'], validate=validate),
                     ego_position=EgoPosition.from_hdf5(file['egoPosition'], validate=validate),
@@ -67,6 +69,7 @@ class PerceptionRecording(BaseModel):
             file.attrs.create('recordingNumber', data=self.recording_number)
             file.attrs.create('egoID', data=self.ego_id)
             file.attrs.create('egoOffset', data=self.ego_offset)
+            file.attrs.create('customInformation', data=self.custom_information)
 
             file.create_dataset('timestamps', data=self.timestamps.val)
 

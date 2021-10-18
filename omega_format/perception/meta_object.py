@@ -30,10 +30,8 @@ class MetaObject(BaseModel):
     abs_acc_longitudinal_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     abs_acc_lateral_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     abs_acc_lateral_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    azimuth_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    azimuth_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     object_classification_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    object_classification_confidence_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
+    object_classification_confidence_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
 
     heading_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     heading_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
@@ -43,13 +41,12 @@ class MetaObject(BaseModel):
     height_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     length_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     length_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    size2d_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    size2d_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    size3d_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
-    size3d_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     rcs_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     age_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     tracking_point_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
+    confidence_of_existence_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
+    movement_classification_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
+    meas_state_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True):
@@ -77,10 +74,8 @@ class MetaObject(BaseModel):
             abs_acc_longitudinal_var_type=PerceptionTypes.PerceptionType(group.attrs['absAccLongitudinalVarType']),
             abs_acc_lateral_val_type=PerceptionTypes.PerceptionType(group.attrs['absAccLateralValType']),
             abs_acc_lateral_var_type=PerceptionTypes.PerceptionType(group.attrs['absAccLateralVarType']),
-            azimuth_val_type=PerceptionTypes.PerceptionType(group.attrs['azimuthValType']),
-            azimuth_var_type=PerceptionTypes.PerceptionType(group.attrs['azimuthVarType']),
             object_classification_val_type=PerceptionTypes.PerceptionType(group.attrs['objectClassificationValType']),
-            object_classification_confidence_type=PerceptionTypes.PerceptionType(group.attrs['objectClassificationConfidenceType']),
+            object_classification_confidence_val_type=PerceptionTypes.PerceptionType(group.attrs['objectClassificationConfidenceValType']),
 
             heading_val_type=PerceptionTypes.PerceptionType(group.attrs['headingValType']),
             heading_var_type=PerceptionTypes.PerceptionType(group.attrs['headingVarType']),
@@ -90,13 +85,12 @@ class MetaObject(BaseModel):
             height_var_type=PerceptionTypes.PerceptionType(group.attrs['heightVarType']),
             length_val_type=PerceptionTypes.PerceptionType(group.attrs['lengthValType']),
             length_var_type=PerceptionTypes.PerceptionType(group.attrs['lengthVarType']),
-            size2d_val_type=PerceptionTypes.PerceptionType(group.attrs['size2dValType']),
-            size2d_var_type=PerceptionTypes.PerceptionType(group.attrs['size2dVarType']),
-            size3d_val_type=PerceptionTypes.PerceptionType(group.attrs['size3dValType']),
-            size3d_var_type=PerceptionTypes.PerceptionType(group.attrs['size3dVarType']),
             rcs_val_type=PerceptionTypes.PerceptionType(group.attrs['rcsValType']),
             age_val_type=PerceptionTypes.PerceptionType(group.attrs['ageValType']),
             tracking_point_val_type=PerceptionTypes.PerceptionType(group.attrs['trackingPointValType']),
+            confidence_of_existence_val_type=PerceptionTypes.PerceptionType(group.attrs['confidenceOfExistenceValType']),
+            movement_classificaton_val_type=PerceptionTypes.PerceptionType(group.attrs['movementClassificationValType']),
+            meas_state_val_type=PerceptionTypes.PerceptionType(group.attrs['measStateValType']),
         )
         return self
 
@@ -123,10 +117,8 @@ class MetaObject(BaseModel):
         group.attrs.create('absAccLongitudinalVarType', data=self.abs_acc_longitudinal_var_type)
         group.attrs.create('absAccLateralValType', data=self.abs_acc_lateral_val_type)
         group.attrs.create('absAccLateralVarType', data=self.abs_acc_lateral_var_type)
-        group.attrs.create('azimuthValType', data=self.azimuth_val_type)
-        group.attrs.create('azimuthVarType', data=self.azimuth_var_type)
         group.attrs.create('objectClassificationValType', data=self.object_classification_val_type)
-        group.attrs.create('objectClassificationConfidenceType', data=self.object_classification_confidence_type)
+        group.attrs.create('objectClassificationConfidenceValType', data=self.object_classification_confidence_val_type)
 
         group.attrs.create('headingValType', data=self.heading_val_type)
         group.attrs.create('headingVarType', data=self.heading_var_type)
@@ -136,10 +128,9 @@ class MetaObject(BaseModel):
         group.attrs.create('heightVarType', data=self.height_var_type)
         group.attrs.create('lengthValType', data=self.length_val_type)
         group.attrs.create('lengthVarType', data=self.length_var_type)
-        group.attrs.create('size2dValType', data=self.size2d_val_type)
-        group.attrs.create('size2dVarType', data=self.size2d_var_type)
-        group.attrs.create('size3dValType', data=self.size3d_val_type)
-        group.attrs.create('size3dVarType', data=self.size3d_var_type)
         group.attrs.create('rcsValType', data=self.rcs_val_type)
         group.attrs.create('ageValType', data=self.age_val_type)
         group.attrs.create('trackingPointValType', data=self.tracking_point_val_type)
+        group.attrs.create('confidenceOfExistenceValType', data=self.confidence_of_existence_val_type)
+        group.attrs.create('movementClassificationValType', data=self.movement_classification_val_type)
+        group.attrs.create('measStateValType', data=self.meas_state_val_type)

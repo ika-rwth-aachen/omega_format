@@ -25,7 +25,7 @@ class ReferenceRecording(InputClassBase):
     Class that represents the OMEGA Format Reference Recording in an object-oriented manner.
     """
     meta_data: MetaData = Field(default_factory=MetaData)
-    timestamps: Timestamps = None
+    timestamps: Timestamps = Field(default_factory=Timestamps)
     ego_id: Optional[int] = None
     ego_vehicle: Optional[RoadUser] = None
     weather: Weather = None
@@ -52,6 +52,8 @@ class ReferenceRecording(InputClassBase):
                 )
 
                 self.ego_id = cls.extract_ego_id(road_users=self.road_users)
+                #if self.ego_id is not None and self.ego_vehicle is None:
+                #    self.ego_vehicle = self.road_users.pop(self.ego_id)
                 self.resolve()
                 return self
 

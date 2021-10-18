@@ -6,17 +6,17 @@ from h5py import Group
 
 from ..reference_resolving import raise_not_resolved
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from warnings import warn
 
 class Trajectory(BaseModel):
     class Config(PydanticConfig):
         pass
-    pos_x: np.ndarray
-    pos_y: np.ndarray
-    pos_z: np.ndarray
-    roll: np.ndarray
-    pitch: np.ndarray
-    heading: np.ndarray
+    pos_x: np.ndarray = np.array([], dtype=np.float64)
+    pos_y: np.ndarray = np.array([], dtype=np.float64)
+    pos_z: np.ndarray = np.array([], dtype=np.float64)
+    roll: np.ndarray = np.array([], dtype=np.float64)
+    pitch: np.ndarray = np.array([], dtype=np.float64)
+    heading: np.ndarray = np.array([], dtype=np.float64)
 
     vel_longitudinal: Optional[np.ndarray]
     vel_lateral: Optional[np.ndarray]
@@ -30,17 +30,13 @@ class Trajectory(BaseModel):
     heading_der: Optional[np.ndarray]
 
     @validator('*')  # the '*' means that this validator is applied to each member of Trajectory
-    def check_array_length(cls, v, values):
-
-        if not len(v) > 0:
-            raise ValueError('received trajectory with empty array')
-
+    def check_array_length(cls, v, values, **kwargs):
         if len(values) > 0:
             # first array would be validated if len(values)=0 -> no length to compare against
             # use the length of pos_x to check equality with other array length
             length = len(values.get('pos_x'))
-            if len(v) != length:
-                raise ValueError(f'length of all trajectory arrays must match, expected len {len(v)}, actual len {length}')
+            if len(v) != length and len(v) > 0:
+                raise ValueError(f'length of all trajectory arrays must match, expected len {length}, actual len {len(v)}')
         return v
 
     @validator('vel_longitudinal', 'vel_lateral')
@@ -104,18 +100,26 @@ class Trajectory(BaseModel):
 
     @cached_property
     def vel(self):
-        return np.sqrt(np.power(self.vel_lateral, 2) + np.power(self.vel_longitudinal, 2) + np.power(self.vel_z, 2))
+        if self.vel_lateral is None or self.vel_longitudinal is None:
+            return None
+        return np.sqrt(np.power(self.vel_lateral, 2) + np.power(self.vel_longitudinal, 2))# + np.power(self.vel_z, 2))
 
     @cached_property
     def acc(self):
-        return np.sqrt(np.power(self.acc_lateral, 2) + np.power(self.acc_longitudinal, 2) + np.power(self.acc_z, 2))
+        if self.acc_lateral is None or self.acc_longitudinal is None:
+            return None
+        return np.sqrt(np.power(self.acc_lateral, 2) + np.power(self.acc_longitudinal, 2))# + np.power(self.acc_z, 2))
 
     @cached_property
     def is_still(self, vel_thresh=0.1, acc_thresh=0.1):
+        if self.vel is None or self.acc is None:
+            return None
         return np.logical_and(self.vel <= vel_thresh, self.acc <= acc_thresh)
 
     @cached_property
     def is_static(self):
+        if self.is_still is None:
+            return None
         return np.all(self.is_still)
 
     @cached_property

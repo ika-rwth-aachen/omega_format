@@ -18,6 +18,7 @@ class VisualizePercSensors(VisualizationModule):
             return []
 
         items = []
+        ego_offset = snip.perception.ego_offset
 
         if snip.identifier != 'only_perception':
             ego_obj = snip.reference.ego_vehicle
@@ -29,18 +30,19 @@ class VisualizePercSensors(VisualizationModule):
 
         for id_, sensor in snip.perception.sensors.items():  # type: int, Sensor
             offset_x = sensor.sensor_pos_lateral
-            offset_y = sensor.sensor_pos_longitudinal
+            offset_y = sensor.sensor_pos_longitudinal + ego_offset
 
             heading = sensor.sensor_heading
             dist_min = sensor.min_range
             dist_max = sensor.max_range
+            diameter = dist_max * 2
             fov_horizontal = sensor.fov_horizontal
             fov_vertical = sensor.fov_vertical
 
-            start_angle = -fov_horizontal
-            span_angle = fov_horizontal * 2
+            start_angle = -fov_horizontal/2
+            span_angle = fov_horizontal
 
-            artist = QtWidgets.QGraphicsEllipseItem(-dist_max / 2, -dist_max / 2, dist_max, dist_max)
+            artist = QtWidgets.QGraphicsEllipseItem(-diameter / 2, -diameter / 2, diameter, diameter)
             artist.setStartAngle(start_angle * 16)
             artist.setSpanAngle(span_angle * 16)
 
@@ -54,14 +56,14 @@ class VisualizePercSensors(VisualizationModule):
             center_point = artist.boundingRect().center()
             artist.translate(-center_point.x(), -center_point.y())
             if snip.identifier != 'only_perception':
-                artist.setRotation(heading + ego_h);
+                artist.setRotation(heading + ego_h)
             else:
-                artist.setRotation(heading);
+                artist.setRotation(heading + 90)
             artist.translate(center_point.x(), center_point.y())
 
             if snip.identifier != 'only_perception':
-                new_x = np.multiply(offset_x, np.cos(np.deg2rad(ego_h))) - np.multiply(offset_y, np.sin(np.deg2rad(ego_h))) + ego_x
-                new_y = np.multiply(offset_x, np.sin(np.deg2rad(ego_h))) + np.multiply(offset_y, np.cos(np.deg2rad(ego_h))) + ego_y
+                new_x = np.multiply(offset_y, np.cos(np.deg2rad(ego_h))) - np.multiply(offset_x, np.sin(np.deg2rad(ego_h))) + ego_x
+                new_y = np.multiply(offset_y, np.sin(np.deg2rad(ego_h))) + np.multiply(offset_x, np.cos(np.deg2rad(ego_h))) + ego_y
                 artist.translate(new_x, new_y)
             else:
                 artist.translate(offset_x, offset_y)

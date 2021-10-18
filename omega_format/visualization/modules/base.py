@@ -47,6 +47,7 @@ class SnippetContainer():
         elif self.perception is not None:
             self.timestamps = perception.timestamps.val
             self.identifier = 'only_perception'
+            self.convert_perception_coordinates_to_plot_coordinates()
         else:
             raise ValueError('Either `reference` or `perception` has to be set')
 
@@ -64,20 +65,30 @@ class SnippetContainer():
         else:
             return [cls(reference=references, perception=perceptions)]
 
+    def convert_perception_coordinates_to_plot_coordinates(self):
+        for obj in self.perception.objects.values():  # type: Object
+            h = obj.heading.val
+            x = -obj.dist_lateral.val
+            y = obj.dist_longitudinal.val
+            heading = 180
+            obj.heading.val += heading/2
+            obj.dist_lateral.val = - np.multiply(x, np.cos(np.deg2rad(heading))) + np.multiply(y, np.sin(np.deg2rad(heading)))
+            obj.dist_longitudinal.val = - np.multiply(x, np.sin(np.deg2rad(heading))) - np.multiply(y, np.cos(np.deg2rad(heading)))
+
     def convert_perception_coordinates_to_reference_coordinates(self):
          for obj in self.perception.objects.values():  # type: Object
             death = obj.birth_stamp+len(obj.heading.val)
-            obj.dist_lateral.val -= self.perception.ego_offset # adjust ego offset
+            obj.dist_longitudinal.val += self.perception.ego_offset # adjust ego offset
 
             ego_h = self.reference.ego_vehicle.tr.heading[obj.birth_stamp:death]
             ego_x = self.reference.ego_vehicle.tr.pos_x[obj.birth_stamp:death]
             ego_y = self.reference.ego_vehicle.tr.pos_y[obj.birth_stamp:death]
-            h = obj.heading.val
-            x = obj.dist_lateral.val
+            x = -obj.dist_lateral.val
             y = obj.dist_longitudinal.val
-            obj.heading.val = h+ego_h
-            obj.dist_lateral.val = np.multiply(x, np.cos(np.deg2rad(ego_h))) - np.multiply(y, np.sin(np.deg2rad(ego_h)))+ego_x
-            obj.dist_longitudinal.val = np.multiply(x, np.sin(np.deg2rad(ego_h))) + np.multiply(y, np.cos(np.deg2rad(ego_h)))+ego_y
+            heading = ego_h + 270
+            obj.dist_lateral.val = np.multiply(x, np.cos(np.deg2rad(heading))) - np.multiply(y, np.sin(np.deg2rad(heading)))+ego_x
+            obj.dist_longitudinal.val = np.multiply(x, np.sin(np.deg2rad(heading))) + np.multiply(y, np.cos(np.deg2rad(heading)))+ego_y
+            obj.heading.val += ego_h
 
     def adjust_perception_object_birth_stamps(self):
         ego_time_offset = self.reference.ego_vehicle.birth

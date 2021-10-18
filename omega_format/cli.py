@@ -19,16 +19,17 @@ app = typer.Typer()
 
 
 def get_snippets_for_vis(reference, perception, snip, max_snippets):
+    validate = True
     if reference is not None:
-        rr = ReferenceRecording.from_hdf5(reference)
+        rr = ReferenceRecording.from_hdf5(reference, validate)
         if snip and perception is None:
             snippets = [SnippetContainer(reference=snippet) for snippet in rr.extract_snippets(max_snippets)]
         elif perception is not None:
-            snippets = [SnippetContainer(perception=PerceptionRecording.from_hdf5(perception), reference=rr)]
+            snippets = [SnippetContainer(perception=PerceptionRecording.from_hdf5(perception, validate), reference=rr)]
         else:
             snippets = [SnippetContainer(reference=rr)]
     elif perception is not None:
-        snippets = [SnippetContainer(perception=PerceptionRecording.from_hdf5(perception))]
+        snippets = [SnippetContainer(perception=PerceptionRecording.from_hdf5(perception, validate))]
     else:
         raise ValueError('Either define a reference filename or a perception filename')
     return snippets

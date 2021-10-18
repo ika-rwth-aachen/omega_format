@@ -1,5 +1,6 @@
 from dataclasses import fields
 from pydantic import conint
+from pydantic.fields import Field
 
 import numpy as np
 
@@ -37,8 +38,8 @@ def timespan_to_cutoff_idxs(obj, birth, death):
 
 
 class DynamicObject(InputClassBase, BBXCornersClass):
-    bb: BoundingBox
-    tr: Trajectory
+    bb: BoundingBox = Field(default_factory=BoundingBox)
+    tr: Trajectory = Field(default_factory=Trajectory)
     birth: conint(ge=0)
     """first timestamp idx"""
 

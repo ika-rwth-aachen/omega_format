@@ -25,7 +25,9 @@ class ObjectClassification(BaseModel):
 
     @validator('confidence')
     def check_array_length(cls, v, values):
-        assert len(v) == len(values.get('val')), f"length of confidence array does not match classifications array"
+        if len(v) != len(values.get('val')):
+            warn('length of confidence array does not match array length for classification. This is only possible if confidence is of type not_provided')
+        # assert len(v) == len(values.get('val')), f"length of confidence array does not match classifications array"
         return v
 
     @classmethod
@@ -55,7 +57,7 @@ class ObjectClassification(BaseModel):
             assert len(self.confidence) > death
             self.confidence = self.confidence[birth:death + 1]
 
-
+'''
 class TrackingPoint(BaseModel):
     class Config(PydanticConfig):
         pass
@@ -104,7 +106,7 @@ class TrackingPoint(BaseModel):
             assert len(self.var) > birth
             assert len(self.var) > death
             self.var = self.var[birth:death + 1]
-
+'''
 
 class Object(BaseModel):
     class Config(PydanticConfig):
@@ -116,11 +118,10 @@ class Object(BaseModel):
     width: ValVar = Field(default_factory=ValVar)
     height: ValVar = Field(default_factory=ValVar)
     length: ValVar = Field(default_factory=ValVar)
-    size2d: ValVar = Field(default_factory=ValVar)
-    size3d: ValVar = Field(default_factory=ValVar)
-    rcs: ValVar = Field(default_factory=ValVar)
-    age: ValVar = Field(default_factory=ValVar)
-    tracking_point: TrackingPoint = Field(default_factory=TrackingPoint)
+
+    rcs: np.ndarray = np.array([])
+    age: np.ndarray = np.array([])
+    tracking_point: List[PerceptionTypes.TrackingPoint] = Field(default_factory=list)
 
     confidence_of_existence: np.ndarray = np.array([])
     movement_classification: List[PerceptionTypes.MovementClassification] = Field(default_factory=list)
@@ -137,7 +138,6 @@ class Object(BaseModel):
     rel_acc_lateral: ValVar = Field(default_factory=ValVar)
     abs_acc_longitudinal: ValVar = Field(default_factory=ValVar)
     abs_acc_lateral: ValVar = Field(default_factory=ValVar)
-    azimuth: ValVar = Field(default_factory=ValVar)
     object_classification: ObjectClassification = Field(default_factory=ObjectClassification)
 
     @property
@@ -160,7 +160,7 @@ class Object(BaseModel):
         self.birth_stamp += birth
 
         for k, v in vars(self).items():
-            if isinstance(v, ValVar) or isinstance(v, ObjectClassification) or isinstance(v, TrackingPoint):
+            if isinstance(v, ValVar) or isinstance(v, ObjectClassification):
                 v.cut_to_timespan(birth, death)
             elif isinstance(v, np.ndarray) or isinstance(v, list):
                 setattr(self, k, v[birth:death + 1])
@@ -177,11 +177,9 @@ class Object(BaseModel):
             width=ValVar.from_hdf5(group['width'], validate=validate),
             height=ValVar.from_hdf5(group['height'], validate=validate),
             length=ValVar.from_hdf5(group['length'], validate=validate),
-            size2d=ValVar.from_hdf5(group['size2d'], validate=validate),
-            size3d=ValVar.from_hdf5(group['size3d'], validate=validate),
-            rcs=ValVar.from_hdf5(group['rcs'], validate=validate),
-            age=ValVar.from_hdf5(group['age'], validate=validate),
-            tracking_point=TrackingPoint.from_hdf5(group['trackingPoint'], validate=validate),
+            rcs=group['rcs'][()],
+            age=group['age'][()],
+            tracking_point=group['trackingPoint'][()].tolist(),
             confidence_of_existence=group['confidenceOfExistence'][()],
 
             movement_classification=list(map(PerceptionTypes.MovementClassification,
@@ -199,7 +197,6 @@ class Object(BaseModel):
             rel_acc_lateral=ValVar.from_hdf5(group['relAccLateral'], validate=validate),
             abs_acc_longitudinal=ValVar.from_hdf5(group['absAccLongitudinal'], validate=validate),
             abs_acc_lateral=ValVar.from_hdf5(group['absAccLateral'], validate=validate),
-            azimuth=ValVar.from_hdf5(group['azimuth'], validate=validate),
             object_classification=ObjectClassification.from_hdf5(group['objectClassification'], validate=validate),
         )
         return self
@@ -211,11 +208,9 @@ class Object(BaseModel):
         self.width.to_hdf5(group.create_group('width'))
         self.height.to_hdf5(group.create_group('height'))
         self.length.to_hdf5(group.create_group('length'))
-        self.size2d.to_hdf5(group.create_group('size2d'))
-        self.size3d.to_hdf5(group.create_group('size3d'))
-        self.rcs.to_hdf5(group.create_group('rcs'))
-        self.age.to_hdf5(group.create_group('age'))
-        self.tracking_point.to_hdf5(group.create_group('trackingPoint'))
+        group.create_dataset('rcs', data=self.rcs)
+        group.create_dataset('age', data=self.age)
+        group.create_dataset('trackingPoint', data=self.tracking_point)
         group.create_dataset('confidenceOfExistence', data=self.confidence_of_existence)
         group.create_dataset('movementClassification', data=self.movement_classification)
         group.create_dataset('measState', data=self.meas_state)
@@ -231,5 +226,4 @@ class Object(BaseModel):
         self.rel_acc_lateral.to_hdf5(group.create_group('relAccLateral'))
         self.abs_acc_longitudinal.to_hdf5(group.create_group('absAccLongitudinal'))
         self.abs_acc_lateral.to_hdf5(group.create_group('absAccLateral'))
-        self.azimuth.to_hdf5(group.create_group('azimuth'))
         self.object_classification.to_hdf5(group.create_group('objectClassification'))

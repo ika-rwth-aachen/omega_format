@@ -110,7 +110,11 @@ class Visualizer(QMainWindow):
         self.visualize()
 
     def elapsed_time(self, index):
+        # if no time information
+        if len(self.snippet.timestamps) == 0:
+            return 0
         return (self.snippet.timestamps[index] - self.snippet.timestamps[0])
+
 
     def visualize(self):
         """

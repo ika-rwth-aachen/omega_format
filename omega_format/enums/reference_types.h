@@ -228,7 +228,7 @@ enum class VVMRecorderNumber {
 
 class VVMReferenceTypesSpecification {
 public:
-  const char* FORMAT_VERSION = "v3.0";
+  const char* FORMAT_VERSION = "v3.1";
 };
 
 enum class VVMRoadConditionMaintenanceStatus {

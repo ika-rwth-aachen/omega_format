@@ -206,7 +206,7 @@
         "DLR": 3
     },
     "ReferenceTypesSpecification": {
-        "FORMAT_VERSION": "v3.0"
+        "FORMAT_VERSION": "v3.1"
     },
     "RoadConditionMaintenanceStatus": {
         "UNKNOWN": 0,

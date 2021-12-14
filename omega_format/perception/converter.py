@@ -19,7 +19,8 @@ from ..dynamics import RoadUser
 from ..reference_recording import ReferenceRecording
 from ..perception_recording import PerceptionRecording
 from ..enums import PerceptionTypes, ReferenceTypes
-from omega_format.perception import Object, Sensor
+from .object import Object
+from .sensor import Sensor
 from tqdm import tqdm
 
 perc_format_ver = "1.3"

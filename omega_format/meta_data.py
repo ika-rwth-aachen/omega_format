@@ -78,7 +78,7 @@ class MetaData(InputClassBase):
         dt = cls.get_attribute(file, 'daytime')
         func = cls if validate else cls.construct
         self = func(
-            daytime=datetime.strptime(cls.assure_string(dt), '%Y%m%d%H%M%S') if dt is not None else None,
+            daytime=datetime.strptime(cls.assure_string(dt), '%Y-%m-%dT%H:%M:%S.%f%z') if dt is not None else None,
             recorder_number=cls.get_attribute(file, 'recorderNumber', int),
             recording_number=cls.get_attribute(file, 'recordingNumber', int),
             reference_point_lat=cls.get_attribute(file, 'refPointLat', float),
@@ -108,7 +108,7 @@ class MetaData(InputClassBase):
             top_group.require_group(sub_group).attrs.create('converterVersion', data=version)
 
     def to_hdf5(self, group: Group):
-        group.attrs.create("daytime", data=datetime.strftime(self.daytime, '%Y%m%d%H%M%S')),
+        group.attrs.create("daytime", data=datetime.strftime(self.daytime, '%Y-%m-%dT%H:%M:%S.%f%z')),
         group.attrs.create("recorderNumber", data=self.recorder_number)
         group.attrs.create("recordingNumber", data=self.recording_number)
         group.attrs.create("refPointLat", data=self.reference_point_lat)

@@ -11,7 +11,7 @@ from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtWidgets import QMainWindow
 
 from .modules import *
-
+import sys
 
 class Visualizer(QMainWindow):
     def __init__(self, snippets: List[SnippetContainer], title="", default_pause=False, visualizers=None, use_default_visualizers=True):
@@ -82,7 +82,7 @@ class Visualizer(QMainWindow):
 
 
         self.show()
-        self._app.exec_()
+        sys.exit(self._app.exec_())
 
     def visualize_next_frame(self, pause=False):
         """

@@ -16,7 +16,7 @@ class Sign(InputClassBase, BBXCornersClass):
     type: ReferenceTypes.SignType
     value: int
     history: str
-    applicable_lanes: ReferenceDict
+    applicable_lanes: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     position: Position
     heading: float
     size_class: int

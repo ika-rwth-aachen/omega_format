@@ -13,7 +13,7 @@ class LateralMarking(InputClassBase):
     polyline: Polyline
     long_size: confloat(ge=0)
     color: ReferenceTypes.LateralMarkingColor
-    applicable_lanes: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], LateralMarking))
+    applicable_lanes: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], LateralMarking))
     overrides: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], LateralMarking))
     condition: ReferenceTypes.LateralMarkingCondition = ReferenceTypes.LateralMarkingCondition.UNKNOWN

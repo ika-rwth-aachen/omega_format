@@ -1,5 +1,6 @@
 from collections import UserDict
 from pydantic import BaseModel
+import io
 from pydantic.fields import Field
 from pathlib import Path
 from typing import Union
@@ -37,8 +38,8 @@ class PerceptionRecording(BaseModel):
     ego_position: EgoPosition = Field(default_factory=EgoPosition)
 
     @classmethod
-    def from_hdf5(cls, filename: Union[str, Path], validate: bool = True):
-        if Path(filename).is_file():
+    def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True):
+        if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
                 func = cls if validate else cls.construct
                 tfunc = Timestamps if validate else Timestamps.construct

@@ -4,7 +4,7 @@ from pydantic.dataclasses import Field
 from itertools import chain
 from pathlib import Path
 from typing import Optional, Union, List
-
+import io
 import h5py
 import numpy as np
 from tqdm import tqdm
@@ -35,9 +35,8 @@ class ReferenceRecording(InputClassBase):
     road_users: DictWithProperties = Field(default_factory=DictWithProperties)
 
     @classmethod
-    def from_hdf5(cls, filename: Union[str, Path], validate: bool = True):
-
-        if Path(filename).is_file():
+    def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True):
+        if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
                 func = cls if validate else cls.construct
                 tfunc = Timestamps if validate else Timestamps.construct

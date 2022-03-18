@@ -4,7 +4,7 @@ from typing import List
 
 import numpy as np
 import pyqtgraph as pg
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5 import uic
 from PyQt5.QtCore import QPoint, QSize, QSettings, QTimer, QSignalMapper, Qt
 from PyQt5.QtGui import QColor, QIcon

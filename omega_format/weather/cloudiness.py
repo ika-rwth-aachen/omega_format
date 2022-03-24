@@ -14,7 +14,7 @@ class Cloudiness(InputClassBase):
     @validator('degree')
     def check_cloudiness_degree(cls, v):
         for value in v:
-            assert 0 <= value <= 8, f'cloudiness should be given in numerators of eights (0 to 8), but is {value}'
+            assert value.size==0 or 0 <= value <= 8, f'cloudiness should be given in numerators of eights (0 to 8), but is {value}'
         return v
 
     @classmethod

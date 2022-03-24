@@ -15,8 +15,7 @@ class BoundingBox(BaseModel):
 
     @validator('vec')
     def parse_values(cls, v):
-        for value in v:
-            assert value > 0, f'bounding box size should be greater zero, but is {value}'
+        assert v.size==0 or np.all(v > 0), f'bounding box size should be greater zero, but is {value}'
         # print(f"Min: {np.min(v)}, Max: {np.max(v)}")
         return v
 

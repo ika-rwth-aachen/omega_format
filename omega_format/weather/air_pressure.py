@@ -15,7 +15,7 @@ class AirPressure(InputClassBase):
     @validator('air_pressure_nn', 'air_pressure_zero')
     def check_air_pressure_plausibility(cls, v):
         for value in v:
-            assert 500 <= value <= 1100, \
+            assert value.size==0 or 500 <= value <= 1100, \
                 f'air pressure value is not plausible, should be between 500 and 1100 hPa, is {value}'
         return v
 

@@ -40,19 +40,19 @@ class EgoPosition(BaseModel):
     @validator('heading')
     def check_angle(cls, v):
         for val in v.val:
-            assert -360 <= val <= 360, f'{val} is not a valid angle'
+            assert val.size>0 and -360 <= val <= 360, f'{val} is not a valid angle'
         return v
 
     @validator('pos_longitude')
     def check_longitude(cls, v):
         for val in v.val:
-            assert -180 <= val <= 180, f'{val} is not a valid longitude value, should be between -180 and 180 degrees'
+            assert val.size>0 and -180 <= val <= 180, f'{val} is not a valid longitude value, should be between -180 and 180 degrees'
         return v
 
     @validator('pos_latitude')
     def check_latitude(cls, v):
         for val in v.val:
-            assert -90 <= val <= 90, f'{val} is not a valid latitude value, should be between -180 and 180 degrees'
+            assert val.size>0 -90 <= val <= 90, f'{val} is not a valid latitude value, should be between -180 and 180 degrees'
         return v
 
     @classmethod

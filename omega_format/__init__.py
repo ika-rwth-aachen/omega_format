@@ -17,13 +17,19 @@ from .settings import DefaultValues
 from .reference_resolving import *
 
 from .enums import ReferenceTypes, PerceptionTypes
-
+from warnings import warn
 import importlib.util
 visualization_available = importlib.util.find_spec("PyQt5") is not None and \
     importlib.util.find_spec("pyqtgraph") is not None
 
 if visualization_available:
-    from . import visualization as vis
+    try:
+        import pyqtgraph
+    except ImportError as e:
+        warn(f'Disabled visualization since pyqtgraph could not be imported: {e}')
+        visualization_available = False
+    else:
+        from . import visualization as vis
 
 from ._version import get_versions_with_clean
 __version__, __clean_version__ = [get_versions_with_clean()[v] for v in ['version', 'clean_version']]

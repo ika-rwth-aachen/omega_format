@@ -48,7 +48,7 @@ class Sensor(BaseModel):
 
     @validator('sensor_heading', 'sensor_pitch', 'sensor_roll')
     def check_angle(cls, v):
-        assert -360 <= v <= 360, f'{v} is not a valid angle'
+        assert v.size==0 or -360 <= v <= 360, f'{v} is not a valid angle'
         return v
 
     @classmethod

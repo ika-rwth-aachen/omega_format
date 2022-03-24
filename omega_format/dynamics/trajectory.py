@@ -42,21 +42,20 @@ class Trajectory(BaseModel):
     @validator('vel_longitudinal', 'vel_lateral')
     def check_velocity(cls, v):
         for value in v:
-            if value > 400*3.6:
+            if value.size>0 and value > 400*3.6:
                 raise ValueError(f'velocity is over {400*3.6} m/s ({400} km/h)')
         return v
 
     @validator('acc_longitudinal', 'acc_lateral', 'acc_z')
     def check_acceleration(cls, v):
-        for value in v:
-            if value > 9.81*20:
-                raise ValueError(f'acceleration over {9.81*20} m/s^2 ({20} g)')
+        if v.size>0 and np.any(v > 9.81*20):
+            raise ValueError(f'acceleration over {9.81*20} m/s^2 ({20} g)')
         return v
 
     @validator('heading', 'roll', 'pitch')
     def check_angle(cls, v):
         for val in v:
-            assert -360 <= val <= 360, f'{val} is not a valid angle'
+            assert val.size>0 and -360 <= val <= 360, f'{val} is not a valid angle'
         return v
 
     @classmethod

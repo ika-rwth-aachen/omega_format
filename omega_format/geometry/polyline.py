@@ -1,14 +1,11 @@
 from pydantic.dataclasses import dataclass
 from pydantic import validator, BaseModel
-from ..pydantic_utils.pydantic_config import PydanticConfig
-
 import numpy as np
 from h5py import Group
+from ..reference_resolving import InputClassBase
 
 
-class Polyline(BaseModel):
-    class Config(PydanticConfig):
-        pass
+class Polyline(InputClassBase):
     pos_x: np.ndarray
     pos_y: np.ndarray
     pos_z: np.ndarray

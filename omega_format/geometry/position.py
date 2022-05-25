@@ -1,12 +1,8 @@
-from pydantic import BaseModel
-
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from h5py import Group
+from ..reference_resolving import InputClassBase
 
 
-class Position(BaseModel):
-    class Config(PydanticConfig):
-        pass
+class Position(InputClassBase):
     pos_x: float
     pos_y: float
     pos_z: float

@@ -5,6 +5,8 @@ from collections import UserDict, UserList
 from .settings import get_settings
 from warnings import warn
 from pydantic import BaseModel
+from typing import Any, Callable, Generator
+
 
 __all__ = ['ReferenceDict', 'require_group', 'ReferenceElement', 'InputClassBase', 'ListWithProperties', 'DictWithProperties', 'value_or_first_element', 'ReferenceNotResolved', 'ReferenceNotResolvable', 'raise_not_resolved']
 
@@ -60,6 +62,15 @@ class InputClassBase(BaseModel, arbitrary_types_allowed=True, copy_on_model_vali
     @classmethod
     def resolve_func(ir, i):
         raise NotImplementedError()
+
+    def __repr__(self):
+        return self.__repr_name__()
+
+    def __pretty__(self, fmt: Callable[[Any], Any], **kwargs: Any) -> Generator[Any, None, None]:
+        yield self.__repr_name__()
+
+    def __str__(self):
+        return self.__repr_name__()
 
 
 class ListWithProperties(UserList):

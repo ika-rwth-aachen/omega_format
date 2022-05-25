@@ -1,4 +1,3 @@
-from functools import cached_property
 from pydantic import BaseModel
 
 import numpy as np
@@ -23,7 +22,7 @@ def rot_point(orig_x, orig_y, x, y, phi):
 
 class BBXCornersClass:
 
-    @cached_property
+    @property
     def _center2frontcenter2left(self):
         try:
             heading = self.tr.heading / 180 * np.pi
@@ -40,22 +39,22 @@ class BBXCornersClass:
         c2l = self.width / 2
         return x, y, heading, c2f, c2l
 
-    @cached_property
+    @property
     def front_left(self):
         x, y, heading, c2f, c2l = self._center2frontcenter2left
         return rot_point(x, y, +c2f, +c2l, heading)
 
-    @cached_property
+    @property
     def front_right(self):
         x, y, heading, c2f, c2l = self._center2frontcenter2left
         return rot_point(x, y, +c2f, -c2l, heading)
 
-    @cached_property
+    @property
     def back_right(self):
         x, y, heading, c2f, c2l = self._center2frontcenter2left
         return rot_point(x, y, -c2f, -c2l, heading)
 
-    @cached_property
+    @property
     def back_left(self):
         x, y, heading, c2f, c2l = self._center2frontcenter2left
         return rot_point(x, y, -c2f, +c2l, heading)

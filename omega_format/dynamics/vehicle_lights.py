@@ -2,14 +2,11 @@ from pydantic.fields import Field
 from pydantic import BaseModel
 from typing import List
 from h5py import Group
-
 from ..enums import ReferenceTypes
-from ..pydantic_utils.pydantic_config import PydanticConfig
+from ..reference_resolving import InputClassBase
 
 
-class VehicleLights(BaseModel):
-    class Config(PydanticConfig):
-        pass
+class VehicleLights(InputClassBase):
     indicator_right: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
     indicator_left: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
     brake_lights: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)

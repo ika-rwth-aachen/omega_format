@@ -2,13 +2,10 @@ from pydantic import validator
 from pydantic import BaseModel, Field
 import numpy as np
 from h5py import Group
+from ..reference_resolving import InputClassBase
 
-from ..pydantic_utils.pydantic_config import PydanticConfig
 
-
-class BoundingBox(BaseModel):
-    class Config(PydanticConfig):
-        pass
+class BoundingBox(InputClassBase):
     vec: np.ndarray = Field(default_factory=np.array([], dtype=np.float64))
     confident_length: bool = True
     confident_width: bool = True

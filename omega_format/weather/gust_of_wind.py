@@ -9,7 +9,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class GustOfWind(InputClassBase):
-    wind_speed: np.ndarray = Field(default_factory=np.array([]))
+    wind_speed: np.ndarray = Field(default=np.array([]))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
     type: List[ReferenceTypes.GustOfWind] = Field(default_factory=lambda: [ReferenceTypes.GustOfWind.NO_GUSTS_OF_WIND])
 

@@ -8,7 +8,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Humidity(InputClassBase):
-    humidity: np.ndarray = Field(default_factory=np.array([]))
+    humidity: np.ndarray = Field(default=np.array([]))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('humidity')

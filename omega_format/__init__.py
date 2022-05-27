@@ -17,7 +17,7 @@ from .settings import DefaultValues
 from .reference_resolving import *
 
 from .enums import ReferenceTypes, PerceptionTypes
-from warnings import warn
+
 import importlib.util
 visualization_available = importlib.util.find_spec("PyQt5") is not None and \
     importlib.util.find_spec("pyqtgraph") is not None

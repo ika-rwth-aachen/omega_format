@@ -10,8 +10,8 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 class ValVar(BaseModel):
     class Config(PydanticConfig):
         pass
-    val: np.ndarray = Field(default_factory=np.array([]))
-    var: np.ndarray = Field(default_factory=np.array([]))
+    val: np.ndarray = Field(default=np.array([]))
+    var: np.ndarray = Field(default=np.array([]))
 
     @validator('var')
     def check_array_length(cls, v, values):

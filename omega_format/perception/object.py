@@ -14,7 +14,7 @@ class ObjectClassification(BaseModel):
     class Config(PydanticConfig):
         pass
     val: List[PerceptionTypes.ObjectClassification] = Field(default_factory=list)
-    confidence: np.ndarray = Field(default_factory=np.array([], dtype=np.float64))
+    confidence: np.ndarray = Field(default=np.array([], dtype=np.float64))
 
     @validator('confidence')
     def check_confidence_values(cls, v):
@@ -117,11 +117,11 @@ class Object(BaseModel):
     height: ValVar = Field(default_factory=ValVar)
     length: ValVar = Field(default_factory=ValVar)
 
-    rcs: np.ndarray = Field(default_factory=np.array([]))
-    age: np.ndarray = Field(default_factory=np.array([]))
+    rcs: np.ndarray = Field(default=np.array([]))
+    age: np.ndarray = Field(default=np.array([]))
     tracking_point: List[PerceptionTypes.TrackingPoint] = Field(default_factory=list)
 
-    confidence_of_existence: np.ndarray = Field(default_factory=np.array([]))
+    confidence_of_existence: np.ndarray = Field(default=np.array([]))
     movement_classification: List[PerceptionTypes.MovementClassification] = Field(default_factory=list)
     meas_state: List[PerceptionTypes.MeasState] = Field(default_factory=list)
 

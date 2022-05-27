@@ -12,8 +12,8 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 class Wind(InputClassBase):
     type: List[ReferenceTypes.Wind] = Field(default_factory=lambda: [ReferenceTypes.Wind.CALM])
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
-    wind_direction: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
-    wind_speed: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    wind_direction: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    wind_speed: np.ndarray = Field(default=np.array([], dtype=np.float64))
 
     @validator('wind_direction')
     def check_degree(cls, v):

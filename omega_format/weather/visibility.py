@@ -8,7 +8,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Visibility(InputClassBase):
-    visibility: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    visibility: np.ndarray = Field(default=np.array([], dtype=np.float64))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('visibility')

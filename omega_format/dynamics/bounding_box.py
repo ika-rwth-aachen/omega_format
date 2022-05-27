@@ -6,7 +6,7 @@ from ..reference_resolving import InputClassBase
 
 
 class BoundingBox(InputClassBase):
-    vec: np.ndarray = Field(default_factory=np.array([], dtype=np.float64))
+    vec: np.ndarray = Field(default=np.array([], dtype=np.float64))
     confident_length: bool = True
     confident_width: bool = True
 

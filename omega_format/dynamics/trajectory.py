@@ -7,12 +7,12 @@ from ..reference_resolving import raise_not_resolved, InputClassBase
 from warnings import warn
 
 class Trajectory(InputClassBase):
-    pos_x: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
-    pos_y: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
-    pos_z: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
-    roll: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
-    pitch: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
-    heading: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    pos_x: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    pos_y: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    pos_z: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    roll: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    pitch: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    heading: np.ndarray = Field(default=np.array([], dtype=np.float64))
 
     vel_longitudinal: Optional[np.ndarray] = Field(defualt=None)
     vel_lateral: Optional[np.ndarray] = Field(defualt=None)

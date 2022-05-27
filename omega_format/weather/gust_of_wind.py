@@ -1,5 +1,4 @@
-from pydantic.fields import Field
-from pydantic import validator
+from pydantic import validator, Field
 from typing import List
 import numpy as np
 from h5py import Group
@@ -10,7 +9,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class GustOfWind(InputClassBase):
-    wind_speed: np.ndarray = np.array([])
+    wind_speed: np.ndarray = Field(default_factory=np.array([]))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
     type: List[ReferenceTypes.GustOfWind] = Field(default_factory=lambda: [ReferenceTypes.GustOfWind.NO_GUSTS_OF_WIND])
 

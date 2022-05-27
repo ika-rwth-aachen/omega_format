@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import validator, Field
 import numpy as np
 from h5py import Group
 
@@ -8,8 +8,8 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class AirPressure(InputClassBase):
-    air_pressure_nn: np.ndarray = np.array([])
-    air_pressure_zero: np.ndarray = np.array([])
+    air_pressure_nn: np.ndarray = Field(default_factory=np.array([]))
+    air_pressure_zero: np.ndarray = Field(default_factory=np.array([]))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('air_pressure_nn', 'air_pressure_zero')

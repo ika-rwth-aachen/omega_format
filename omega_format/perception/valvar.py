@@ -2,7 +2,7 @@ from warnings import warn
 
 import numpy as np
 from h5py import Group
-from pydantic import validator, BaseModel
+from pydantic import validator, BaseModel, Field
 
 from ..pydantic_utils.pydantic_config import PydanticConfig
 
@@ -10,8 +10,8 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 class ValVar(BaseModel):
     class Config(PydanticConfig):
         pass
-    val: np.ndarray = np.array([])
-    var: np.ndarray = np.array([])
+    val: np.ndarray = Field(default_factory=np.array([]))
+    var: np.ndarray = Field(default_factory=np.array([]))
 
     @validator('var')
     def check_array_length(cls, v, values):

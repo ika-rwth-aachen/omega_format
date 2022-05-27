@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import validator, Field
 from typing import Optional
 import numpy as np
 from h5py import Group
@@ -7,52 +7,52 @@ from ..reference_resolving import raise_not_resolved, InputClassBase
 from warnings import warn
 
 class Trajectory(InputClassBase):
-    pos_x: np.ndarray = np.array([], dtype=np.float64)
-    pos_y: np.ndarray = np.array([], dtype=np.float64)
-    pos_z: np.ndarray = np.array([], dtype=np.float64)
-    roll: np.ndarray = np.array([], dtype=np.float64)
-    pitch: np.ndarray = np.array([], dtype=np.float64)
-    heading: np.ndarray = np.array([], dtype=np.float64)
+    pos_x: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    pos_y: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    pos_z: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    roll: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    pitch: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    heading: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
 
-    vel_longitudinal: Optional[np.ndarray]
-    vel_lateral: Optional[np.ndarray]
-    vel_z: Optional[np.ndarray]
-    acc_longitudinal: Optional[np.ndarray]
-    acc_lateral: Optional[np.ndarray]
-    acc_z: Optional[np.ndarray]
+    vel_longitudinal: Optional[np.ndarray] = Field(defualt=None)
+    vel_lateral: Optional[np.ndarray] = Field(defualt=None)
+    vel_z: Optional[np.ndarray] = Field(defualt=None)
+    acc_longitudinal: Optional[np.ndarray] = Field(defualt=None)
+    acc_lateral: Optional[np.ndarray] = Field(defualt=None)
+    acc_z: Optional[np.ndarray] = Field(defualt=None)
 
-    roll_der: Optional[np.ndarray]
-    pitch_der: Optional[np.ndarray]
-    heading_der: Optional[np.ndarray]
+    roll_der: Optional[np.ndarray] = Field(defualt=None)
+    pitch_der: Optional[np.ndarray] = Field(defualt=None)
+    heading_der: Optional[np.ndarray] = Field(defualt=None)
+    if False:
+        @validator('*')  # the '*' means that this validator is applied to each member of Trajectory
+        def check_array_length(cls, v, values, **kwargs):
+            if len(values) > 0:
+                # first array would be validated if len(values)=0 -> no length to compare against
+                # use the length of pos_x to check equality with other array length
+                if values.get('pos_x').size!=v.size and v.size!=0:
+                    raise ValueError(f'length of all trajectory arrays must match, expected len {length}, actual len {len(v)}')
+            return v
 
-    @validator('*')  # the '*' means that this validator is applied to each member of Trajectory
-    def check_array_length(cls, v, values, **kwargs):
-        if len(values) > 0:
-            # first array would be validated if len(values)=0 -> no length to compare against
-            # use the length of pos_x to check equality with other array length
-            length = len(values.get('pos_x'))
-            if len(v) != length and len(v) > 0:
-                raise ValueError(f'length of all trajectory arrays must match, expected len {length}, actual len {len(v)}')
-        return v
+    if False:
+        @validator('vel_longitudinal', 'vel_lateral')
+        def check_velocity(cls, v):
+            for value in v:
+                if value.size>0 and value > 400*3.6:
+                    raise ValueError(f'velocity is over {400*3.6} m/s ({400} km/h)')
+            return v
 
-    @validator('vel_longitudinal', 'vel_lateral')
-    def check_velocity(cls, v):
-        for value in v:
-            if value.size>0 and value > 400*3.6:
-                raise ValueError(f'velocity is over {400*3.6} m/s ({400} km/h)')
-        return v
+        @validator('acc_longitudinal', 'acc_lateral', 'acc_z')
+        def check_acceleration(cls, v):
+            if v.size>0 and np.any(v > 9.81*20):
+                raise ValueError(f'acceleration over {9.81*20} m/s^2 ({20} g)')
+            return v
 
-    @validator('acc_longitudinal', 'acc_lateral', 'acc_z')
-    def check_acceleration(cls, v):
-        if v.size>0 and np.any(v > 9.81*20):
-            raise ValueError(f'acceleration over {9.81*20} m/s^2 ({20} g)')
-        return v
-
-    @validator('heading', 'roll', 'pitch')
-    def check_angle(cls, v):
-        for val in v:
-            assert val.size>0 and -360 <= val <= 360, f'{val} is not a valid angle'
-        return v
+        @validator('heading', 'roll', 'pitch')
+        def check_angle(cls, v):
+            for val in v:
+                assert val.size>0 and -360 <= val <= 360, f'{val} is not a valid angle'
+            return v
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True):

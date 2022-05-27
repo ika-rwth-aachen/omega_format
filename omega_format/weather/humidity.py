@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import validator, Field
 import numpy as np
 from h5py import Group
 
@@ -8,7 +8,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Humidity(InputClassBase):
-    humidity: np.ndarray = np.array([])
+    humidity: np.ndarray = Field(default_factory=np.array([]))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('humidity')

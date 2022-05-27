@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import validator, Field
 import numpy as np
 from h5py import Group
 
@@ -8,9 +8,9 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Temperature(InputClassBase):
-    air_temp: np.ndarray = np.array([])
-    air_temp_5cm: np.ndarray = np.array([])
-    ground_temp: np.ndarray = np.array([])
+    air_temp: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    air_temp_5cm: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    ground_temp: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('air_temp', 'air_temp_5cm', 'ground_temp')

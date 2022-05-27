@@ -11,10 +11,10 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 class Precipitation(InputClassBase):
     type: List[ReferenceTypes.Precipitation] = Field(default_factory=lambda: [ReferenceTypes.Precipitation.NO_RAIN])
-    amount_hourly: np.ndarray = np.array([])
-    amount_minute: np.ndarray = np.array([])
-    new_snow_depth: np.ndarray = np.array([])
-    snow_depth: np.ndarray = np.array([])
+    amount_hourly: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    amount_minute: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    new_snow_depth: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    snow_depth: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('amount_hourly')

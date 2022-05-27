@@ -1,9 +1,7 @@
-from pydantic.fields import Field
 from warnings import warn
 import numpy as np
 from h5py import Group
-from pydantic import validator
-from pydantic import BaseModel
+from pydantic import validator, Field, BaseModel
 
 from .valvar import ValVar
 from ..pydantic_utils.pydantic_config import PydanticConfig
@@ -16,8 +14,8 @@ class EgoPosition(BaseModel):
     pos_longitude: ValVar = Field(default_factory=ValVar)
     pos_latitude: ValVar = Field(default_factory=ValVar)
     pos_z: ValVar = Field(default_factory=ValVar)
-    yaw_rate: np.ndarray = np.array([], dtype=np.float64)
-    pitch: np.ndarray = np.array([], dtype=np.float64)
+    yaw_rate: np.ndarray = Field(default_factory=np.array([], dtype=np.float64))
+    pitch: np.ndarray = Field(default_factory=np.array([], dtype=np.float64))
 
     if False:
         @validator('heading', 'pos_longitude', 'pos_latitude')

@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import validator, Field
 import numpy as np
 from h5py import Group
 
@@ -8,10 +8,10 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Solar(InputClassBase):
-    diff_solar_radiation: np.ndarray = np.array([])
-    longwave_down_radiation: np.ndarray = np.array([])
-    solar_hours: np.ndarray = np.array([])
-    solar_incoming_radiation: np.ndarray = np.array([])
+    diff_solar_radiation: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    longwave_down_radiation: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    solar_hours: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    solar_incoming_radiation: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('solar_hours')

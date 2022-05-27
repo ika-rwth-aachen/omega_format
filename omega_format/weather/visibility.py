@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import validator, Field
 import numpy as np
 from h5py import Group
 
@@ -8,7 +8,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Visibility(InputClassBase):
-    visibility: np.ndarray = np.array([])
+    visibility: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
     @validator('visibility')

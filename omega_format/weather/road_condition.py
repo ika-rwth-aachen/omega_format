@@ -1,13 +1,13 @@
 import numpy as np
 from h5py import Group
-
+from pydantic import Field
 from ..reference_resolving import InputClassBase
 
 
 class RoadCondition(InputClassBase):
-    maintenance_status: np.ndarray = np.array([])
-    spray: np.ndarray = np.array([])
-    surface_condition: np.ndarray = np.array([])
+    maintenance_status: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    spray: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
+    surface_condition: np.ndarray = Field(default_factory = np.array([], dtype=np.float64))
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True):

@@ -8,13 +8,15 @@ from ...enums import ReferenceTypes
 
 rut = ReferenceTypes.RoadUserType
 
-def print_heading(tp: RoadUser, index):
+def print_heading(snip, id_, index):
+    tp = snip.reference.ego_vehicle if id_ == snip.reference.ego_id else snip.reference.road_users[id_]
     if hasattr(tp.tr, 'heading'):
         return f'\nheading:{tp.tr.heading[index]:.1f}'
     else:
         return ""
 
-def print_speed(tp: RoadUser, index: int):
+def print_speed(snip, id_, index):
+    tp = snip.reference.ego_vehicle if id_ == snip.reference.ego_id else snip.reference.road_users[id_]
     if hasattr(tp.tr, 'vel_lateral') and hasattr(tp.tr, 'vel_longitudinal'):
         speed = np.sqrt(abs(tp.tr.vel_lateral[index])**2 + abs(tp.tr.vel_longitudinal[index])**2) * 3.6
         return f'\nspeed:{speed:.2f} km/h'
@@ -27,10 +29,11 @@ class VisualizeTP(VisualizationModule):
         super().__init__("Road User", **kwargs)
         self.text_funcs = text_funcs
 
-    def _get_bounding_box_text(self, id_, index, tp):
+    def _get_bounding_box_text(self, id_, index, snip):
+        tp = snip.reference.ego_vehicle if id_ == snip.reference.ego_id else snip.reference.road_users[id_]
         text = f'{id_}:{tp.type.name}'
         if self.text_funcs is not None and len(self.text_funcs) > 0:
-            text = f'{text}{"".join([func(tp, index) for func in self.text_funcs])}'
+            text = f'{text}{"".join([func(snip, id_, index) for func in self.text_funcs])}'
         return text
 
     def visualize_dynamics(self, snip, timestamp, visualizer):
@@ -43,7 +46,7 @@ class VisualizeTP(VisualizationModule):
 
             for id_, tp in objects.items():
                 if hasattr(tp, 'in_timespan') and tp.in_timespan(timestamp, timestamp):
-                    text = self._get_bounding_box_text(id_, timestamp-tp.birth, tp)
+                    text = self._get_bounding_box_text(id_, timestamp-tp.birth, snip)
 
                     if tp is snip.reference.ego_vehicle:
                         # different visualization for ego vehicle

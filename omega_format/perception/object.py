@@ -18,7 +18,7 @@ class ObjectClassification(BaseModel):
 
     @validator('confidence')
     def check_confidence_values(cls, v):
-        assert v.size==0 or np.any(~np.logical_and(0<=v, v<=1)), f"confidence value should be between 0 and 1, but is {value}"
+        assert v.size==0 or np.all(np.logical_and(0<=v, v<=1)), f"confidence value should be between 0 and 1, but is {v}"
         return v
 
     @validator('confidence')

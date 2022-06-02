@@ -9,7 +9,8 @@ install_requires = [
     'typer',
     'xarray',
     'pydantic',
-    'parse'
+    'parse',
+    'shapely'
 ]
 extras_require = {
     'visualization': ['pyqtgraph', 'pyqt5'],

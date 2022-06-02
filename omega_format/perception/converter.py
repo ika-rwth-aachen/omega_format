@@ -6,15 +6,13 @@ from copy import deepcopy
 from json import load
 from pathlib import Path
 from typing import Union, Optional
-
+import shapely.geometry
+import shapely.affinity
 import h5py
 import numpy as np
 import omega_format
 import pyproj
 import typer
-from PyQt5 import QtWidgets
-from PyQt5.QtGui import QTransform
-from PyQt5.QtCore import QPointF
 from ..dynamics import RoadUser
 from ..reference_recording import ReferenceRecording
 from ..perception_recording import PerceptionRecording
@@ -363,34 +361,26 @@ class Converter:
         ego_offset = self.perception_recording.ego_offset
         offset_x = sensor.sensor_pos_lateral
         offset_y = sensor.sensor_pos_longitudinal + ego_offset
-
         heading = sensor.sensor_heading
-        dist_min = sensor.min_range
         dist_max = sensor.max_range
-        diameter = dist_max * 2
         fov_horizontal = sensor.fov_horizontal
-        fov_vertical = sensor.fov_vertical
 
-        start_angle = int(-fov_horizontal / 2)
-        span_angle = int(fov_horizontal)
-
-        artist = QtWidgets.QGraphicsEllipseItem(-diameter / 2, -diameter / 2, diameter, diameter)
-        artist.setStartAngle(start_angle * 16)
-        artist.setSpanAngle(span_angle * 16)
-
-        center_point = artist.boundingRect().center()
-
-        # artist.translate(-center_point.x(), -center_point.y())
-        q_transform = QTransform()
-        artist.setTransform(q_transform.fromTranslate(-center_point.x(), -center_point.y()), True)
-        artist.setRotation(heading + 90)
-        # artist.translate(center_point.x(), center_point.y())
-        artist.setTransform(q_transform.fromTranslate(center_point.x(), center_point.y()), True)
-
-        # artist.translate(offset_x, offset_y)
-        artist.setTransform(q_transform.fromTranslate(offset_x, offset_y), True)
-
-        self.sensor_list.append(artist)
+        fov = shapely.affinity.translate(
+                shapely.affinity.rotate(
+                    shapely.geometry.Polygon([
+                        [0,0],
+                        np.array([np.cos(np.deg2rad(-fov_horizontal/2)), np.sin(np.deg2rad(-fov_horizontal/2))])*dist_max*2,
+                        np.array([np.cos(np.deg2rad(fov_horizontal/2)), np.sin(np.deg2rad(fov_horizontal/2))])*dist_max*2
+                    ]).intersection(
+                        shapely.geometry.Point(0,0).buffer(dist_max)
+                    ),
+                    angle=heading+90, # positive == counter clockwise
+                    origin=(0,0)
+                ),
+                xoff=offset_x+ego_offset,
+                yoff=offset_y
+            )
+        self.sensor_list.append(fov)
 
     def filter_objects_outside_sensor_fov(self):
         for obj_index in list(self.perception_recording.objects.keys()):
@@ -405,17 +395,22 @@ class Converter:
         for i in range(obj.len):
             x = obj.dist_lateral.val[i]
             y = obj.dist_longitudinal.val[i]
-            length = obj.length.val[i]
-            width = obj.width.val[i]
+            l = obj.length.val[i]
+            w = obj.width.val[i]
+            heading = obj.heading.val[i]
 
-            points = [
-                QPointF(y, x),
-                QPointF(y, x + length),
-                QPointF(y + width, x),
-                QPointF(y + width, x + length),
-            ]
+            shape = shapely.affinity.rotate(
+                shapely.geometry.Polygon([
+                    (x-l/2,y-w/2),
+                    (x+l/2,y-w/2),
+                    (x+l/2,y+w/2),
+                    (x-l/2,y+w/2)
+                ]),
+                angle=heading+90,
+                origin='center'
+            )
 
-            if any([area.contains(point) for point in points for area in self.sensor_list]):
+            if any([area.intersects(shape) for area in self.sensor_list]):
                 if start == -1:
                     start = i
             elif start != -1:

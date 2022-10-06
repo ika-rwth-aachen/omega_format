@@ -25,6 +25,7 @@ visualization_available = importlib.util.find_spec("PyQt5") is not None and \
 if visualization_available:
     try:
         import pyqtgraph
+        import PyQt5.QtGui
     except ImportError as e:
         warn(f'Disabled visualization since pyqtgraph could not be imported: {e}')
         visualization_available = False

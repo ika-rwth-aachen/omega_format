@@ -37,4 +37,7 @@ class Temperature(InputClassBase):
         group.attrs.create('source', data=self.source)
 
     def get_avg_temp(self):
-        return np.mean(self.air_temp)
+        try:
+            return np.mean(self.air_temp)
+        except FloatingPointError:
+            return np.nan

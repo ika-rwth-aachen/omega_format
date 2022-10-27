@@ -32,5 +32,8 @@ class Humidity(InputClassBase):
 
     @property
     def is_foggy(self):
-        humidity = np.mean(self.humidity)
-        return humidity > 95
+        try:
+            humidity = np.mean(self.humidity)
+            return humidity > 95
+        except FloatingPointError:
+            return False

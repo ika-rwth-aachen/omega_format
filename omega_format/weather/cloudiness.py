@@ -32,5 +32,8 @@ class Cloudiness(InputClassBase):
 
     @property
     def is_cloudy(self):
-        degree = np.mean(self.degree)
-        return degree >= 2
+        try:
+            degree = np.mean(self.degree)
+            return degree >= 2
+        except FloatingPointError:
+            return False

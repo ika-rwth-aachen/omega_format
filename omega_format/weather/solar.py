@@ -43,5 +43,8 @@ class Solar(InputClassBase):
 
     @property
     def is_sunny(self):
-        solar_hours = np.mean(self.solar_hours)
-        return solar_hours >= 30
+        try:
+            solar_hours = np.mean(self.solar_hours)
+            return solar_hours >= 30
+        except FloatingPointError:
+            return False

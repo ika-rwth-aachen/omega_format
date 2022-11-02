@@ -124,9 +124,13 @@ def bbx2d(x: float, y: float, length: float, width: float, heading: float, text:
         rectangle_outer.setBrush(brush)
         arrow.setBrush(brush)
     center_point = rectangle.boundingRect().center()
-    rectangle.translate(center_point.x(), center_point.y())
-    rectangle.rotate(heading)
-    rectangle.translate(-center_point.x(), -center_point.y())
+    trans_rot = QTransform()
+    trans_rot.translate(center_point.x(), center_point.y())
+    trans_rot.rotate(heading)
+
+    trans_set_back = QTransform()
+    trans_set_back.translate(-center_point.x(), -center_point.y())
+    rectangle.setTransform(trans_rot*trans_set_back)
     rectangle.setToolTip(text)
     return rectangle
 

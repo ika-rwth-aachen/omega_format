@@ -132,17 +132,21 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
         -   [13.1 converterVersion](#131-converterversion-2)
         -   [13.2 Type](#132-type-7)
         -   [13.3 Sub Type](#133-sub-type-2)
-        -   [13.5 birthStamp](#135-birthstamp)
-        -   [13.6 Trajectory](#136-trajectory-1)
-        -   [13.7 isDataRecorder](#137-isdatarecorder)
-        -   [13.8 Bounding Box](#138-bounding-box)
-        -   [13.9 Vehicle Lights](#139-vehicle-lights)
+        -   [13.4 connectedTo](#134-connected-to)
+        -   [13.5 attachedTo](#135-attached-to)
+        -   [13.6 birthStamp](#136-birthstamp)
+        -   [13.7 Trajectory](#137-trajectory-1)
+        -   [13.8 isDataRecorder](#138-isdatarecorder)
+        -   [13.9 Bounding Box](#139-bounding-box)
+        -   [13.10 Vehicle Lights](#1310-vehicle-lights)
     -   [14. Misc Object](#14-misc-object)
         -   [14.1 Type](#141-type-8)
         -   [14.2 Sub Type](#142-sub-type-3)
         -   [14.3 Trajectory](#143-trajectory-2)
         -   [14.4 birthStamp](#144-birthstamp-1)
         -   [14.5 Bounding Box](#145-bounding-box-1)
+        -   [14.6 Connected To](#146-connected-to)
+        -   [14.7 Attached To](#147-attached-to)
     -   [15. State](#15-state)
         -   [15.1 ReferenceID](#151-referenceid)
         -   [15.2 Value](#152-value-2)
@@ -194,7 +198,7 @@ An exception to this is the description of signs. Due to the amount of signs and
 For all subtypes that can be used if desired to provide more additional information if it is known, this field should be left empty (0x0 or 0x2 in hdf5 dataset) to show that no subtype is provided for that entity this field should be left empty (0x0 or 0x2 in hdf5 dataset).
 
 ### 2.3 IDs
-All objects in the format have an id through their placement within the file. Counting begins with ‘0’. Ids of nested objects such as, e.g., signs that belong to a road are only unambiguous if not only providing the id of the sign (through its position in the file), but also the id of the road (through its position in the file). This means ids for subgroups or subsubgroups are always tuples. The degree by which the ids are nested can be determined by the entries in the columns ‘Group’, ‘Subgroup’ and ‘Subsubgroup’ in the signal list in the excel file.
+All objects in the format have an id through their placement within the file. Counting begins with ‘0’. Ids of nested objects such as, e.g., signs that belong to a road are only unambiguous if not only providing the id of the sign (through its position in the file), but also the id of the road (through its position in the file). This means ids for subgroups or subsubgroups are always tuples. The degree by which the ids are nested can be determined by the entries in the columns ‘Group’, ‘Subgroup’ and ‘Subsubgroup’ in the signal list. RoadUsers have an 'RU' as a prefix in the id and MiscObjects a 'M'.
 
 ### 2.4 Temporary Modifications
 It is to be expected that the data format will be used for data measured at recurring intersections etc. Therefore, the Road format can be reused when measuring data on streets that have already been modelled before. In order to be able to reuse this description, the possibility is given to add temporary modifications in case, e.g., road work is present during one recording. This idea sticks closely to the idea of Layer 3 of the 6-Layer Model for environment description. Layer 3 information can be used as an additional component that can be “pinned on top” of the “usual” road description (Layer 1 and 2).
@@ -286,18 +290,10 @@ The directions for the acceleration are equivalent to the ones for the velocity.
 Version number of the input format used. Please provide number in the following format: version “x.y”. The format version is saved as an attribute.
 
 ### 3.2 RecorderNumber
-The filename needs to be provided in order to be able to couple the data provided for the scenario database (ground truth) to the corresponding file for the sensor recording (perception database). The unique filename consists out of a recorderNumber and a recordingNumber. All information is saved as an attribute.
-
-Partner numbers/identifiers are generated on request. For now we are certain that AVL and ika will deliver data. Therefore, those two are already assigned a number below
-
-- 1: AVL
-- 2: ika
-- 3: DLR
+A string UUID identifying the party that created the file/recording. Needed to match Recording and perception data. Saved as an attribute in HDF5.
 
 ### 3.3 RecordingNumber
-The filename needs to be provided in order to be able to couple the data provided for the scenario database (ground truth) to the corresponding file for the sensor recording (perception database). The unique filename consists out of a recorderNumber and a recordingNumber. All information is saved as an attribute.
-
-The numbers of the individual recordings can be chosen by the partner providing the data. It is important that those numbers are unique and that the ground truth recording and the corresponding sensor under test recording from the same drive get the same number.
+A string UUID identifying the recording. Needed to match Recording and perception data. The tuple of RecorderNumber and RecordingNumber should be unique. It is stored as an attribute in HDF5. 
 
 ### 3.4 converterVersion
 The field converterVersion in the top level refers to the version number of the tool used to merge all data together (if this was the case)
@@ -1397,65 +1393,74 @@ Sub types can be used to provide additional information regarding the entities a
 ### 13.4 Connected to
 Mostly for trailers. Connect to vehicles via ID if necessary. Use crossreference. This field should be empty (0x0 or 0x2 in hdf5 dataset) if the road user is not connected to another. The information is saved as an attribute.
 
-### 13.5 birthStamp
+### 13.5 Attached to
+E.g. for a car placed on a tow truck. Use crossreference. This field should be empty (0x0 or 0x2 in hdf5 dataset) if the road user is not connected to another. The information is saved as an attribute.
+
+### 13.6 birthStamp
 The birth stamp provides the index in the timestamps vector at which the road user was “born”, i.e., was first seen in the scenario. The index counting starts with 0. Example: If the birthStamp of a road user is 10, is trajectory starts at timestamp[10] (i.e. the 11th entry in the timestamps vector). The information is saved as an attribute.
 
-### 13.6 Trajectory
+### 13.7 Trajectory
 The trajectory for each road user is provided in its center point. For more information refer to Chapter 2.9.
 
-### 13.7 isDataRecorder
+### 13.8 isDataRecorder
 This bool value needs to be set to true if the current road user is the vehicle recording the data used for ground truth (DGT). If data recording is not done with test vehicle, but, e.g., with a drone, this value will always be false. The information is saved as an attribute.
 
-### 13.8 Bounding Box
+### 13.9 Bounding Box
 The bounding box contains width, height and length of a box around the road user.
 
-#### 13.8.1 **Length**
+#### 13.9.1 **Length**
 In order to provide the trajectory of the object in its center point it might be necessary, depending on the way the recording was made, to calculate the center point with the help of length and width of the vehicle. Therefore, the determined length needs to be noted down here. This is particularly needed for cars and trucks etc. Not so much for pedestrians or bicycles. The information is saved as an attribute.
 
-##### 13.8.1.1 **Confident**
+##### 13.9.1.1 **Confident**
 Additional information on the confidence of the length provided. The value can be either a ‘0’ or a ‘1’. Zero means that the value provided is just assumed and not precisely measured. One means that the value is precisely measured. This is additional information that might be valuable when checking data and analyzing “odd looking behavior” that might be due to uncertain center point calculations.
 
-#### 13.8.2 **Width**
+#### 13.9.2 **Width**
 Same as above just for the width of the vehicle. The information is saved as an attribute.
 
-##### 13.8.2.1 **Confident**
+##### 13.9.2.1 **Confident**
 Additional information on the confidence of the width provided. The value can be either a ‘0’ or a ‘1’. Zero means that the value provided is just assumed and not precisely measured. One means that the value is precisely measured. This is additional information that might be valuable when checking data and analyzing “odd looking behavior” that might be due to uncertain center point calculations.
 
-#### 13.8.3 Height
+#### 13.9.3 Height
 Height of road user. Height is not as important as length and width as it is not needed for the calculation of the center point. If height is not known, please use negative value to show this. The information is saved as an attribute.
 
-### 13.9 Vehicle Lights
+### 13.10 Vehicle Lights
 All vehicle lights fields are filled at every timestamp.
 
-#### 13.9.1 **indicatorRight**
+#### 13.10.1 **indicatorRight**
 - 1 = switched on
 - 0 = switched off
 - -1 = unknown
 
-#### 13.9.2 **indicatorLeft**
+#### 13.10.2 **indicatorLeft**
 - 1 = switched on
 - 0 = switched off
 - -1 = unknown
 
-#### 13.9.3 **brakeLights**
+#### 13.10.3 **brakeLights**
 - 1 = switched on
 - 0 = switched off
 - -1 = unknown
 
-#### 13.9.4 **Headlights**
+#### 13.10.4 **Headlights**
 - 1 = switched on
 - 0 = switched off
 - -1 = unknown
 
-#### 13.9.5 **reversingLights**
+#### 13.10.5 **reversingLights**
 - 1 = switched on
 - 0 = switched off
 - -1 = unknown
 
-#### 13.9.6 **blueLight**
+#### 13.10.6 **blueLight**
 - 1 = switched on
 - 0 = switched off
 - -1 = unknown
+
+#### 13.10.7 **orangeLight**
+- 1 = switched on
+- 0 = switched off
+- -1 = unknown
+
 
 ## 14. Misc Object
 
@@ -1512,6 +1517,12 @@ Same as above just for the width of the object. The information is saved as an a
 
 #### 14.5.3 Height
 Height of object. Height is not as important as length and width as it is not needed for the calculation of the center point. If height is not known, please use negative value to show this. The information is saved as an attribute.
+
+### 14.6 Connected to
+E.g. for horse chained onto another horse. Use crossreference. This field should be empty (0x0 or 0x2 in hdf5 dataset) if the road user is not connected to another. The information is saved as an attribute.
+
+### 14.7 Attached to
+E.g. for a roofrack attached to a car. Use crossreference. This field should be empty (0x0 or 0x2 in hdf5 dataset) if the road user is not connected to another. The information is saved as an attribute.
 
 ## 15. State
 Traffic lights, switchable traffic signs etc. have a certain state that can change over time. A list of possible states can be found in the following. Not all states can be used with all traffic signs. E.g. a switchable traffic sign can have the value of any sign in the traffic sign catalog while a traffic light can change its different phases (red, green etc.)

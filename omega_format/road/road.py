@@ -36,7 +36,7 @@ class Road(InputClassBase):
         return input_recording.roads[i]
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             location=ReferenceTypes.RoadLocation(group.attrs["location"]),

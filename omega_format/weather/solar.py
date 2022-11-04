@@ -23,7 +23,7 @@ class Solar(InputClassBase):
     #  TODO Sanity checks for Radiation
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = cls(
             diff_solar_radiation=group['diffSolarRadiation'][()],

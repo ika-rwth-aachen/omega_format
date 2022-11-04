@@ -17,7 +17,7 @@ class FlatMarking(InputClassBase):
     layer_flag: ReferenceTypes.LayerFlag = ReferenceTypes.LayerFlag.PERMANENT_GENERAL
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             color=ReferenceTypes.FlatMarkingColor(group.attrs["color"]),

@@ -29,7 +29,7 @@ class ObjectClassification(BaseModel):
         return v
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             val=list(map(PerceptionTypes.ObjectClassification, group['val'][()].tolist())),
@@ -79,7 +79,7 @@ class TrackingPoint(BaseModel):
         return v
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             val=list(map(PerceptionTypes.TrackingPoint, group['val'][()].tolist())),
@@ -164,7 +164,7 @@ class Object(BaseModel):
                 setattr(self, k, v[birth:death + 1])
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         sub_group_name = group.name.rpartition('/')[-1]
         func = cls if validate else cls.construct
         self = func(

@@ -31,7 +31,7 @@ class Sign(InputClassBase, BBXCornersClass):
     time_dependent: bool = False
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         type_ = group.attrs["type"]
         if isinstance(type_, bytes):
             type_ = type_.decode("utf-8")

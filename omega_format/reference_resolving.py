@@ -52,10 +52,10 @@ class InputClassBase(BaseModel, arbitrary_types_allowed=True, copy_on_model_vali
                 v.resolve(input_recording)
 
     @classmethod
-    def convert2objects(cls, file, group_name=None, check_require=False, validate=True):
+    def convert2objects(cls, file, group_name=None, check_require=False, validate=True, legacy=None):
         """Converts list of dicts to list of objects of type `object_class`"""
         if require_group(file, group_name) or not check_require:
-            return DictWithProperties({int(i): cls.from_hdf5(o, validate=validate) for i, o in file[group_name].items() if i!='converterVersion'})
+            return DictWithProperties({int(k): cls.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file[group_name].items() if k!='converterVersion'})
         else:
             return DictWithProperties()
 

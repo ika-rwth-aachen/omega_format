@@ -52,7 +52,7 @@ class Sensor(BaseModel):
         return v
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         sub_group_name = group.name.rpartition('/')[-1]
         func = cls if validate else cls.construct
         self = func(

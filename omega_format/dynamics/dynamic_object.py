@@ -11,7 +11,8 @@ from ..enums import ReferenceTypes
 from ..geometry import BBXCornersClass
 from ..reference_resolving import *
 import xarray as xr
-
+from typing import Optional
+from h5py import Group
 
 def in_timespan(obj, birth, death):
     """
@@ -41,6 +42,8 @@ class DynamicObject(InputClassBase, BBXCornersClass):
     bb: BoundingBox = Field(default_factory=BoundingBox)
     tr: Trajectory = Field(default_factory=Trajectory)
     birth: conint(ge=0)
+    connected_to: Optional[ReferenceElement] = None
+    attached_to: Optional[ReferenceElement] = None
     """first timestamp idx"""
 
     @property
@@ -99,3 +102,15 @@ class DynamicObject(InputClassBase, BBXCornersClass):
         return xr.Dataset({f: ('time', getattr(self.tr,f)) for f in self.tr.__fields__.keys()},
                           coords={'time':rr.timestamps.val[self.birth:self.end+1]})
 
+    def to_hdf5(self, group: Group):
+        group.attrs.create('birthStamp', data=self.birth)
+        if self.connected_to is not None:
+            group.attrs.create('connectedTo', data=self.connected_to.reference)
+        else:
+            group.attrs.create('attachedTo', data=-1)
+        if self.attached_to is not None:
+            group.attrs.create('attachedTo', data=self.connected_to.reference)
+        else:
+            group.attrs.create('attachedTo', data=-1)
+        self.bb.to_hdf5(group.create_group('boundBox'))
+        self.tr.to_hdf5(group.create_group('trajectory'))

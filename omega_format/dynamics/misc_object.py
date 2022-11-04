@@ -11,13 +11,35 @@ from .bounding_box import BoundingBox
 class MiscObject(DynamicObject):
     type: ReferenceTypes.MiscObjectType = Field(default_factory=ReferenceTypes.MiscObjectType)
     sub_type: ReferenceTypes.MiscObjectSubType = Field(default_factory=ReferenceTypes.MiscObjectSubType)
+    id: str = f'M-1'
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate=True):
+    def from_hdf5(cls, group: Group, validate=True, legacy=None):
+        if legacy=='v3.1':
+            return cls._legacy_from_hdf5_v3_1(group, validate=validate)
+        elif legacy is None:
+            sub_group_name = group.name.rpartition('/')[-1]
+            func = cls if validate else cls.construct
+            self = func(
+                id=sub_group_name,
+                tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
+                bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate),
+                connected_to=ReferenceElement(id=group.attrs["connectedTo"], object_class=DynamicObject),
+                attached_to=ReferenceElement(id=group.attrs["attachedTo"], object_class=DynamicObject),
+                type=ReferenceTypes.MiscObjectType(group.attrs["type"]),
+                sub_type=ReferenceTypes.MiscObjectSubType(group.attrs["subtype"]),
+                birth=group.attrs["birthStamp"].astype(int)
+            )
+            return self
+        else:
+            raise NotImplementedError()
+
+    @classmethod
+    def _legacy_from_hdf5_v3_1(cls, group: Group, validate=True):
         sub_group_name = group.name.rpartition('/')[-1]
         func = cls if validate else cls.construct
         self = func(
-            id=int(sub_group_name),
+            id=f'M{sub_group_name}',
             tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
             bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate),
             type=ReferenceTypes.MiscObjectType(group.attrs["type"]),
@@ -32,8 +54,6 @@ class MiscObject(DynamicObject):
         return input_recording.misc_objects[i]
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('birthStamp', data=self.birth)
-        self.bb.to_hdf5(group.create_group('boundBox'))
-        self.tr.to_hdf5(group.create_group('trajectory'))
+        super().to_hdf5(group)
         group.create_dataset('type', data=self.type)
         group.create_dataset('subtype', data=self.sub_type)

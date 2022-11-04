@@ -18,7 +18,7 @@ class Visibility(InputClassBase):
         return v
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             visibility=group['visibility'][()],

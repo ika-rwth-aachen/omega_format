@@ -13,7 +13,7 @@ class MiscInfo(BaseModel):
     acoustics: confloat(ge=0) = 0.
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         sub_group_name = group.name.rpartition('/')[-1]
         self = func(

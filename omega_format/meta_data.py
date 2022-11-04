@@ -74,7 +74,7 @@ class MetaData(InputClassBase):
             return value
 
     @classmethod
-    def from_hdf5(cls, file: File, validate: bool = True):
+    def from_hdf5(cls, file: File, validate: bool = True, legacy=None):
         dt = cls.get_attribute(file, 'daytime')
         func = cls if validate else cls.construct
         self = func(

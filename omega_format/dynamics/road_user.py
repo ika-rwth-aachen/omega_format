@@ -14,21 +14,45 @@ from h5py import Group
 class RoadUser(DynamicObject):
     type: ReferenceTypes.RoadUserType = ReferenceTypes.RoadUserType.REGULAR
     sub_type: Any = None # ReferenceTypes.RoadUserSubType
-    connected_to: Optional[ReferenceElement] = None
     is_data_recorder: bool = False
     vehicle_lights: VehicleLights = Field(default_factory=VehicleLights)
-    id: int = -1
+    id: str = f'RU-1'
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
+        if legacy=='v3.1':
+            return cls._legacy_from_hdf5_v3_1(group, validate)
+        elif legacy is None:
+            classification_type = ReferenceTypes.RoadUserType(group.attrs["type"])
+            sub_group_name = group.name.rpartition('/')[-1]
+            func = cls if validate else cls.construct
+            self = func(
+                id=sub_group_name,
+                type=classification_type,
+                sub_type=ReferenceTypes.RoadUserType.get_subtype(classification_type, group.attrs["subtype"]),
+                connected_to=ReferenceElement(id=group.attrs["connectedTo"], object_class=DynamicObject),
+                attached_to=ReferenceElement(id=group.attrs["attachedTo"], object_class=DynamicObject),
+                is_data_recorder=group.attrs["isDataRecorder"].astype(bool),
+                birth=group.attrs["birthStamp"].astype(int),
+                tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
+                bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate),
+                vehicle_lights=VehicleLights.from_hdf5(group['vehicleLights'], validate=validate)
+            )
+            return self
+        else:
+            raise NotImplementedError()
+        
+        
+    @classmethod
+    def _legacy_from_hdf5_v3_1(cls, group: Group, validate: bool = True, legacy=None):
         classification_type = ReferenceTypes.RoadUserType(group.attrs["type"])
         sub_group_name = group.name.rpartition('/')[-1]
         func = cls if validate else cls.construct
         self = func(
-            id=int(sub_group_name),
+            id=f'RU{sub_group_name}',
             type=classification_type,
             sub_type=ReferenceTypes.RoadUserType.get_subtype(classification_type, group.attrs["subtype"]),
-            connected_to=ReferenceElement(id=group.attrs["connectedTo"], object_class=RoadUser),
+            connected_to=ReferenceElement(id=f'RU{group.attrs["connectedTo"]}', object_class=DynamicObject),
             is_data_recorder=group.attrs["isDataRecorder"].astype(bool),
             birth=group.attrs["birthStamp"].astype(int),
             tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
@@ -48,14 +72,8 @@ class RoadUser(DynamicObject):
             return input_recording.road_users[i]
 
     def to_hdf5(self, group: Group):
-        group.attrs.create('birthStamp', data=self.birth)
+        super().to_hdf5(group)
         group.attrs.create('isDataRecorder', data=self.is_data_recorder)
         group.attrs.create('type', data=self.type)
         group.attrs.create('subtype', data=self.sub_type)
-        if self.connected_to is not None:
-            group.attrs.create('connectedTo', data=self.connected_to.reference)
-        else:
-            group.attrs.create('connectedTo', data=-1)
-        self.bb.to_hdf5(group.create_group('boundBox'))
-        self.tr.to_hdf5(group.create_group('trajectory'))
         self.vehicle_lights.to_hdf5(group.create_group('vehicleLights'))

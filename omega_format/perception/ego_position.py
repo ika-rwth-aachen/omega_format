@@ -54,7 +54,7 @@ class EgoPosition(BaseModel):
         return v
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             heading=ValVar.from_hdf5(group['heading'], validate=validate),

@@ -26,7 +26,7 @@ class ReferenceRecording(InputClassBase):
     """
     meta_data: MetaData = Field(default_factory=MetaData)
     timestamps: Timestamps = Field(default_factory=Timestamps)
-    ego_id: Optional[int] = None
+    ego_id: Optional[str] = None
     ego_vehicle: Optional[RoadUser] = None
     weather: Weather = None
     misc_objects: DictWithProperties = Field(default_factory=DictWithProperties)
@@ -34,21 +34,46 @@ class ReferenceRecording(InputClassBase):
     states: DictWithProperties = Field(default_factory=DictWithProperties)
     road_users: DictWithProperties = Field(default_factory=DictWithProperties)
 
+
+    @property 
+    def dynamic_objects(self):
+        return {k: v for pre, d in zip(['M', "RU"], [self.misc_objects, self.road_users]) for k,v in d.items()}
+
     @classmethod
-    def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True):
+    def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True, legacy=None):
         if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
                 func = cls if validate else cls.construct
                 tfunc = Timestamps if validate else Timestamps.construct
-                self = func(
-                    misc_objects=MiscObject.convert2objects(file, "miscObject", True, validate=validate),
-                    roads=Road.convert2objects(file, "road", True, validate=validate),
-                    states=State.convert2objects(file, "state", True, validate=validate),
-                    road_users=RoadUser.convert2objects(file, "roadUser", True, validate=validate),
-                    weather=Weather.from_hdf5(file['weather'], validate=validate) if require_group(file, "weather") else None,
-                    timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
-                    meta_data=MetaData.from_hdf5(file, validate=validate)
-                )
+
+                if legacy=='v3.1':
+                    self = func(
+                        roads=Road.convert2objects(file, "road", True, validate=validate, legacy=legacy),
+                        states=State.convert2objects(file, "state", True, validate=validate, legacy=legacy),
+                        misc_objects=DictWithProperties({f'M{k}': v for k, v in MiscObject.convert2objects(file, "miscObject", True, validate=validate, legacy=legacy).items()}),
+                        road_users=DictWithProperties({f'RU{k}': v for k,v in RoadUser.convert2objects(file, "roadUser", True, validate=validate, legacy=legacy).items()}),
+                        weather=Weather.from_hdf5(file['weather'], validate=validate, legacy=legacy) if require_group(file, "weather") else None,
+                        timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
+                        meta_data=MetaData.from_hdf5(file, validate=validate)
+                    )
+                elif legacy is not None:
+                    raise NotImplementedError()
+                else:
+                    if require_group(file, 'dynamicObjects'):
+                        misc_objects=DictWithProperties({k: MiscObject.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file['dynamicObjects'].items() if k.startswith('M')})
+                        road_users=DictWithProperties({k: RoadUser.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file['dynamicObjects'].items() if k.startswith('RU')})
+                    else:
+                        misc_objects = DictWithProperties([])
+                        road_users = DictWithProperties([])
+                    self = func(
+                        roads=Road.convert2objects(file, "road", True, validate=validate),
+                        states=State.convert2objects(file, "state", True, validate=validate),
+                        weather=Weather.from_hdf5(file['weather'], validate=validate) if require_group(file, "weather") else None,
+                        timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
+                        meta_data=MetaData.from_hdf5(file, validate=validate),
+                        misc_objects=misc_objects,
+                        road_users=road_users
+                    )
 
                 self.ego_id = cls.extract_ego_id(road_users=self.road_users)
                 if self.ego_id is not None and self.ego_vehicle is None:
@@ -74,11 +99,12 @@ class ReferenceRecording(InputClassBase):
 
             f.create_dataset('timestamps', data=self.timestamps.val)
 
-            self.road_users.to_hdf5(f.require_group('roadUser'))
+            self.road_users.to_hdf5(f.require_group('dynamicObjects'))
             if self.ego_vehicle is not None:
-                ig = f['roadUser'].create_group(str(self.ego_id))
+                ig = f['dynamicObjects'].create_group(str(self.ego_id))
                 self.ego_vehicle.to_hdf5(ig)
-            self.misc_objects.to_hdf5(f.require_group('miscObject'))
+            self.misc_objects.to_hdf5(f.require_group('dynamicObjects'))
+            
             self.roads.to_hdf5(f.require_group('road'))
             self.states.to_hdf5(f.require_group('state'))
 

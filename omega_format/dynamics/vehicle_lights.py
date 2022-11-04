@@ -15,7 +15,7 @@ class VehicleLights(InputClassBase):
     blue_light: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         rf = lambda s: list(map(ReferenceTypes.RoadUserVehicleLights, group[s][:].tolist()))
         func = cls if validate else cls.construct
         self = func(

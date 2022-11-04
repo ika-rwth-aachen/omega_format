@@ -49,7 +49,7 @@ class MetaObject(BaseModel):
     meas_state_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True):
+    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             dist_longitudinal_val_type=PerceptionTypes.PerceptionType(group.attrs['distLongitudinalValType']),

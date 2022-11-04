@@ -18,8 +18,8 @@ def get_converter_version(h5file, group_str):
 class MetaData(InputClassBase):
     daytime: datetime = None
     format_version: str = get_versions()['version']
-    recorder_number: int = None
-    recording_number: int = None
+    recorder_number: str = ''
+    recording_number: str = ''
 
     reference_point_lat: float = None
     reference_point_lon: float = None
@@ -76,11 +76,18 @@ class MetaData(InputClassBase):
     @classmethod
     def from_hdf5(cls, file: File, validate: bool = True, legacy=None):
         dt = cls.get_attribute(file, 'daytime')
+        
+        if legacy=='v3.1':
+            dt = datetime.strptime(cls.assure_string(dt), '%Y%m%d%H%M%S') if dt is not None else None
+        else:
+            dt = datetime.strptime(cls.assure_string(dt), '%Y-%m-%dT%H:%M:%S.%f%z') if dt is not None else None
+
         func = cls if validate else cls.construct
+
         self = func(
-            daytime=datetime.strptime(cls.assure_string(dt), '%Y-%m-%dT%H:%M:%S.%f%z') if dt is not None else None,
-            recorder_number=cls.get_attribute(file, 'recorderNumber', int),
-            recording_number=cls.get_attribute(file, 'recordingNumber', int),
+            daytime=dt,
+            recorder_number=cls.get_attribute(file, 'recorderNumber', str),
+            recording_number=cls.get_attribute(file, 'recordingNumber', str),
             reference_point_lat=cls.get_attribute(file, 'refPointLat', float),
             reference_point_lon=cls.get_attribute(file, 'refPointLong', float),
             natural_behavior=cls.get_attribute(file, 'naturalBehavior', bool),

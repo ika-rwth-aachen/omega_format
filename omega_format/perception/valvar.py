@@ -5,7 +5,7 @@ from h5py import Group
 from pydantic import validator, BaseModel, Field
 
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class ValVar(BaseModel):
     class Config(PydanticConfig):
@@ -35,8 +35,8 @@ class ValVar(BaseModel):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('val', data=self.val)
-        group.create_dataset('var', data=self.var)
+        group.create_dataset('val', data=self.val, **get_settings().hdf5_compress_args)
+        group.create_dataset('var', data=self.var, **get_settings().hdf5_compress_args)
 
     def cut_to_timespan(self, birth, death):
         assert birth >= 0

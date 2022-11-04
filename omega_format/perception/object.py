@@ -8,7 +8,7 @@ from pydantic import validator, BaseModel, Field
 from .valvar import ValVar
 from ..enums import PerceptionTypes
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class ObjectClassification(BaseModel):
     class Config(PydanticConfig):
@@ -38,8 +38,8 @@ class ObjectClassification(BaseModel):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('val', data=self.val)
-        group.create_dataset('confidence', data=self.confidence)
+        group.create_dataset('val', data=self.val, **get_settings().hdf5_compress_args)
+        group.create_dataset('confidence', data=self.confidence, **get_settings().hdf5_compress_args)
 
     def cut_to_timespan(self, birth, death):
         assert birth >= 0
@@ -55,56 +55,6 @@ class ObjectClassification(BaseModel):
             assert len(self.confidence) > death
             self.confidence = self.confidence[birth:death + 1]
 
-'''
-class TrackingPoint(BaseModel):
-    class Config(PydanticConfig):
-        pass
-    val: List[PerceptionTypes.TrackingPoint] = Field(default_factory=list)
-    var: np.ndarray = np.array([], dtype=np.float64)
-
-    @validator('val')
-    def check_array_not_empty(cls, v):
-        if not len(v) > 0:
-            warn('received empty array in TrackingPoint class')
-        return v
-
-    @validator('var')
-    def check_array_length(cls, v, values):
-        if len(values) > 0:
-            # first array would be validated if len(values)=0 -> no length to compare against
-            # use the length of pos_x to check equality with other array length
-            length = len(values.get('val'))
-            if len(v) != length:
-                raise ValueError(f'length of all TrackingPoint arrays must match, expected len {len(v)}, actual len {length}')
-        return v
-
-    @classmethod
-    def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
-        self = func(
-            val=list(map(PerceptionTypes.TrackingPoint, group['val'][()].tolist())),
-            var=group['var'][()],
-        )
-        return self
-
-    def to_hdf5(self, group: Group):
-        group.create_dataset('val', data=self.val)
-        group.create_dataset('var', data=self.var)
-
-    def cut_to_timespan(self, birth, death):
-        assert birth >= 0
-        assert birth <= death
-
-        if len(self.val) > 0:
-            assert len(self.val) > birth
-            assert len(self.val) > death
-            self.val = self.val[birth:death + 1]
-
-        if len(self.var) > 0:
-            assert len(self.var) > birth
-            assert len(self.var) > death
-            self.var = self.var[birth:death + 1]
-'''
 
 class Object(BaseModel):
     class Config(PydanticConfig):
@@ -206,12 +156,12 @@ class Object(BaseModel):
         self.width.to_hdf5(group.create_group('width'))
         self.height.to_hdf5(group.create_group('height'))
         self.length.to_hdf5(group.create_group('length'))
-        group.create_dataset('rcs', data=self.rcs)
-        group.create_dataset('age', data=self.age)
-        group.create_dataset('trackingPoint', data=self.tracking_point)
-        group.create_dataset('confidenceOfExistence', data=self.confidence_of_existence)
-        group.create_dataset('movementClassification', data=self.movement_classification)
-        group.create_dataset('measState', data=self.meas_state)
+        group.create_dataset('rcs', data=self.rcs, **get_settings().hdf5_compress_args)
+        group.create_dataset('age', data=self.age, **get_settings().hdf5_compress_args)
+        group.create_dataset('trackingPoint', data=self.tracking_point, **get_settings().hdf5_compress_args)
+        group.create_dataset('confidenceOfExistence', data=self.confidence_of_existence, **get_settings().hdf5_compress_args)
+        group.create_dataset('movementClassification', data=self.movement_classification, **get_settings().hdf5_compress_args)
+        group.create_dataset('measState', data=self.meas_state, **get_settings().hdf5_compress_args)
 
         self.dist_longitudinal.to_hdf5(group.create_group('distLongitudinal'))
         self.dist_lateral.to_hdf5(group.create_group('distLateral'))

@@ -7,7 +7,7 @@ from typing import List
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class Wind(InputClassBase):
     type: List[ReferenceTypes.Wind] = Field(default_factory=lambda: [ReferenceTypes.Wind.CALM])
@@ -43,8 +43,8 @@ class Wind(InputClassBase):
     def to_hdf5(self, group: Group):
         group.attrs.create('source', data=self.source)
         group.create_dataset('type', data=self.type)
-        group.create_dataset('windDirection', data=self.wind_direction)
-        group.create_dataset('windSpeed', data=self.wind_speed)
+        group.create_dataset('windDirection', data=self.wind_direction, **get_settings().hdf5_compress_args)
+        group.create_dataset('windSpeed', data=self.wind_speed, **get_settings().hdf5_compress_args)
 
     @property
     def is_windy(self):

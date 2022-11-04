@@ -7,7 +7,7 @@ from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class Precipitation(InputClassBase):
     type: List[ReferenceTypes.Precipitation] = Field(default_factory=lambda: [ReferenceTypes.Precipitation.NO_RAIN])
@@ -55,12 +55,12 @@ class Precipitation(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('amountHourly', data=self.amount_hourly)
-        group.create_dataset('amountMinute', data=self.amount_minute)
-        group.create_dataset('newSnowDepth', data=self.new_snow_depth)
-        group.create_dataset('snowDepth', data=self.snow_depth)
+        group.create_dataset('amountHourly', data=self.amount_hourly, **get_settings().hdf5_compress_args)
+        group.create_dataset('amountMinute', data=self.amount_minute, **get_settings().hdf5_compress_args)
+        group.create_dataset('newSnowDepth', data=self.new_snow_depth, **get_settings().hdf5_compress_args)
+        group.create_dataset('snowDepth', data=self.snow_depth, **get_settings().hdf5_compress_args)
         group.attrs.create('source', data=self.source)
-        group.create_dataset('type', data=self.type)
+        group.create_dataset('type', data=self.type, **get_settings().hdf5_compress_args)
 
     @property
     def is_raining(self):

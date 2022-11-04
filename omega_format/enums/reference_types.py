@@ -6,21 +6,15 @@ class ReferenceTypesSpecification(Enum):
     FORMAT_VERSION = get_versions_with_clean()['clean_version']
 
 
-class RecorderNumber(IntEnum):
-    AVL = 1
-    IKA = 2
-    DLR = 3
-
-
 class RoadLocation(IntEnum):
-        TODO = 0
+        UNKNOWN = 0
         URBAN = 1
         NON_URBAN = 2
         HIGHWAY = 3
 
 
 class LaneType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     DRIVING = 1
     SHOULDER = 2
     BUS_LANE = 3
@@ -40,7 +34,7 @@ class LaneType(IntEnum):
 
 
 class LaneSubType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     BRIDGE = 1
     TUNNEL = 2
 
@@ -52,7 +46,7 @@ class LaneClass(IntEnum):
 
 
 class BoundaryType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     SOLID = 1
     DASHED = 2
     SOLID_SOLID = 3
@@ -78,7 +72,7 @@ class BoundaryType(IntEnum):
 
 
 class BoundarySubType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     THIN = 1
     THICK = 2
     METAL = 3
@@ -326,9 +320,10 @@ class SignType(str, Enum):
 
     @classmethod
     def _missing_(cls, value):
-        for member in cls:
-            if member.value == value:
-                return member
+        if '_' in value:
+            return cls(value.replace('_','-'))
+        else:
+            super()._missing_(cls, value)
 
 
 class SignSizeClass(IntEnum):
@@ -339,7 +334,7 @@ class SignSizeClass(IntEnum):
 
 
 class FlatMarkingType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     NOTICE_ARROW = 1
     ZIG_ZAG = 2
     KEEPOUT_AREA = 3
@@ -608,14 +603,14 @@ class RoadUserSubTypeTRAILER(_RoadUserSubType,IntEnum):
     BENDY_BUS_TRAILER = 7
 
 class MiscObjectType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     ANIMAL = 1
     PLAY_EQUIPMENT = 2
     MISC = 3
 
 
 class MiscObjectSubType(IntEnum):
-    TODO = 0
+    UNKNOWN = 0
     DOG = 1
     CAT = 2
     HORSE = 3

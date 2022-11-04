@@ -5,6 +5,8 @@ from h5py import Group
 
 from ..reference_resolving import raise_not_resolved, InputClassBase
 from warnings import warn
+from ..settings import get_settings
+
 
 class Trajectory(InputClassBase):
     pos_x: np.ndarray = Field(default=np.array([], dtype=np.float64))
@@ -77,21 +79,21 @@ class Trajectory(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('posX', data=self.pos_x)
-        group.create_dataset('posY', data=self.pos_y)
-        group.create_dataset('posZ', data=self.pos_z)
-        group.create_dataset('roll', data=self.roll)
-        group.create_dataset('pitch', data=self.pitch)
-        group.create_dataset('heading', data=self.heading)
-        group.create_dataset('velLongitudinal', data=self.vel_longitudinal)
-        group.create_dataset('velLateral', data=self.vel_lateral)
-        group.create_dataset('velZ', data=self.vel_z)
-        group.create_dataset('accLateral', data=self.acc_lateral)
-        group.create_dataset('accLongitudinal', data=self.acc_longitudinal)
-        group.create_dataset('accZ', data=self.acc_z)
-        group.create_dataset('rollDer', data=self.roll_der)
-        group.create_dataset('pitchDer', data=self.pitch_der)
-        group.create_dataset('headingDer', data=self.heading_der)
+        group.create_dataset('posX', data=self.pos_x, **get_settings().hdf5_compress_args)
+        group.create_dataset('posY', data=self.pos_y, **get_settings().hdf5_compress_args)
+        group.create_dataset('posZ', data=self.pos_z, **get_settings().hdf5_compress_args)
+        group.create_dataset('roll', data=self.roll, **get_settings().hdf5_compress_args)
+        group.create_dataset('pitch', data=self.pitch, **get_settings().hdf5_compress_args)
+        group.create_dataset('heading', data=self.heading, **get_settings().hdf5_compress_args)
+        group.create_dataset('velLongitudinal', data=self.vel_longitudinal, **get_settings().hdf5_compress_args)
+        group.create_dataset('velLateral', data=self.vel_lateral, **get_settings().hdf5_compress_args)
+        group.create_dataset('velZ', data=self.vel_z, **get_settings().hdf5_compress_args)
+        group.create_dataset('accLateral', data=self.acc_lateral, **get_settings().hdf5_compress_args)
+        group.create_dataset('accLongitudinal', data=self.acc_longitudinal, **get_settings().hdf5_compress_args)
+        group.create_dataset('accZ', data=self.acc_z, **get_settings().hdf5_compress_args)
+        group.create_dataset('rollDer', data=self.roll_der, **get_settings().hdf5_compress_args)
+        group.create_dataset('pitchDer', data=self.pitch_der, **get_settings().hdf5_compress_args)
+        group.create_dataset('headingDer', data=self.heading_der, **get_settings().hdf5_compress_args)
 
     @property
     def vel(self):

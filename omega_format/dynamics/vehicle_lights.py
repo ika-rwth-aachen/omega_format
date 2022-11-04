@@ -4,7 +4,7 @@ from typing import List
 from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-
+from ..settings import get_settings
 
 class VehicleLights(InputClassBase):
     indicator_right: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
@@ -29,9 +29,9 @@ class VehicleLights(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('indicatorRight', data=self.indicator_right)
-        group.create_dataset('indicatorLeft', data=self.indicator_left)
-        group.create_dataset('brakeLights', data=self.brake_lights)
-        group.create_dataset('headlights', data=self.headlights)
-        group.create_dataset('reversingLights', data=self.reverseing_lights)
-        group.create_dataset('blueLight', data=self.blue_light)
+        group.create_dataset('indicatorRight', data=self.indicator_right, **get_settings().hdf5_compress_args)
+        group.create_dataset('indicatorLeft', data=self.indicator_left, **get_settings().hdf5_compress_args)
+        group.create_dataset('brakeLights', data=self.brake_lights, **get_settings().hdf5_compress_args)
+        group.create_dataset('headlights', data=self.headlights, **get_settings().hdf5_compress_args)
+        group.create_dataset('reversingLights', data=self.reverseing_lights, **get_settings().hdf5_compress_args)
+        group.create_dataset('blueLight', data=self.blue_light, **get_settings().hdf5_compress_args)

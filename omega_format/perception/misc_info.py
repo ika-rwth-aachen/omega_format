@@ -3,7 +3,7 @@ from pydantic.types import conint, confloat
 from h5py import Group
 
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class MiscInfo(BaseModel):
     class Config(PydanticConfig):
@@ -24,5 +24,5 @@ class MiscInfo(BaseModel):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('lightIntensity', data=self.light_intensity)
-        group.create_dataset('acoustics', data=self.acoustics)
+        group.create_dataset('lightIntensity', data=self.light_intensity, **get_settings().hdf5_compress_args)
+        group.create_dataset('acoustics', data=self.acoustics, **get_settings().hdf5_compress_args)

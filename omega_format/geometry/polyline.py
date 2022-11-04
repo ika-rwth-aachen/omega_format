@@ -3,7 +3,7 @@ from pydantic import validator, BaseModel
 import numpy as np
 from h5py import Group
 from ..reference_resolving import InputClassBase
-
+from ..settings import get_settings
 
 class Polyline(InputClassBase):
     pos_x: np.ndarray
@@ -35,6 +35,6 @@ class Polyline(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('posX', data=self.pos_x)
-        group.create_dataset('posY', data=self.pos_y)
-        group.create_dataset('posZ', data=self.pos_z)
+        group.create_dataset('posX', data=self.pos_x, **get_settings().hdf5_compress_args)
+        group.create_dataset('posY', data=self.pos_y, **get_settings().hdf5_compress_args)
+        group.create_dataset('posZ', data=self.pos_z, **get_settings().hdf5_compress_args)

@@ -1,7 +1,6 @@
 from h5py import Group
 from ..reference_resolving import InputClassBase
 
-
 class Position(InputClassBase):
     pos_x: float
     pos_y: float

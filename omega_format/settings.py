@@ -5,12 +5,19 @@ class Settings(BaseSettings):
 
     ALLOW_MISSING_TL_GROUPS: bool  = True  # allow e.g. weather not to be present
     ALLOW_INCOMPLETE_META_DATA: bool = True
+    COMPRESS_HDF5: bool = True
 
     class Config:
         env_prefix = 'omega_format_'
         env_file = ".env"
         # secrets_dir = '/run/secrets'  # for docker secrets
 
+    @property
+    def hdf5_compress_args(self):
+        if self.COMPRESS_HDF5:
+            return dict(compression='gzip', compression_opts=9)
+        else:
+            return {}
 
 class SettingsGetter:
     def __init__(self, **kwargs):

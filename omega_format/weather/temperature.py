@@ -5,7 +5,7 @@ from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class Temperature(InputClassBase):
     air_temp: np.ndarray = Field(default=np.array([], dtype=np.float64))
@@ -31,9 +31,9 @@ class Temperature(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('airTemp', data=self.air_temp)
-        group.create_dataset('airTemp5cm', data=self.air_temp_5cm)
-        group.create_dataset('groundTemp', data=self.ground_temp)
+        group.create_dataset('airTemp', data=self.air_temp, **get_settings().hdf5_compress_args)
+        group.create_dataset('airTemp5cm', data=self.air_temp_5cm, **get_settings().hdf5_compress_args)
+        group.create_dataset('groundTemp', data=self.ground_temp, **get_settings().hdf5_compress_args)
         group.attrs.create('source', data=self.source)
 
     def get_avg_temp(self):

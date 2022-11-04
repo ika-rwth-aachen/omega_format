@@ -14,7 +14,7 @@ from .perception.object import Object
 from .perception.sensor import Sensor
 from .timestamps import Timestamps
 from .pydantic_utils.pydantic_config import PydanticConfig
-
+from .settings import get_settings
 
 class PerceptionRecording(BaseModel):
     """
@@ -72,7 +72,7 @@ class PerceptionRecording(BaseModel):
             file.attrs.create('egoOffset', data=self.ego_offset)
             file.attrs.create('customInformation', data=self.custom_information)
 
-            file.create_dataset('timestamps', data=self.timestamps.val)
+            file.create_dataset('timestamps', data=self.timestamps.val, **get_settings().hdf5_compress_args)
 
             self.ego_position.to_hdf5(file.create_group('egoPosition'))
 

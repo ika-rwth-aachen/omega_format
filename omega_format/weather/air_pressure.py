@@ -5,7 +5,7 @@ from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class AirPressure(InputClassBase):
     air_pressure_nn: np.ndarray = Field(default=np.array([]))
@@ -30,6 +30,6 @@ class AirPressure(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('airPressureNN', data=self.air_pressure_nn)
-        group.create_dataset('airPressureZero', data=self.air_pressure_zero)
+        group.create_dataset('airPressureNN', data=self.air_pressure_nn, **get_settings().hdf5_compress_args)
+        group.create_dataset('airPressureZero', data=self.air_pressure_zero, **get_settings().hdf5_compress_args)
         group.attrs.create('source', data=self.source)

@@ -5,7 +5,7 @@ from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class Cloudiness(InputClassBase):
     degree: np.ndarray = Field(default=np.array([]))
@@ -27,7 +27,7 @@ class Cloudiness(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('degree', data=self.degree)
+        group.create_dataset('degree', data=self.degree, **get_settings().hdf5_compress_args)
         group.attrs.create('source', data=self.source)
 
     @property

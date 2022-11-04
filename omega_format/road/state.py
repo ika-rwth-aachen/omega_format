@@ -3,7 +3,7 @@ import numpy as np
 from h5py import Group
 
 from ..reference_resolving import InputClassBase, ReferenceElement
-
+from ..settings import get_settings
 
 class State(InputClassBase):
     sign: ReferenceElement
@@ -33,4 +33,4 @@ class State(InputClassBase):
 
     def to_hdf5(self, group: Group):
         group.create_dataset('referenceId', data=self.sign.reference)
-        group.create_dataset('value', data=self.values)
+        group.create_dataset('value', data=self.values, **get_settings().hdf5_compress_args)

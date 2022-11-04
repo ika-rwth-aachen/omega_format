@@ -19,6 +19,8 @@ from .road.state import State
 from .timestamps import Timestamps
 from .weather.weather import Weather
 from concurrent.futures import ThreadPoolExecutor
+from .settings import get_settings
+
 
 class ReferenceRecording(InputClassBase):
     """
@@ -97,7 +99,7 @@ class ReferenceRecording(InputClassBase):
         with h5py.File(filename, 'w') as f:
             self.meta_data.to_hdf5(f)
 
-            f.create_dataset('timestamps', data=self.timestamps.val)
+            f.create_dataset('timestamps', data=self.timestamps.val, **get_settings().hdf5_compress_args)
 
             self.road_users.to_hdf5(f.require_group('dynamicObjects'))
             if self.ego_vehicle is not None:

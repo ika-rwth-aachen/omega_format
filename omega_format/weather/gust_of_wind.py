@@ -6,7 +6,7 @@ from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class GustOfWind(InputClassBase):
     wind_speed: np.ndarray = Field(default=np.array([]))
@@ -31,5 +31,5 @@ class GustOfWind(InputClassBase):
 
     def to_hdf5(self, group: Group):
         group.attrs.create('source', data=self.source)
-        group.create_dataset('type', data=self.type)
-        group.create_dataset('windSpeed', data=self.wind_speed)
+        group.create_dataset('type', data=self.type, **get_settings().hdf5_compress_args)
+        group.create_dataset('windSpeed', data=self.wind_speed, **get_settings().hdf5_compress_args)

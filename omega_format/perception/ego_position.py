@@ -5,7 +5,7 @@ from pydantic import validator, Field, BaseModel
 
 from .valvar import ValVar
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class EgoPosition(BaseModel):
     class Config(PydanticConfig):
@@ -71,5 +71,5 @@ class EgoPosition(BaseModel):
         self.pos_longitude.to_hdf5(group.create_group('posLongitude'))
         self.pos_latitude.to_hdf5(group.create_group('posLatitude'))
         self.pos_z.to_hdf5(group.create_group('posZ'))
-        group.create_dataset('yawRate', data=self.yaw_rate)
-        group.create_dataset('pitch', data=self.pitch)
+        group.create_dataset('yawRate', data=self.yaw_rate, **get_settings().hdf5_compress_args)
+        group.create_dataset('pitch', data=self.pitch, **get_settings().hdf5_compress_args)

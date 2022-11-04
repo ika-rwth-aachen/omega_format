@@ -5,7 +5,7 @@ from h5py import Group
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..pydantic_utils.pydantic_config import PydanticConfig
-
+from ..settings import get_settings
 
 class Solar(InputClassBase):
     diff_solar_radiation: np.ndarray = Field(default=np.array([], dtype=np.float64))
@@ -35,10 +35,10 @@ class Solar(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('diffSolarRadiation', data=self.diff_solar_radiation)
-        group.create_dataset('longwaveDownRadiation', data=self.longwave_down_radiation)
-        group.create_dataset('solarHours', data=self.solar_hours)
-        group.create_dataset('solarIncomingRadiation', data=self.solar_incoming_radiation)
+        group.create_dataset('diffSolarRadiation', data=self.diff_solar_radiation, **get_settings().hdf5_compress_args)
+        group.create_dataset('longwaveDownRadiation', data=self.longwave_down_radiation, **get_settings().hdf5_compress_args)
+        group.create_dataset('solarHours', data=self.solar_hours, **get_settings().hdf5_compress_args)
+        group.create_dataset('solarIncomingRadiation', data=self.solar_incoming_radiation, **get_settings().hdf5_compress_args)
         group.attrs.create('source', data=self.source)
 
     @property

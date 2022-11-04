@@ -60,7 +60,7 @@ class InputClassBase(BaseModel, arbitrary_types_allowed=True, copy_on_model_vali
             return DictWithProperties()
 
     @classmethod
-    def resolve_func(ir, i):
+    def resolve_func(cls, ir, i):
         raise NotImplementedError()
 
     def __repr__(self):
@@ -201,7 +201,7 @@ class ReferenceElement:
         finds the corresponding object to the identifier `reference` and sets the pointer as `value`. If no object could
         be found an `ReferenceNotResolvable` is raised.
         """
-        if np.all(self.reference == -1):
+        if np.all(self.reference == -1) or (isinstance(self.reference, str) and self.reference.endswith('-1')):
             self._value = None
         else:
             self._value = self.object_class.resolve_func(input_recording, self.reference)

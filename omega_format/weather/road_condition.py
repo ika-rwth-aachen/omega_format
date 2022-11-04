@@ -2,7 +2,7 @@ import numpy as np
 from h5py import Group
 from pydantic import Field
 from ..reference_resolving import InputClassBase
-
+from ..settings import get_settings
 
 class RoadCondition(InputClassBase):
     maintenance_status: np.ndarray = Field(default=np.array([], dtype=np.float64))
@@ -20,6 +20,6 @@ class RoadCondition(InputClassBase):
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('maintenanceStatus', data=self.maintenance_status)
+        group.create_dataset('maintenanceStatus', data=self.maintenance_status, **get_settings().hdf5_compress_args)
         group.create_dataset('spray', data=self.spray)
-        group.create_dataset('surfaceCondition', data=self.surface_condition)
+        group.create_dataset('surfaceCondition', data=self.surface_condition, **get_settings().hdf5_compress_args)

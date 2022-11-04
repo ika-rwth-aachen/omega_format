@@ -24,9 +24,9 @@ class PerceptionRecording(BaseModel):
         pass
     format_version: str = "1.3"
     converter_version: str = ""
-    recorder_number: int = 0
-    recording_number: int = 0
-    ego_id: int = 0
+    recorder_number: str = ''
+    recording_number: str = ''
+    ego_id: str = 'RU-1'
     ego_offset: float = 0.
     custom_information: str = ""
 
@@ -48,7 +48,7 @@ class PerceptionRecording(BaseModel):
                     converter_version=file.attrs['converterVersion'],
                     recorder_number=file.attrs['recorderNumber'],
                     recording_number=file.attrs['recordingNumber'],
-                    ego_id=int(file.attrs['egoID']),
+                    ego_id=file.attrs['egoID'],
                     ego_offset=file.attrs['egoOffset'],
                     custom_information=file.attrs['customInformation'],
                     timestamps=tfunc(val=file['timestamps'][()]),

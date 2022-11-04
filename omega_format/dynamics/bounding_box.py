@@ -17,7 +17,7 @@ class BoundingBox(InputClassBase):
         return v
 
     @classmethod
-    def from_hdf5(cls, group: Group, validate=True):
+    def from_hdf5(cls, group: Group, validate=True, legacy=None):
         func = cls if validate else cls.construct
         self = func(
             confident_length=group['length'].attrs["confident"],

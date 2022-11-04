@@ -21,7 +21,7 @@ class RoadUser(DynamicObject):
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         if legacy=='v3.1':
-            return cls._legacy_from_hdf5_v3_1(group, validate)
+            return cls._legacy_from_hdf5_v3_1(group, validate, legacy=legacy)
         elif legacy is None:
             classification_type = ReferenceTypes.RoadUserType(group.attrs["type"])
             sub_group_name = group.name.rpartition('/')[-1]
@@ -55,9 +55,9 @@ class RoadUser(DynamicObject):
             connected_to=ReferenceElement(id=f'RU{group.attrs["connectedTo"]}', object_class=DynamicObject),
             is_data_recorder=group.attrs["isDataRecorder"].astype(bool),
             birth=group.attrs["birthStamp"].astype(int),
-            tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
-            bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate),
-            vehicle_lights=VehicleLights.from_hdf5(group['vehicleLights'], validate=validate)
+            tr=Trajectory.from_hdf5(group['trajectory'], validate=validate, legacy=legacy),
+            bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate, legacy=legacy),
+            vehicle_lights=VehicleLights.from_hdf5(group['vehicleLights'], validate=validate, legacy=legacy)
         )
         return self
 

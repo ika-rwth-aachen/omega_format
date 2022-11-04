@@ -59,7 +59,7 @@ class ObjectClassification(BaseModel):
 class Object(BaseModel):
     class Config(PydanticConfig):
         pass
-    id: int = -1
+    id: str = 'RU-1'
     birth_stamp: int = 0
 
     heading: ValVar = Field(default_factory=ValVar)
@@ -118,7 +118,7 @@ class Object(BaseModel):
         sub_group_name = group.name.rpartition('/')[-1]
         func = cls if validate else cls.construct
         self = func(
-            id=int(sub_group_name),
+            id=sub_group_name,
             birth_stamp=group.attrs['birthStamp'].astype(int),
 
             heading=ValVar.from_hdf5(group['heading'], validate=validate),

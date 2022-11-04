@@ -16,7 +16,7 @@ class MiscObject(DynamicObject):
     @classmethod
     def from_hdf5(cls, group: Group, validate=True, legacy=None):
         if legacy=='v3.1':
-            return cls._legacy_from_hdf5_v3_1(group, validate=validate)
+            return cls._legacy_from_hdf5_v3_1(group, validate=validate, legacy=legacy)
         elif legacy is None:
             sub_group_name = group.name.rpartition('/')[-1]
             func = cls if validate else cls.construct
@@ -35,13 +35,13 @@ class MiscObject(DynamicObject):
             raise NotImplementedError()
 
     @classmethod
-    def _legacy_from_hdf5_v3_1(cls, group: Group, validate=True):
+    def _legacy_from_hdf5_v3_1(cls, group: Group, validate=True, legacy=None):
         sub_group_name = group.name.rpartition('/')[-1]
         func = cls if validate else cls.construct
         self = func(
             id=f'M{sub_group_name}',
-            tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
-            bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate),
+            tr=Trajectory.from_hdf5(group['trajectory'], validate=validate, legacy=legacy),
+            bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate, legacy=legacy),
             type=ReferenceTypes.MiscObjectType(group.attrs["type"]),
             sub_type=ReferenceTypes.MiscObjectSubType(group.attrs["subtype"]),
             birth=group.attrs["birthStamp"].astype(int)

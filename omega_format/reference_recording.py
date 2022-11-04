@@ -56,7 +56,7 @@ class ReferenceRecording(InputClassBase):
                         road_users=DictWithProperties({f'RU{k}': v for k,v in RoadUser.convert2objects(file, "roadUser", True, validate=validate, legacy=legacy).items()}),
                         weather=Weather.from_hdf5(file['weather'], validate=validate, legacy=legacy) if require_group(file, "weather") else None,
                         timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
-                        meta_data=MetaData.from_hdf5(file, validate=validate)
+                        meta_data=MetaData.from_hdf5(file, validate=validate, legacy=legacy)
                     )
                 elif legacy is not None:
                     raise NotImplementedError()

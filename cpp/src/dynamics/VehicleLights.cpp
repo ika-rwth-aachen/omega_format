@@ -8,6 +8,7 @@ VehicleLights::VehicleLights(size_t lifetime) {
     this->brakeLights.resize(lifetime, static_cast<int>(VVMRoadUserVehicleLights::UNKNOWN));
     this->reversingLights.resize(lifetime, static_cast<int>(VVMRoadUserVehicleLights::UNKNOWN));
     this->blueLight.resize(lifetime, static_cast<int>(VVMRoadUserVehicleLights::UNKNOWN));
+    this->orangeLight.resize(lifetime, static_cast<int>(VVMRoadUserVehicleLights::UNKNOWN));
     this->headlights.resize(lifetime, static_cast<int>(VVMRoadUserVehicleLights::UNKNOWN));
 }
 
@@ -20,6 +21,7 @@ void VehicleLights::to_hdf5(hdf5::node::Group &parent_group) {
     omega::add_dataset_to_group(vehicle_lights_group, "brakeLights", this->brakeLights);
     omega::add_dataset_to_group(vehicle_lights_group, "reversingLights", this->reversingLights);
     omega::add_dataset_to_group(vehicle_lights_group, "blueLight", this->blueLight);
+    omega::add_dataset_to_group(vehicle_lights_group, "orangeLight", this->orangeLight);
     omega::add_dataset_to_group(vehicle_lights_group, "headlights", this->headlights);
 }
 
@@ -31,6 +33,7 @@ VehicleLights VehicleLights::from_hdf5(hdf5::node::Group &parent_group) {
     omega::read_dataset(parent_group, "brakeLights",vehicleLights.brakeLights);
     omega::read_dataset(parent_group, "reversingLights",vehicleLights.reversingLights);
     omega::read_dataset(parent_group, "blueLight",vehicleLights.blueLight);
+    omega::read_dataset(parent_group, "orangeLight",vehicleLights.orangeLight);
     omega::read_dataset(parent_group, "headlights",vehicleLights.headlights);
 
     return vehicleLights;

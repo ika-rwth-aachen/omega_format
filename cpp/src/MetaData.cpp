@@ -68,9 +68,7 @@ namespace omega {
         read_attribute(parent_group, "naturalBehavior", meta_data.naturalBehavior);
         read_attribute(parent_group, "naturalExposure", meta_data.naturalExposure);
 
-        int recorderNumber;
-        read_attribute(parent_group, "recorderNumber", recorderNumber);
-        meta_data.recorderNumber = static_cast<VVMRecorderNumber>(recorderNumber);
+        read_attribute(parent_group, "recorderNumber", meta_data.recorderNumber);
         read_attribute(parent_group, "recordingNumber", meta_data.recordingNumber);
 
         read_attribute(parent_group, "refPointLat", meta_data.refPointLat);

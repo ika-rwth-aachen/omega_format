@@ -25,7 +25,7 @@ enum inDTypes {
 class RoadUser {
 
     // general parameters
-    int id;
+    std::string id;
     int birthStamp;
     int finalFrame;
     float time_step_length_in_sec;
@@ -80,7 +80,8 @@ public:
     bool isDataRecorder;
     VVMRoadUserType numericalType;
     VVMRoadUserSubTypeGeneral numericalSubType;
-    int connectedTo;
+    std::string connectedTo;
+    std::string attachedTo;
 
     BoundingBox bb;
     Trajectory tr;
@@ -89,7 +90,7 @@ public:
     // constructors
     RoadUser();
 
-    RoadUser(int id,
+    RoadUser(std::string id,
              int birthStamp, int finalFrame,
              double width,
              double length,

@@ -14,12 +14,14 @@ namespace omega {
 
 class MiscObject {
     private:
-        int id;
+        std::string id;
         int birthStamp;
         VVMMiscObjectType type_;
         VVMMiscObjectSubType subtype_;
         BoundingBox bb;
         Trajectory tr;
+        std::string connectedTo;
+        std::string attachedTo;
     public:
         MiscObject();
 

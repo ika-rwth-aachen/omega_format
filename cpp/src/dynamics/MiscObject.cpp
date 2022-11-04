@@ -5,7 +5,7 @@ namespace omega {
 
     MiscObject::MiscObject() : tr(0) {
         this->birthStamp = 0;
-        this->id = 0;
+        this->id = "M0";
         type_ = VVMMiscObjectType::TODO;
         subtype_ = VVMMiscObjectSubType::TODO;
     }
@@ -20,7 +20,8 @@ namespace omega {
         int subtype = static_cast<int>(this->subtype_);
         omega::add_attribute_to_group(ru_group, "type", type);
         omega::add_attribute_to_group(ru_group, "subtype", subtype);
-
+        omega::add_attribute_to_group(ru_group, "connectedTo", this->connectedTo);
+        omega::add_attribute_to_group(ru_group, "attachedTo", this->attachedTo);
         return true;
     }
 
@@ -35,7 +36,8 @@ namespace omega {
 
         miscObject.id = omega::get_group_id(parent_group);
         omega::read_attribute(parent_group, "birthStamp", miscObject.birthStamp);
-
+        omega::read_attribute(parent_group, "connectedTo", miscObject.connectedTo);
+        omega::read_attribute(parent_group, "attachedTo", miscObject.attachedTo);
         hdf5::node::Group bound_box_group = parent_group.get_group("boundBox");
         hdf5::node::Group trajectory_group = parent_group.get_group("trajectory");
         hdf5::node::Group vehicle_lights_group = parent_group.get_group("vehicleLights");

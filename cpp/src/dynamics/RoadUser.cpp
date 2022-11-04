@@ -7,15 +7,16 @@ RoadUser::RoadUser() : tr(0), vl(0) {
     this->birthStamp = 0;
     this->finalFrame = 0;
     this->time_step_length_in_sec = 0.0;
-    this->id = 0;
+    this->id = "RU0";
     this->isDataRecorder = false;
-    this->connectedTo = -1;
+    this->connectedTo = "RU-1";
+    this->attachedTo = "RU-1";
 
     numericalType = VVMRoadUserType::REGULAR;
     numericalSubType = VVMRoadUserSubTypeGeneral::REGULAR;
 }
 
-RoadUser::RoadUser(int id,
+RoadUser::RoadUser(std::string id,
                    int birthStamp, int finalFrame,
                    double width,
                    double length,
@@ -31,7 +32,8 @@ RoadUser::RoadUser(int id,
         vl(size_t(lifetime)) {
 
     this->setPropertiesFromInDType(inDTypeString, length, width);
-    this->connectedTo = -1;
+    this->connectedTo = 'RU-1';
+    this->attachedTo = 'RU-1';
     this->isDataRecorder = false;
 }
 
@@ -75,7 +77,7 @@ void RoadUser::setPropertiesFromInDType(std::string inDTypeString, double length
     }
 }
 
-int RoadUser::getId() const {
+std::string RoadUser::getId() const {
     return this->id;
 }
 
@@ -107,6 +109,7 @@ void RoadUser::to_hdf5(hdf5::node::Group &parent_group) {
     omega::add_attribute_to_group(ru_group, "subtype", subtype);
 
     omega::add_attribute_to_group(ru_group, "connectedTo", this->connectedTo);
+    omega::add_attribute_to_group(ru_group, "attachedTo", this->attachedTo);
     omega::add_attribute_to_group(ru_group, "birthStamp", this->getInitialFrame());
     omega::add_attribute_to_group(ru_group, "isDataRecorder", this->isDataRecorder);
 }
@@ -122,6 +125,7 @@ RoadUser RoadUser::from_hdf5(hdf5::node::Group parent_group) {
 
     road_user.id = omega::get_group_id(parent_group);
     omega::read_attribute(parent_group, "connectedTo", road_user.connectedTo);
+    omega::read_attribute(parent_group, "attachedTo", road_user.attachedTo);
     omega::read_attribute(parent_group, "birthStamp", road_user.birthStamp);
     omega::read_attribute(parent_group, "isDataRecorder", road_user.isDataRecorder);
 

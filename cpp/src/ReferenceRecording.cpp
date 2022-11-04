@@ -40,7 +40,7 @@ namespace omega {
 
         // write road users
         if (!this->roadUsers_.empty()) {
-            hdf5::node::Group road_user_group = hdf5::node::Group(hdf5_group_root.create_group("roadUser"));
+            hdf5::node::Group road_user_group = hdf5::node::Group(hdf5_group_root.create_group("dynamicObjects"));
             for (auto &road_user: this->roadUsers_) {
                 //hdf5::node::Group road_user_id_group = hdf5::node::Group(
                 //        road_user_group.create_group(to_string(road_user.getId())));
@@ -49,7 +49,7 @@ namespace omega {
         }
 
         // write misc object
-        hdf5::node::Group misc_object_group = hdf5::node::Group(hdf5_group_root.create_group("miscObject"));
+        hdf5::node::Group misc_object_group = hdf5::node::Group(hdf5_group_root.create_group("dynamicObjects"));
         if (false && !this->miscObjects_.has_value()) {
             for (auto &misc_objects: *this->miscObjects_) {
                 misc_objects.to_hdf5(misc_object_group);

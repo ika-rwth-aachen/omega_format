@@ -11,6 +11,7 @@ public:
     std::vector<int> headlights;
     std::vector<int> reversingLights;
     std::vector<int> blueLight;
+    std::vector<int> orangeLight;
 
 public:
     VehicleLights(size_t lifetime);

@@ -13,8 +13,8 @@ namespace omega {
     public:
         std::string daytime;
         std::string formatVersion;
-        VVMRecorderNumber recorderNumber;
-        int recordingNumber;
+        std::string recorderNumber;
+        std::string recordingNumber;
 
         double refPointLong;
         double refPointLat;

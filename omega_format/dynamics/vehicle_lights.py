@@ -13,6 +13,7 @@ class VehicleLights(InputClassBase):
     headlights: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
     reverseing_lights: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
     blue_light: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
+    orange_light: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
@@ -25,6 +26,7 @@ class VehicleLights(InputClassBase):
             headlights=rf('headlights'),
             reverseing_lights=rf('reversingLights'),
             blue_light=rf('blueLight'),
+            **({} if legacy=='v3.1' else {'orange_light': rf('orangeLight')})
         )
         return self
 
@@ -35,3 +37,4 @@ class VehicleLights(InputClassBase):
         group.create_dataset('headlights', data=self.headlights, **get_settings().hdf5_compress_args)
         group.create_dataset('reversingLights', data=self.reverseing_lights, **get_settings().hdf5_compress_args)
         group.create_dataset('blueLight', data=self.blue_light, **get_settings().hdf5_compress_args)
+        group.create_dataset('orangeLight', data=self.orangeLight, **get_settings().hdf5_compress_args)

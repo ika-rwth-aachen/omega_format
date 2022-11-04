@@ -373,7 +373,7 @@ class FlatMarkingType(IntEnum):
     CROSSWALK = 36
     AMPHIBIAN = 37
     AVENUE = 38
-    PLAIN = 39
+    PLANE = 39
     ELECTRICALVEHICLE = 40
     CARSHARING = 41
 

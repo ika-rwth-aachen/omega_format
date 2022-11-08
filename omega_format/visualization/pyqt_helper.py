@@ -127,10 +127,8 @@ def bbx2d(x: float, y: float, length: float, width: float, heading: float, text:
     trans_rot = QTransform()
     trans_rot.translate(center_point.x(), center_point.y())
     trans_rot.rotate(heading)
-
-    trans_set_back = QTransform()
-    trans_set_back.translate(-center_point.x(), -center_point.y())
-    rectangle.setTransform(trans_rot*trans_set_back)
+    trans_rot.translate(-center_point.x(), -center_point.y())
+    rectangle.setTransform(trans_rot)
     rectangle.setToolTip(text)
     return rectangle
 

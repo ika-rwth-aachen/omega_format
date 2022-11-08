@@ -18,10 +18,10 @@ visualization_available = importlib.util.find_spec("PyQt5") is not None and \
 app = typer.Typer()
 
 
-def get_snippets_for_vis(reference, perception, snip, max_snippets):
+def get_snippets_for_vis(reference, perception, snip, max_snippets, legacy=None):
     validate = True
     if reference is not None:
-        rr = ReferenceRecording.from_hdf5(reference, validate)
+        rr = ReferenceRecording.from_hdf5(reference, validate, legacy=legacy)
         if snip and perception is None:
             snippets = [SnippetContainer(reference=snippet) for snippet in rr.extract_snippets(max_snippets)]
         elif perception is not None:
@@ -29,7 +29,7 @@ def get_snippets_for_vis(reference, perception, snip, max_snippets):
         else:
             snippets = [SnippetContainer(reference=rr)]
     elif perception is not None:
-        snippets = [SnippetContainer(perception=PerceptionRecording.from_hdf5(perception, validate))]
+        snippets = [SnippetContainer(perception=PerceptionRecording.from_hdf5(perception, validate, legacy=legacy))]
     else:
         raise ValueError('Either define a reference filename or a perception filename')
     return snippets
@@ -42,12 +42,12 @@ if visualization_available:
     def visualize(reference: Optional[Path] = typer.Argument(None, exists=True, readable=True, dir_okay=False),
                   perception: Optional[Path] = typer.Option(None, exists=True, readable=True, dir_okay=False),
                   snip: bool = typer.Option(False),
-                  max_snippets: Optional[int] = typer.Option(2)):
+                  max_snippets: Optional[int] = typer.Option(2), legacy: Optional[str] = typer.Option(None)):
         """
         Visualizes data of `ReferenceRecording` and `PerceptionRecording` files.
         """
 
-        snippets = get_snippets_for_vis(reference, perception, snip, max_snippets)
+        snippets = get_snippets_for_vis(reference, perception, snip, max_snippets, legacy=legacy)
         title = f'Perception: {perception.stem} ' if perception is not None else ''
         title += f'Reference: {reference.stem}' if reference is not None else ''
         visualizer = Visualizer(snippets, title)
@@ -63,13 +63,14 @@ else:
 
 @app.command("verify")
 def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=True, dir_okay=False),
-           perception: Optional[Path] = typer.Option(None, exists=True, readable=True, dir_okay=False)):
+           perception: Optional[Path] = typer.Option(None, exists=True, readable=True, dir_okay=False),
+           legacy: Optional[str] = typer.Option(None)):
     """
     Test if a OMEGA Format file conforms to specification
     """
     if reference is not None:
         try:
-            rr = ReferenceRecording.from_hdf5(reference)
+            rr = ReferenceRecording.from_hdf5(reference, legacy=legacy)
         except FileNotFoundError as e:
             raise e
         except Exception as e:
@@ -82,7 +83,7 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
 
     if perception is not None:
         try:
-            pr = PerceptionRecording.from_hdf5(perception)
+            pr = PerceptionRecording.from_hdf5(perception, legacy=legacy)
         except FileNotFoundError as e:
             raise e
         except Exception as e:

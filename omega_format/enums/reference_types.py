@@ -12,6 +12,13 @@ class RoadLocation(IntEnum):
         NON_URBAN = 2
         HIGHWAY = 3
 
+        @classmethod
+        def _missing_(cls, value):
+            if value=="TODO":
+                return cls.UNKNOWN
+            else:
+                super()._missing_(cls, value)
+
 
 class LaneType(IntEnum):
     UNKNOWN = 0
@@ -32,12 +39,24 @@ class LaneType(IntEnum):
     VEGETATION = 15
     FREESPACE = 16
 
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
 
 class LaneSubType(IntEnum):
     UNKNOWN = 0
     BRIDGE = 1
     TUNNEL = 2
 
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
 
 class LaneClass(IntEnum):
     NONE = 0
@@ -70,6 +89,12 @@ class BoundaryType(IntEnum):
     MISC = 21
     STRUCTURAL_OBJECT = 22
 
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
 
 class BoundarySubType(IntEnum):
     UNKNOWN = 0
@@ -77,6 +102,13 @@ class BoundarySubType(IntEnum):
     THICK = 2
     METAL = 3
     WOODEN = 4
+    
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
 
 
 class BoundaryColor(IntEnum):
@@ -377,6 +409,13 @@ class FlatMarkingType(IntEnum):
     ELECTRICALVEHICLE = 40
     CARSHARING = 41
 
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
+
 
 class FlatMarkingColor(IntEnum):
     UNKNOWN = 0
@@ -506,7 +545,6 @@ class RoadUserVehicleLights(IntEnum):
 class RoadUserType(IntEnum):
     REGULAR = 0
     CAR = 1
-    """This is a test variable annotation"""
     TRUCK = 2
     BUS = 3
     MOTORCYCLE = 4
@@ -608,6 +646,12 @@ class MiscObjectType(IntEnum):
     PLAY_EQUIPMENT = 2
     MISC = 3
 
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
 
 class MiscObjectSubType(IntEnum):
     UNKNOWN = 0
@@ -617,6 +661,12 @@ class MiscObjectSubType(IntEnum):
     BIRD = 4
     WILD = 5
 
+    @classmethod
+    def _missing_(cls, value):
+        if value=="TODO":
+            return cls.UNKNOWN
+        else:
+            super()._missing_(cls, value)
 
 class StateValue(IntEnum):
     UNKNOWN = 0

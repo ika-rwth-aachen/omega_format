@@ -37,4 +37,4 @@ class VehicleLights(InputClassBase):
         group.create_dataset('headlights', data=self.headlights, **get_settings().hdf5_compress_args)
         group.create_dataset('reversingLights', data=self.reverseing_lights, **get_settings().hdf5_compress_args)
         group.create_dataset('blueLight', data=self.blue_light, **get_settings().hdf5_compress_args)
-        group.create_dataset('orangeLight', data=self.orangeLight, **get_settings().hdf5_compress_args)
+        group.create_dataset('orangeLight', data=self.orange_light, **get_settings().hdf5_compress_args)

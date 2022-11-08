@@ -80,7 +80,7 @@ class MetaData(InputClassBase):
         if legacy=='v3.1':
             dt = datetime.strptime(cls.assure_string(dt), '%Y%m%d%H%M%S') if dt is not None else None
         else:
-            dt = datetime.strptime(cls.assure_string(dt), '%Y-%m-%dT%H:%M:%S.%f%z') if dt is not None else None
+            dt = datetime.fromisoformat(cls.assure_string(dt)) if dt is not None else None
 
         func = cls if validate else cls.construct
 
@@ -115,7 +115,7 @@ class MetaData(InputClassBase):
             top_group.require_group(sub_group).attrs.create('converterVersion', data=version)
 
     def to_hdf5(self, group: Group):
-        group.attrs.create("daytime", data=datetime.strftime(self.daytime, '%Y-%m-%dT%H:%M:%S.%f%z')),
+        group.attrs.create("daytime", data=datetime.isoformat(self.daytime)),
         group.attrs.create("recorderNumber", data=self.recorder_number)
         group.attrs.create("recordingNumber", data=self.recording_number)
         group.attrs.create("refPointLat", data=self.reference_point_lat)

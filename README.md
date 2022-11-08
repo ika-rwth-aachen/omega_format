@@ -65,6 +65,15 @@ visualizer.start_gui_and_visualization()
 A window will open that lets you interact with and inspect your data.
 ![](visualizer_ui.png)
 
+## Load data in older versions
+
+```python
+# load an omega-format file of an older version (e.g. `v3.1`)
+rr = omega_format.ReferenceRecording.from_hdf5('path/to/v3.1_reference_recording.hdf5', legacy='v3.1')
+
+rr.to_hdf5('path/where/to/store/current_version_reference_recording.hdf5')
+```
+
 
 ### Extending the visualizer
 By subclassing [`omega_format.visualization.VisualizationModule`](./omega_format/visualization/modules/base.py) and adding an instance of your subclass to the `visualizers` list of the [`Visualizer` ](./omega_format/visualization/visualizer.py) you can extend the functionality of the visualizer. The subclass has to implement at least one of the functions `visualize_static` and `visualize_dynamics`, returning a list of pyqt widgets to plot. For more details take a look at the [`omega_format.vis.VisualizationModule`](./omega_format/visualization/modules/base.py) or the other modules defined in the `visualization.modules` directory.

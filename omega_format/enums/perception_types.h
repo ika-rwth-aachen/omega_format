@@ -44,7 +44,7 @@ enum class VVMPerceptionType {
 
 class VVMPerceptionTypeSpecification {
 public:
-  const char* FORMAT_VERSION = "v1.2";
+  const char* FORMAT_VERSION = "v1.3";
 };
 
 enum class VVMSensorModality {

@@ -37,7 +37,7 @@
         "DETERMINED": 2
     },
     "PerceptionTypeSpecification": {
-        "FORMAT_VERSION": "v1.2"
+        "FORMAT_VERSION": "v1.3"
     },
     "SensorModality": {
         "LIDAR": 1,

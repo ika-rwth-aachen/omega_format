@@ -17,7 +17,7 @@ class RoadLocation(IntEnum):
             if value=="TODO":
                 return cls.UNKNOWN
             else:
-                super()._missing_(cls, value)
+                return super()._missing_(cls, value)
 
 
 class LaneType(IntEnum):
@@ -44,7 +44,7 @@ class LaneType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 class LaneSubType(IntEnum):
     UNKNOWN = 0
@@ -56,7 +56,7 @@ class LaneSubType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 class LaneClass(IntEnum):
     NONE = 0
@@ -94,7 +94,7 @@ class BoundaryType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 class BoundarySubType(IntEnum):
     UNKNOWN = 0
@@ -108,7 +108,7 @@ class BoundarySubType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 
 class BoundaryColor(IntEnum):
@@ -355,7 +355,7 @@ class SignType(str, Enum):
         if '_' in value:
             return cls(value.replace('_','-'))
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 
 class SignSizeClass(IntEnum):
@@ -414,7 +414,7 @@ class FlatMarkingType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 
 class FlatMarkingColor(IntEnum):
@@ -651,7 +651,7 @@ class MiscObjectType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 class MiscObjectSubType(IntEnum):
     UNKNOWN = 0
@@ -666,7 +666,7 @@ class MiscObjectSubType(IntEnum):
         if value=="TODO":
             return cls.UNKNOWN
         else:
-            super()._missing_(cls, value)
+            return super()._missing_(cls, value)
 
 class StateValue(IntEnum):
     UNKNOWN = 0

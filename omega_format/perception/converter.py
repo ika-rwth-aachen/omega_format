@@ -434,6 +434,6 @@ class Converter:
             for start, end in obj_timespan_list[1:]:
                 adj_obj = deepcopy(copy_obj)
                 adj_obj.cut_to_timespan(start, end)
-                adj_obj.id = max(list(self.perception_recording.objects.keys())) + 1
+                adj_obj.id = f'RU{max([int(i[2:]) for i in self.perception_recording.objects.keys()]) + 1}'
                 self.original_obj_id[adj_obj.id] = obj.id
                 self.perception_recording.objects[adj_obj.id] = adj_obj

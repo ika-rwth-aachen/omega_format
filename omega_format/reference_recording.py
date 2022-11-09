@@ -47,7 +47,9 @@ class ReferenceRecording(InputClassBase):
             with h5py.File(filename, 'r') as file:
                 func = cls if validate else cls.construct
                 tfunc = Timestamps if validate else Timestamps.construct
-
+                if legacy is None and file.attrs['formatVersion'] in ['v3.1', 'v3.0']:
+                    legacy='v3.1'
+                    
                 if legacy=='v3.1':
                     self = func(
                         roads=Road.convert2objects(file, "road", True, validate=validate, legacy=legacy),

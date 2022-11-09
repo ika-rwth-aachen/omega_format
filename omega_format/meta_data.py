@@ -6,7 +6,7 @@ from ._version import get_versions
 from .reference_resolving import InputClassBase
 from .settings import get_settings
 import parse
-
+import omega_format
 
 def get_converter_version(h5file, group_str):
     if group_str in h5file and 'converterVersion' in h5file.get(group_str).attrs:
@@ -122,7 +122,7 @@ class MetaData(InputClassBase):
         group.attrs.create("refPointLong", data=self.reference_point_lon)
         group.attrs.create("naturalBehavior", data=self.natural_behavior)
         group.attrs.create("naturalExposure", data=self.natural_exposure)
-        group.attrs.create("formatVersion", data=self.format_version)
+        group.attrs.create("formatVersion", data=omega_format.__clean_version__)
         if self.top_level_converter_version is not None:
             group.attrs.create("converterVersion", data=self.top_level_converter_version)
 

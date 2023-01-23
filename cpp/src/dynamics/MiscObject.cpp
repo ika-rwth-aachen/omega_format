@@ -6,12 +6,12 @@ namespace omega {
     MiscObject::MiscObject() : tr(0) {
         this->birthStamp = 0;
         this->id = "M0";
-        type_ = VVMMiscObjectType::TODO;
-        subtype_ = VVMMiscObjectSubType::TODO;
+        type_ = VVMMiscObjectType::UNKNOWN;
+        subtype_ = VVMMiscObjectSubType::UNKNOWN;
     }
 
     bool MiscObject::to_hdf5(hdf5::node::Group &parent_group) {
-        hdf5::node::Group ru_group(parent_group.create_group(std::to_string(this->id)));
+        hdf5::node::Group ru_group(parent_group.create_group(this->id));
 
         bb.to_hdf5(ru_group);
         tr.to_hdf5(ru_group);

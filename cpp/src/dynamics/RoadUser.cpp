@@ -32,8 +32,8 @@ RoadUser::RoadUser(std::string id,
         vl(size_t(lifetime)) {
 
     this->setPropertiesFromInDType(inDTypeString, length, width);
-    this->connectedTo = 'RU-1';
-    this->attachedTo = 'RU-1';
+    this->connectedTo = "RU-1";
+    this->attachedTo = "RU-1";
     this->isDataRecorder = false;
 }
 
@@ -97,7 +97,7 @@ void RoadUser::to_hdf5(hdf5::node::Group &parent_group) {
     // maybe use some assertions before writing
 
     // Writing the hdf group to a group with id as name
-    hdf5::node::Group ru_group(parent_group.create_group(std::to_string(this->id)));
+    hdf5::node::Group ru_group(parent_group.create_group(this->id));
 
     bb.to_hdf5(ru_group);
     tr.to_hdf5(ru_group);

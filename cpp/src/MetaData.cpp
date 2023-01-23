@@ -10,8 +10,8 @@ namespace omega {
 
         refPointLong = 0.0;
         refPointLat = 0.0;
-        recorderNumber = VVMRecorderNumber::IKA;
-        recordingNumber = 0;
+        recorderNumber = "ika";
+        recordingNumber = "0";
         referenceModality = 3;
         customInformation = "";
         naturalBehavior = true;
@@ -26,7 +26,7 @@ namespace omega {
         omega::add_attribute_to_group(parent_group, "naturalBehavior", this->naturalBehavior);
         omega::add_attribute_to_group(parent_group, "naturalExposure", this->naturalExposure);
 
-        omega::add_attribute_to_group(parent_group, "recorderNumber", static_cast<int>(this->recorderNumber));
+        omega::add_attribute_to_group(parent_group, "recorderNumber", this->recorderNumber);
         omega::add_attribute_to_group(parent_group, "recordingNumber", this->recordingNumber);
 
         omega::add_attribute_to_group(parent_group, "refPointLat", this->refPointLat);

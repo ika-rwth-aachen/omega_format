@@ -2,7 +2,7 @@
 
 #include <filesystem>
 #include <boost/filesystem.hpp>
-
+#include <optional>
 #include "hdf5_utility.h"
 
 using namespace std;

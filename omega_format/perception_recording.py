@@ -24,9 +24,9 @@ class PerceptionRecording(BaseModel):
         pass
     format_version: str = "1.3"
     converter_version: str = ""
-    recorder_number: str = ''
-    recording_number: str = ''
-    ego_id: str = 'RU-1'
+    recorder_number: str = ""
+    recording_number: str = ""
+    ego_id: str = "RU-1"
     ego_offset: float = 0.
     custom_information: str = ""
 

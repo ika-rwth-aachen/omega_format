@@ -99,7 +99,7 @@ public:
              int lifetime);
 
     // getter
-    int getId() const;
+    std::string getId() const;
 
     int getInitialFrame() const;
 

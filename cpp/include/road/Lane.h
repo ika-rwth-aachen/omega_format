@@ -43,8 +43,8 @@ namespace omega {
         int lane_id_{}; ///< Unique id of this lane. This id should be unique inside a road.
         std::weak_ptr<Road> parent_; ///< Reference to parent
 
-        VVMLaneType lane_type_ = VVMLaneType::TODO; ///< Type of lane. (street, walkway etc.)
-        VVMLaneSubType lane_sub_type_ = VVMLaneSubType::TODO; ///< Subtype of lane. (bridge, tunnel etc.)
+        VVMLaneType lane_type_ = VVMLaneType::UNKNOWN; ///< Type of lane. (street, walkway etc.)
+        VVMLaneSubType lane_sub_type_ = VVMLaneSubType::UNKNOWN; ///< Subtype of lane. (bridge, tunnel etc.)
         VVMLaneClass lane_class_ = VVMLaneClass::NONE; ///< Lane class. (intersection, roundabout etc.)
 
         bool right_border_inverted_{}; ///< Flag that indicates that the right border is in inverted order.

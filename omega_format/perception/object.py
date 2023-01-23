@@ -59,7 +59,7 @@ class ObjectClassification(BaseModel):
 class Object(BaseModel):
     class Config(PydanticConfig):
         pass
-    id: str = 'RU-1'
+    id: str = "RU-1"
     birth_stamp: int = 0
 
     heading: ValVar = Field(default_factory=ValVar)

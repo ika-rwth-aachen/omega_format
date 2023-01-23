@@ -31,8 +31,8 @@ namespace omega {
         int boundary_id_ = 0; ///< Unique id of boundary. It needs to be unique within a lane.
         std::weak_ptr<Lane> parent_; ///< Reference to parent
 
-        VVMBoundaryType boundary_type_ = VVMBoundaryType::TODO; ///< Type of boundary. (line, wall etc.)
-        VVMBoundarySubType boundary_sub_type_ = VVMBoundarySubType::TODO; ///< Subtype of the boundary. (dashed, wood etc.)
+        VVMBoundaryType boundary_type_ = VVMBoundaryType::UNKNOWN; ///< Type of boundary. (line, wall etc.)
+        VVMBoundarySubType boundary_sub_type_ = VVMBoundarySubType::UNKNOWN; ///< Subtype of the boundary. (dashed, wood etc.)
         VVMBoundaryColor boundary_color_ = VVMBoundaryColor::UNKNOWN; ///< Color ob boundary. (white, yellow etc.)
         VVMBoundaryCondition boundary_condition_ = VVMBoundaryCondition::UNKNOWN; ///< Condition of boundary. ( Fine etc.)
 

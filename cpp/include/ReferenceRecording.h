@@ -5,6 +5,7 @@
 #include <memory>
 #include <map>
 #include <weather/Weather.h>
+#include <optional>
 
 #include "road/Road.h"
 #include "dynamics/RoadUser.h"

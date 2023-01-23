@@ -51,7 +51,7 @@ add_library(omega_cpp_lib
 target_include_directories(omega_cpp_lib PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
-        PUBLIC src ../omega_format/enums)
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../omega_format/enums>)
 
 # If we have compiler requirements for this library, list them
 # here

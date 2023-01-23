@@ -56,7 +56,7 @@ namespace omega {
 
     private:
         int road_id_ = 0; ///< Id of road used to determine the hdf group name
-        VVMRoadLocation road_location_ = VVMRoadLocation::TODO; ///< Road location that indicates that the road is an urban road or not
+        VVMRoadLocation road_location_ = VVMRoadLocation::UNKNOWN; ///< Road location that indicates that the road is an urban road or not
         std::string road_name_; ///< Name of the road, use for debug and mapping reasons, not part of the vvm definition
 
         Lanes_Ptr lanes_; ///< List of all lanes in this road for later automatic writing

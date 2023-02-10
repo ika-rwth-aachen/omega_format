@@ -107,7 +107,7 @@ class DynamicObject(InputClassBase, BBXCornersClass):
         if self.connected_to is not None:
             group.attrs.create('connectedTo', data=self.connected_to.reference)
         else:
-            group.attrs.create('attachedTo', data=-1)
+            group.attrs.create('connectedTo', data=-1)
         if self.attached_to is not None:
             group.attrs.create('attachedTo', data=self.connected_to.reference)
         else:

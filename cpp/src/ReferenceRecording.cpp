@@ -38,21 +38,27 @@ namespace omega {
             }
         }
 
+
+        try {
+        if (!hdf5_group_root.has_group("dynamicObjects")){
+            hdf5::node::Group dyanmics_group = hdf5_group_root.create_group("dynamicObjects");
+        } else {
+            hdf5::node::Group dyanmics_group = hdf5_group_root.get_group("dynamicObjects");
+        }
+
         // write road users
         if (!this->roadUsers_.empty()) {
-            hdf5::node::Group road_user_group = hdf5::node::Group(hdf5_group_root.create_group("dynamicObjects"));
             for (auto &road_user: this->roadUsers_) {
                 //hdf5::node::Group road_user_id_group = hdf5::node::Group(
                 //        road_user_group.create_group(to_string(road_user.getId())));
-                road_user.to_hdf5(road_user_group);
+                road_user.to_hdf5(dyanmics_group);
             }
         }
 
         // write misc object
-        hdf5::node::Group misc_object_group = hdf5::node::Group(hdf5_group_root.create_group("dynamicObjects"));
         if (false && !this->miscObjects_.has_value()) {
             for (auto &misc_objects: *this->miscObjects_) {
-                misc_objects.to_hdf5(misc_object_group);
+                misc_objects.to_hdf5(dyanmics_group);
             }
         }
 

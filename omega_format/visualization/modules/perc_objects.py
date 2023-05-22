@@ -66,7 +66,7 @@ class VisualizePercPath(VisualizationModule):
         Visualizes the full paths of the objects
         """
         items = []
-        comet_tail_length = np.int(self.comet_tail_length_in_s * visualizer.fps)
+        comet_tail_length = int(self.comet_tail_length_in_s * visualizer.fps)
 
         for id_, obj in snip.perception.objects.items():
             if obj.in_timespan(timestamp, timestamp):

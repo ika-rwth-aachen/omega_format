@@ -12,7 +12,7 @@ from ..settings import get_settings
 
 class ObjectClassification(BaseModel):
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     val: List[PerceptionTypes.ObjectClassification] = Field(default_factory=list)
     confidence: np.ndarray = Field(default=np.array([], dtype=np.float64))
 
@@ -58,7 +58,7 @@ class ObjectClassification(BaseModel):
 
 class Object(BaseModel):
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     id: str = "RU-1"
     birth_stamp: int = 0
 

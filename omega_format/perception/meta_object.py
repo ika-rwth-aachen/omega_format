@@ -7,7 +7,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 class MetaObject(BaseModel):
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     dist_longitudinal_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     dist_longitudinal_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     dist_lateral_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED

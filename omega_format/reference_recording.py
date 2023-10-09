@@ -199,7 +199,7 @@ class ReferenceRecording(InputClassBase):
     def get_snippet_tp_ids(self, max_snippets=None, ignore_ego=False):
         if ignore_ego or self.ego_id is None:
             ids = [k for k, v in self.road_users.items() if v.type == ReferenceTypes.RoadUserType.CAR and not np.all(v.tr.is_static)]
-            if max_snippets is not None or max_snippets == 0 or max_snippets == -1:
+            if max_snippets is not None and max_snippets != 0 and max_snippets != -1:
                 ids = ids[:max_snippets]
         else:
             ids = [self.ego_id]

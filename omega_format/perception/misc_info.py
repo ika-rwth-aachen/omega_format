@@ -7,7 +7,7 @@ from ..settings import get_settings
 
 class MiscInfo(BaseModel):
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     id: conint(ge=0) = 0
     light_intensity: confloat(ge=0) = 0.
     acoustics: confloat(ge=0) = 0.

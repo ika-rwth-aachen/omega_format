@@ -9,7 +9,7 @@ from ..pydantic_utils.pydantic_config import PydanticConfig
 
 class Sensor(BaseModel):
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     id: int = 0
     sensor_modality: PerceptionTypes.SensorModality = PerceptionTypes.SensorModality.LIDAR
     fusion_information: str = ""

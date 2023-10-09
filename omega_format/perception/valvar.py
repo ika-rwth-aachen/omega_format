@@ -6,16 +6,20 @@ from pydantic import validator, BaseModel, Field
 
 from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
-
+from numpy.typing import NDArray
 class ValVar(BaseModel):
     class Config(PydanticConfig):
+        arbitrary_types_allowed=True
+    val: NDArray[np.floating] = Field(default=np.array([]))
+    var: NDArray[np.floating] = Field(default=np.array([]))
+    
+    @validator('val')
+    def check_zero_or_same_length(cls, v, values):
         pass
-    val: np.ndarray = Field(default=np.array([]))
-    var: np.ndarray = Field(default=np.array([]))
 
     @validator('var')
     def check_array_length(cls, v, values):
-        if not len(v) > 0:
+        if not v.size > 0:
             warn('received empty array in ValVar class')
 
         length = len(values.get('val'))
@@ -51,3 +55,4 @@ class ValVar(BaseModel):
             assert len(self.var) > birth
             assert len(self.var) > death
             self.var = self.var[birth:death + 1]
+pass

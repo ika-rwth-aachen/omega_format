@@ -9,7 +9,7 @@ from ..settings import get_settings
 
 class EgoPosition(BaseModel):
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     heading: ValVar = Field(default_factory=ValVar)
     pos_longitude: ValVar = Field(default_factory=ValVar)
     pos_latitude: ValVar = Field(default_factory=ValVar)

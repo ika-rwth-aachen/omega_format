@@ -21,7 +21,7 @@ class PerceptionRecording(BaseModel):
     Class that represents the OMEGA-PerceptionDB-Format in an object-oriented manner.
     """
     class Config(PydanticConfig):
-        pass
+        arbitrary_types_allowed=True
     format_version: str = "1.3"
     converter_version: str = ""
     recorder_number: str = ""
@@ -56,7 +56,7 @@ class PerceptionRecording(BaseModel):
                     ego_position=EgoPosition.from_hdf5(file['egoPosition'], validate=validate),
                     sensors=UserDict({int(i): Sensor.from_hdf5(group, validate=validate) for i, group in file['sensor'].items()}),
                     misc_objects=UserDict({int(i): MiscInfo.from_hdf5(group, validate=validate) for i, group in file['miscInfo'].items()}),
-                    objects=UserDict({int(i): Object.from_hdf5(group, validate=validate) for i, group in file['object'].items()}),
+                    objects=UserDict({i: Object.from_hdf5(group, validate=validate) for i, group in file['object'].items()}),
                 )
                 return self
         else:

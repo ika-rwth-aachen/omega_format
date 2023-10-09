@@ -80,7 +80,7 @@ class MetaData(InputClassBase):
         if legacy=='v3.1':
             dt = datetime.strptime(cls.assure_string(dt), '%Y%m%d%H%M%S') if dt is not None else None
         else:
-            dt = datetime.fromisoformat(cls.assure_string(dt)) if dt is not None else None
+            dt = datetime.fromisoformat(cls.assure_string(dt)) if dt is not None and dt!='' else None
 
         func = cls if validate else cls.construct
 

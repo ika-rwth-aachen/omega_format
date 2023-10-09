@@ -150,6 +150,9 @@ class ReferenceRecording(InputClassBase):
         self.resolve()
 
     def extract_snippet(self, tp_id):
+        if tp_id == self.ego_id:
+            return deepcopy(self)
+        
         assert tp_id in self.road_users
         assert self.road_users[tp_id].type == ReferenceTypes.RoadUserType.CAR
 

@@ -87,7 +87,7 @@ class VisualizeTPPath(VisualizationModule):
         objects = {k: v for k, v in snip.reference.road_users.items()}
         objects[snip.reference.ego_id] = snip.reference.ego_vehicle
 
-        comet_tail_length = np.int(self.comet_tail_length_in_s * visualizer.fps)
+        comet_tail_length = int(self.comet_tail_length_in_s * visualizer.fps)
 
         for id_, tp in objects.items():
             if hasattr(tp, 'in_timespan') and tp.in_timespan(timestamp, timestamp, ):

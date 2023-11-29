@@ -1,6 +1,6 @@
 from enum import Enum, IntEnum
 from .._version import get_versions_with_clean
-
+import warnings
 
 class ReferenceTypesSpecification(Enum):
     FORMAT_VERSION = get_versions_with_clean()['clean_version']
@@ -168,7 +168,7 @@ class SignType(str, Enum):
     GIVE_WAY = '205'
     STOP_GIVE_WAY = '206'
     ONCOMING_PRIORITY_GIVEAWAY = '208'
-    MANDATORY_TURN_RIGHT = '209'
+    MANDATORY_TURN_RIGHT = '209' #209-20 (wird automatisch genommen und ist in ordnung)
     MANDATORY_TURN_LEFT = '209-10'
     MANDATORY_STRAIGHT = '209-30'
     MANDATORY_PASSING_HERE_LEFT = '211-10'
@@ -179,7 +179,7 @@ class SignType(str, Enum):
     ROUNDABOUT_SIGN = '215'
     ONE_WAY_STREET_LEFT = '220-10'
     ONE_WAY_STREET_RIGHT = '220-20'
-    PRESCRIBED_PASSING_RIGHT = '222'
+    PRESCRIBED_PASSING_RIGHT = '222' # is also 222-20
     PRESCRIBED_PASSING_LEFT = '222-10'
     DRIVING_EMERGENCY_LANE_ALLOWED = '223-1'
     DRIVING_EMERGENCY_LANE_CANCELLED = '223-2'
@@ -279,6 +279,7 @@ class SignType(str, Enum):
     DEAD_END = '357'
     DEAD_END_CYCLISTS_AND_PEDESTRIANS_CAN_PASS = '357-50'
     DEAD_END_PEDESTRIANS_CAN_PASS = '357-51'
+    REFULING = '365'
     ADVISORY_SPEED_LIMIT = '380'
     ADVISORY_SPEED_LIMIT_CANCELLATION = '381'
     SMALL_CITY_LIMIT_START_OF = '385'
@@ -315,7 +316,7 @@ class SignType(str, Enum):
     MAIN_ROAD_UP_RIGHT = '1002-21'
     DISTANCE_IN = '1004-31'
     STOP_IN = '1004-32'
-    PICTURE = '1006-31'
+    PICTURE = '1006-31' # Unfallgefahr
     TEXT = '1007'
     TRUCK = '1010-51'
     BUS = '1010-57'
@@ -352,8 +353,20 @@ class SignType(str, Enum):
 
     @classmethod
     def _missing_(cls, value):
+        new_value = None
         if '_' in value:
-            return cls(value.replace('_','-'))
+            new_value = value.replace('_','-')
+        elif ('(') in value:
+            new_value = value.split('(')[0]
+        elif '.' in value:
+            new_value = value.replace('.', '-')
+        elif int(value[-1]==0):
+            new_value =  cls(value[:-1])
+        elif '-' in value:
+            new_value = value.split('-')[0]
+        if new_value is not None:
+            warnings.warn(f'Sign Type {value} unkown: interpreted as Sign Type {new_value}!')
+            return cls(new_value)
         else:
             return super()._missing_(cls, value)
 

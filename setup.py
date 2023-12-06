@@ -8,7 +8,7 @@ install_requires = [
     'tqdm',
     'typer',
     'xarray',
-    'pydantic<=2.0.0',
+    'pydantic<2',
     'parse',
     'shapely'
 ]

@@ -162,7 +162,7 @@ class Visualizer(QMainWindow):
             self.fps = 25
         else:
             self.fps = value
-        self._timer.setInterval(1000.0 / self.fps)
+        self._timer.setInterval(int(1000.0 / self.fps))
 
     def _compute_fps(self):
         self._last_frame = len(self.snippet.timestamps) - 1

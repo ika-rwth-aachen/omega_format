@@ -6,8 +6,6 @@ build-backend = "setuptools.build_meta"
 include = ["omega_format*"]
 namespaces = false
 
-[tool.setuptools.package-data]
-'src' = ['*.json']
 
 [project]
 name = "omega_format"

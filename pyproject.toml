@@ -54,3 +54,10 @@ addopts = "-ra -q"
 
 [tool.ruff]
 ignore = ["E741"]
+
+[tool.setuptools.package-data]
+"omega_format" = [
+    "visualization/ui/main.ui",
+    "visualization/ui/icon.svg",
+    "perception/config.json"
+]

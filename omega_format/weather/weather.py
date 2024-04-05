@@ -30,7 +30,7 @@ class Weather(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             weather_station_id=str(group.attrs["weatherStationId"]),
             precipitation=Precipitation.from_hdf5(group['precipitation'], validate=validate),

@@ -4,4 +4,3 @@ dependencies:
   - pip
   - pip:
       - -e .[complete]
-      - pydantic

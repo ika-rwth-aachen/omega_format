@@ -1,17 +1,19 @@
-from pydantic import validator, Field
+from pydantic import field_validator, Field
 import numpy as np
 from h5py import Group
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class Humidity(InputClassBase):
-    humidity: np.ndarray = Field(default=np.array([]))
+    humidity: pnd.NpNDArray
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
-    @validator('humidity')
+    @field_validator('humidity')
+    @classmethod
     def check_humidity(cls, v):
         for value in v:
             assert 0 <= value <= 100, f"humidity should be between 0 and 100 %, but is {value}"
@@ -19,7 +21,7 @@ class Humidity(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             humidity=group['humidity'][()],
             source=group.attrs["source"]

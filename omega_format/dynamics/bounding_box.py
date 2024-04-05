@@ -1,24 +1,24 @@
-from pydantic import validator
-from pydantic import BaseModel, Field
+from pydantic import field_validator, Field
 import numpy as np
 from h5py import Group
 from ..reference_resolving import InputClassBase
-
+import pydantic_numpy.typing as pnd
 
 class BoundingBox(InputClassBase):
-    vec: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    vec: pnd.NpNDArray
     confident_length: bool = True
     confident_width: bool = True
 
-    @validator('vec')
+    @field_validator('vec')
+    @classmethod
     def parse_values(cls, v):
-        assert v.size==0 or np.all(v > 0), f'bounding box size should be greater zero, but is {value}'
+        assert v.size==0 or np.all(v > 0), f'bounding box size should be greater zero, but is {v}'
         # print(f"Min: {np.min(v)}, Max: {np.max(v)}")
         return v
 
     @classmethod
     def from_hdf5(cls, group: Group, validate=True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             confident_length=group['length'].attrs["confident"],
             confident_width=group['width'].attrs["confident"],
@@ -43,6 +43,6 @@ class BoundingBox(InputClassBase):
     def to_hdf5(self, group: Group):
         dset_length = group.create_dataset('length', data=self.length)
         dset_width = group.create_dataset('width', data=self.width)
-        dset_height = group.create_dataset('height', data=self.height)
+        _ = group.create_dataset('height', data=self.height)
         dset_length.attrs["confident"] = self.confident_length
         dset_width.attrs["confident"] = self.confident_width

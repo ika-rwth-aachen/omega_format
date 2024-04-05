@@ -1,6 +1,7 @@
 from pydantic.fields import Field
 import numpy as np
 from h5py import Group
+from typing import Optional
 
 from .border import Border
 from .boundary import Boundary
@@ -12,10 +13,10 @@ from ..reference_resolving import InputClassBase, ReferenceDict, ReferenceElemen
 
 
 class Lane(InputClassBase):
-    border_right: ReferenceElement = None
-    border_left: ReferenceElement = None
-    type: ReferenceTypes.LaneType = None
-    sub_type: ReferenceTypes.LaneSubType = None
+    border_right: Optional[ReferenceElement] = None
+    border_left: Optional[ReferenceElement] = None
+    type: Optional[ReferenceTypes.LaneType] = None
+    sub_type: Optional[ReferenceTypes.LaneSubType] = None
     boundaries: DictWithProperties = Field(default_factory=DictWithProperties)
     predecessors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     successors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
@@ -28,7 +29,7 @@ class Lane(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             border_right=ReferenceElement(group['borderRight'][:], Border),
             border_left=ReferenceElement(group['borderLeft'][:], Border),
@@ -60,7 +61,10 @@ class Lane(InputClassBase):
         return output
 
     def oriented_borders(self):
-        rb_min = np.inf; rb_max = 0; lb_min = np.inf; lb_max = 0
+        rb_min = np.inf
+        rb_max = 0
+        lb_min = np.inf
+        lb_max = 0
         for b in self.boundaries.values():
             if b.is_right_boundary:
                 rb_min = int(np.min(np.array([rb_min, b.poly_index_start, b.poly_index_end])))
@@ -113,5 +117,5 @@ class Lane(InputClassBase):
         self.surface.to_hdf5(group.create_group('surface'))
 
         flat_marking_group = group.create_group('flatMarking')
-        for id, flat_marking in self.flat_markings.items():  # type: int, FlatMarking
+        for id, flat_marking in self.flat_markings.items():
             flat_marking.to_hdf5(flat_marking_group.create_group(str(id)))

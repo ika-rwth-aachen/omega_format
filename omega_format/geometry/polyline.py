@@ -1,32 +1,30 @@
-from pydantic.dataclasses import dataclass
-from pydantic import validator, BaseModel
+from pydantic import field_validator, model_validator
 import numpy as np
 from h5py import Group
 from ..reference_resolving import InputClassBase
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class Polyline(InputClassBase):
-    pos_x: np.ndarray
-    pos_y: np.ndarray
-    pos_z: np.ndarray
+    pos_x: pnd.NpNDArray
+    pos_y: pnd.NpNDArray
+    pos_z: pnd.NpNDArray
 
-    @validator('*')  # the '*' means that this validator is applied to each member of Trajectory
-    def check_array_length(cls, v, values):
-        if not len(v) > 0:
-            raise ValueError('received trajectory with empty array')
-
-        if len(values) > 0:
-            # first array would be validated if len(values)=0 -> no length to compare against
-            # use the length of pos_x to check equality with other array length
-            length = len(values.get('pos_x'))
-            if len(v) != length:
-                raise ValueError(
-                    f'length of all trajectory arrays must match, expected len {len(v)}, actual len {length}')
+    @field_validator('*')
+    @classmethod
+    def check_array_length(cls, v):
+        assert v.shape[0]>0, 'size zero polyline'
         return v
+    
+    @model_validator(mode='after')
+    def check_same_length(self):
+        assert self.pos_x.shape[0]==self.pos_y.shape[0]==self.pos_z.shape[0], 'Polyline has coordinates of different length'
+        return self
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             pos_x=group['posX'][:],
             pos_y=group['posY'][:],

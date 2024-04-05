@@ -1,8 +1,7 @@
 """
 .. include:: ./../README.md
 """
-from .pydantic_utils import *
-
+# ruff: noqa: F401, F403
 from .road import *
 from .geometry import *
 from .dynamics import *
@@ -31,7 +30,3 @@ if visualization_available:
         visualization_available = False
     else:
         from . import visualization as vis
-
-from ._version import get_versions_with_clean
-__version__, __clean_version__ = [get_versions_with_clean()[v] for v in ['version', 'clean_version']]
-del get_versions_with_clean

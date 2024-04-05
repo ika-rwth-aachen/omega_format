@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # https://pydantic-docs.helpmanual.io/usage/settings/
@@ -6,11 +6,7 @@ class Settings(BaseSettings):
     ALLOW_MISSING_TL_GROUPS: bool  = True  # allow e.g. weather not to be present
     ALLOW_INCOMPLETE_META_DATA: bool = True
     COMPRESS_HDF5: bool = True
-
-    class Config:
-        env_prefix = 'omega_format_'
-        env_file = ".env"
-        # secrets_dir = '/run/secrets'  # for docker secrets
+    model_config = SettingsConfigDict(env_prefix='omega_format_', env_file=".env")
 
     @property
     def hdf5_compress_args(self):

@@ -1,17 +1,17 @@
-from pydantic.types import confloat
 from pydantic.fields import Field
 from h5py import Group
 
 from .lane import Lane
 from ..enums import ReferenceTypes
 from ..geometry import Polyline
-from ..reference_resolving import *
+from ..reference_resolving import InputClassBase, ReferenceDict, raise_not_resolved
+from typing_extensions import Annotated
 
 
 class LateralMarking(InputClassBase):
     type: ReferenceTypes.LateralMarkingType
     polyline: Polyline
-    long_size: confloat(ge=0)
+    long_size: Annotated[float, Field(ge=0)]
     color: ReferenceTypes.LateralMarkingColor
     applicable_lanes: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], LateralMarking))
@@ -21,7 +21,7 @@ class LateralMarking(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             type=ReferenceTypes.LateralMarkingType(group.attrs["type"]),
             polyline=Polyline.from_hdf5(group),

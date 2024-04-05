@@ -1,19 +1,21 @@
-from pydantic import validator, Field
+from pydantic import field_validator, Field
 from typing import List
 import numpy as np
 from h5py import Group
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class GustOfWind(InputClassBase):
-    wind_speed: np.ndarray = Field(default=np.array([]))
+    wind_speed: pnd.NpNDArray
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
     type: List[ReferenceTypes.GustOfWind] = Field(default_factory=lambda: [ReferenceTypes.GustOfWind.NO_GUSTS_OF_WIND])
 
-    @validator('wind_speed')
+    @field_validator('wind_speed')
+    @classmethod
     def check_wind_speed(cls, v):
         for value in v:
             assert 0 <= value <= 120, f"wind speed should be between 0 and 120 m/s, but is {value}"
@@ -21,8 +23,8 @@ class GustOfWind(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
-        self = cls(
+        func = cls if validate else cls.model_construct
+        self = func(
             wind_speed=group['windSpeed'][()],
             source=ReferenceTypes.WeatherSource(group.attrs["source"]),
             type=list(map(ReferenceTypes.GustOfWind, group['type'][()].tolist()))

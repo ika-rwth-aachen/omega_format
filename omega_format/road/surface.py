@@ -15,7 +15,7 @@ class Surface(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             material=ReferenceTypes.SurfaceMaterial(group.attrs["material"]),
             color=ReferenceTypes.SurfaceColor(group.attrs["color"]),

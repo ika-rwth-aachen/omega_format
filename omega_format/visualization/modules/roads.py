@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QPen, QBrush, QColor
 
 from .base import VisualizationModule
-from ..pyqt_helper import *
+from ..pyqt_helper import visualize_objects, color_random, polygon2d
 from ...road import Lane, Sign, Border, LateralMarking, FlatMarking, Boundary
 from ...enums import ReferenceTypes
 

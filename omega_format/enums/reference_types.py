@@ -1,9 +1,10 @@
 from enum import Enum, IntEnum
-from .._version import get_versions_with_clean
 import warnings
+import importlib
+
 
 class ReferenceTypesSpecification(Enum):
-    FORMAT_VERSION = get_versions_with_clean()['clean_version']
+    FORMAT_VERSION = importlib.metadata.version('omega-format')
 
 
 class RoadLocation(IntEnum):
@@ -575,7 +576,7 @@ class RoadUserType(IntEnum):
     def get_subtype(_type, sub_type_int):
         try:
             sub_type = globals()['RoadUserSubType'+_type.name]
-        except KeyError as e:
+        except KeyError:
             sub_type = RoadUserSubTypeGeneral
         return sub_type(sub_type_int)
 

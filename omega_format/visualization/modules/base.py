@@ -1,18 +1,14 @@
-import math
 from collections import deque
 from enum import Enum
 from typing import Optional, List, Callable
-from dataclasses import field
 
 import numpy as np
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QGraphicsItem, QCheckBox, QDoubleSpinBox, QSpinBox
+from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QCheckBox, QDoubleSpinBox, QSpinBox
 from PyQt5.QtCore import QCoreApplication
 from pyqtgraph import ColorButton
 
-from ..pyqt_helper import *
 from ...reference_recording import ReferenceRecording
-from ...perception import Object
 from ...perception_recording import PerceptionRecording
 
 
@@ -67,7 +63,6 @@ class SnippetContainer():
 
     def convert_perception_coordinates_to_plot_coordinates(self):
         for obj in self.perception.objects.values():  # type: Object
-            h = obj.heading.val
             x = -obj.dist_lateral.val
             y = obj.dist_longitudinal.val
             heading = 180

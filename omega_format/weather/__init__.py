@@ -1,3 +1,4 @@
+# ruff: noqa: F401
 from .air_pressure import AirPressure
 from .cloudiness import Cloudiness
 from .gust_of_wind import GustOfWind

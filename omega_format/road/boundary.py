@@ -1,28 +1,28 @@
-from pydantic.types import conint, confloat
 from pydantic.fields import Field
 from h5py import Group
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase, ReferenceDict, raise_not_resolved
-
+from typing_extensions import Annotated
+from typing import Optional
 
 class Boundary(InputClassBase):
-    color: ReferenceTypes.BoundaryColor = None
-    condition: ReferenceTypes.BoundaryCondition = None
-    poly_index_start: conint(ge=0) = 0
-    poly_index_end: conint(ge=0) = 0
-    type: ReferenceTypes.BoundaryType = None
-    sub_type: ReferenceTypes.BoundarySubType = None
-    is_right_boundary: bool  = None
+    color: Optional[ReferenceTypes.BoundaryColor] = None
+    condition: Optional[ReferenceTypes.BoundaryCondition] = None
+    poly_index_start: Annotated[int, Field(ge=0)] = 0
+    poly_index_end: Annotated[int, Field(ge=0)] = 0
+    type: Optional[ReferenceTypes.BoundaryType] = None
+    sub_type: Optional[ReferenceTypes.BoundarySubType] = None
+    is_right_boundary: Optional[bool]  = None
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Boundary))
     overrides: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Boundary))
-    height: confloat(ge=0) = 0
+    height: Annotated[float, Field(ge=0)] = 0
     layer_flag: ReferenceTypes.LayerFlag = ReferenceTypes.LayerFlag.PERMANENT_GENERAL
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
-        self = cls(
+        func = cls if validate else cls.model_construct
+        self = func(
             color=ReferenceTypes.BoundaryColor(group.attrs["color"]),
             condition=ReferenceTypes.BoundaryCondition(group.attrs["condition"]),
             poly_index_start=group.attrs["polyIndexStart"],

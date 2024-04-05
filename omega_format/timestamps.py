@@ -1,9 +1,11 @@
 import numpy as np
 from pydantic import Field
 from .reference_resolving import InputClassBase
+import pydantic_numpy.typing as pnd
+
 
 class Timestamps(InputClassBase):
-    val: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    val: pnd.NpNDArray
 
     def cut_to_timespan(self, birth, death):
         self.val = self.val[birth:death+1]

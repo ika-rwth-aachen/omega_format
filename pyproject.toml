@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "ruff"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["omega_format*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+'src' = ['*.json']
+
+[project]
+name = "omega_format"
+authors = [
+    {name = "ika - RWTH Aachen", email = "michael.schuldes@ika.rwth-aachen.de"},
+]
+description = "OMEGA Format Library (read/write/visualize)"
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["one", "two"]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: None",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    'numpy',
+    'h5py',
+    'tqdm',
+    'typer',
+    'xarray',
+    'pydantic>=2',
+    'pydantic-settings',
+    'pydantic-numpy',
+    'parse',
+    'shapely>=2'
+
+]
+version = "4.1"
+
+[project.optional-dependencies]
+visualization = ['pyqtgraph', 'pyqt5']
+doc = ['pdoc3']
+test = ['pytest']
+complete = ['pyqtgraph', 'pyqt5', 'pdoc3', 'pytest']
+
+[project.scripts]
+omega_format = "omega_format.cli:app"
+
+[tool.pytest]
+addopts = "-ra -q"
+[tool.pytest.ini_options]
+
+[tool.ruff]
+ignore = ["E741"]

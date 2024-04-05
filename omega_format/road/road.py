@@ -9,11 +9,11 @@ from .sign import Sign
 from .structural_object import StructuralObject
 from ..enums import ReferenceTypes
 from ..reference_resolving import DictWithProperties, raise_not_resolved, InputClassBase
-
+from typing import Optional
 
 class Road(InputClassBase):
-    location: ReferenceTypes.RoadLocation = None
-    num_lanes: int = None
+    location: Optional[ReferenceTypes.RoadLocation] = None
+    num_lanes: Optional[int] = None
     lateral_markings: DictWithProperties = Field(default_factory=DictWithProperties)
     lanes: DictWithProperties = Field(default_factory=DictWithProperties)
     borders: DictWithProperties = Field(default_factory=DictWithProperties)
@@ -37,7 +37,7 @@ class Road(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             location=ReferenceTypes.RoadLocation(group.attrs["location"]),
             lateral_markings=LateralMarking.convert2objects(group, 'lateralMarking', validate=validate),

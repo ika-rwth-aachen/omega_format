@@ -201,7 +201,7 @@
         "OLD_LEFT_OVER_ON_GROUND_ONLY_LIQUID": 10
     },
     "ReferenceTypesSpecification": {
-        "FORMAT_VERSION": "v4.0"
+        "FORMAT_VERSION": "v5.0"
     },
     "RoadConditionMaintenanceStatus": {
         "UNKNOWN": 0,

@@ -2,11 +2,12 @@ from datetime import datetime
 
 import numpy as np
 from h5py import Group, File
-from ._version import get_versions
 from .reference_resolving import InputClassBase
 from .settings import get_settings
 import parse
 import omega_format
+from typing import Optional
+import importlib
 
 def get_converter_version(h5file, group_str):
     if group_str in h5file and 'converterVersion' in h5file.get(group_str).attrs:
@@ -16,48 +17,52 @@ def get_converter_version(h5file, group_str):
 
 
 class MetaData(InputClassBase):
-    daytime: datetime = None
-    format_version: str = get_versions()['version']
+    daytime: Optional[datetime] = None
+    format_version: str = importlib.metadata.version('omega-format')
     recorder_number: str = ''
     recording_number: str = ''
 
-    reference_point_lat: float = None
-    reference_point_lon: float = None
+    reference_point_lat: Optional[float] = None
+    reference_point_lon: Optional[float] = None
 
     natural_behavior: bool = False
     natural_exposure: bool = False
 
-    top_level_converter_version: str = None
-    road_user_converter_version: str = None
-    road_converter_version: str = None
-    weather_converter_version: str = None
-    state_converter_version: str = None
-    misc_object_converter_version: str = None
+    top_level_converter_version: Optional[str] = None
+    road_user_converter_version: Optional[str] = None
+    road_converter_version: Optional[str] = None
+    weather_converter_version: Optional[str] = None
+    state_converter_version: Optional[str] = None
+    misc_object_converter_version: Optional[str] = None
 
     custom_information: str = ""
-    reference_modality: int = None
+    reference_modality: Optional[int] = None
 
+    @staticmethod
+    def _none2string(x):
+        return "0.0" if x is None else x
     @property
     def version_identifier(self):
-        none2string = lambda x: "0.0" if x is None else x
-        return (f'C({none2string(self.top_level_converter_version)})' +
-                f'U({none2string(self.road_user_converter_version)})' +
-                f'R({none2string(self.road_converter_version)})' +
-                f'W({none2string(self.weather_converter_version)})' +
-                f'S({none2string(self.state_converter_version)})' +
-                f'M({none2string(self.misc_object_converter_version)})'
+        return (f'C({self._none2string(self.top_level_converter_version)})' +
+                f'U({self._none2string(self.road_user_converter_version)})' +
+                f'R({self._none2string(self.road_converter_version)})' +
+                f'W({self._none2string(self.weather_converter_version)})' +
+                f'S({self._none2string(self.state_converter_version)})' +
+                f'M({self._none2string(self.misc_object_converter_version)})'
                 )
-
-    @classmethod
-    def is_version_higher(cls, m1, m2):
-        parsed = lambda x: parse.search('C({:d}.{:d})' +
+    @staticmethod
+    def _version_parser(x):
+        return parse.search('C({:d}.{:d})' +
                                         'U({:d}.{:d})' +
                                         'R({:d}.{:d})' +
                                         'W({:d}.{:d})' +
                                         'S({:d}.{:d})' +
                                         'M({:d}.{:d})', x).fixed
-        m1 = parsed(m1)
-        m2 = parsed(m2)
+
+    @classmethod
+    def is_version_higher(cls, m1, m2): 
+        m1 = cls._version_parser(m1)
+        m2 = cls._version_parser(m2)
         if np.any(np.greater(m1, m2)) and np.all(np.greater_equal(m1, m2)):
             return True
         elif np.all(np.less_equal(m1, m2)):
@@ -82,7 +87,7 @@ class MetaData(InputClassBase):
         else:
             dt = datetime.fromisoformat(cls.assure_string(dt)) if dt is not None and dt!='' else None
 
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
 
         self = func(
             daytime=dt,
@@ -122,7 +127,7 @@ class MetaData(InputClassBase):
         group.attrs.create("refPointLong", data=self.reference_point_lon)
         group.attrs.create("naturalBehavior", data=self.natural_behavior)
         group.attrs.create("naturalExposure", data=self.natural_exposure)
-        group.attrs.create("formatVersion", data=omega_format.__clean_version__)
+        group.attrs.create("formatVersion", data=omega_format.__version__)
         if self.top_level_converter_version is not None:
             group.attrs.create("converterVersion", data=self.top_level_converter_version)
 
@@ -137,7 +142,7 @@ class MetaData(InputClassBase):
 
     @classmethod
     def assure_string(cls, byte_array):
-        if type(byte_array) == bytes:
+        if isinstance(byte_array, bytes):
             return byte_array.decode("utf-8")
         else:
             return byte_array

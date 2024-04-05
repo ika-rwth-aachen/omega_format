@@ -70,7 +70,7 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
     """
     if reference is not None:
         try:
-            rr = ReferenceRecording.from_hdf5(reference, legacy=legacy)
+            _ = ReferenceRecording.from_hdf5(reference, legacy=legacy)
         except FileNotFoundError as e:
             raise e
         except Exception as e:
@@ -83,7 +83,7 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
 
     if perception is not None:
         try:
-            pr = PerceptionRecording.from_hdf5(perception, legacy=legacy)
+            _ = PerceptionRecording.from_hdf5(perception, legacy=legacy)
         except FileNotFoundError as e:
             raise e
         except Exception as e:
@@ -102,16 +102,6 @@ def version():
     import omega_format
     print(omega_format.__version__)
     return omega_format.__version__
-
-
-@app.command("clean-version")
-def version():
-    """
-        Returns the clean version of the OMEGA Format
-    """
-    import omega_format
-    print(omega_format.__clean_version__)
-    return omega_format.__clean_version__
 
 
 @app.command('generate_c_headers_and_json', help='Generate .h and .json from python enums.')

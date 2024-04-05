@@ -222,7 +222,7 @@ enum class VVMPrecipitation {
 
 class VVMReferenceTypesSpecification {
 public:
-  const char* FORMAT_VERSION = "v4.0";
+  const char* FORMAT_VERSION = "v5.0";
 };
 
 enum class VVMRoadConditionMaintenanceStatus {

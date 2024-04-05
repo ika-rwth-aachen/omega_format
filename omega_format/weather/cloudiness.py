@@ -1,17 +1,19 @@
-from pydantic import validator, Field
+from pydantic import field_validator, Field
 import numpy as np
 from h5py import Group
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class Cloudiness(InputClassBase):
-    degree: np.ndarray = Field(default=np.array([]))
+    degree: pnd.NpNDArray
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
-    @validator('degree')
+    @field_validator('degree')
+    @classmethod
     def check_cloudiness_degree(cls, v):
         for value in v:
             assert value.size==0 or 0 <= value <= 8, f'cloudiness should be given in numerators of eights (0 to 8), but is {value}'
@@ -19,7 +21,7 @@ class Cloudiness(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             degree=group['degree'][()],
             source=ReferenceTypes.WeatherSource(group.attrs["source"]),

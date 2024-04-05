@@ -2,7 +2,7 @@ import numpy as np
 import pyqtgraph as pg
 
 from .base import VisualizationModule
-from ..pyqt_helper import *
+from ..pyqt_helper import get_pen, visualize_objects
 from ...dynamics import Trajectory, RoadUser
 from ...enums import ReferenceTypes
 

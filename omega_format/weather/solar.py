@@ -1,20 +1,22 @@
-from pydantic import validator, Field
+from pydantic import field_validator, Field
 import numpy as np
 from h5py import Group
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class Solar(InputClassBase):
-    diff_solar_radiation: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    longwave_down_radiation: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    solar_hours: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    solar_incoming_radiation: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    diff_solar_radiation: pnd.NpNDArray = Field(default_factory=np.array)
+    longwave_down_radiation: pnd.NpNDArray = Field(default_factory=np.array)
+    solar_hours: pnd.NpNDArray = Field(default_factory=np.array)
+    solar_incoming_radiation: pnd.NpNDArray = Field(default_factory=np.array)
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
-    @validator('solar_hours')
+    @field_validator('solar_hours')
+    @classmethod
     def check_solar_hours(cls, v):
         for value in v:
             assert 0 <= value <= 24, f"solar hours should be between 0 and 24 h, bus is {value}"
@@ -24,8 +26,8 @@ class Solar(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
-        self = cls(
+        func = cls if validate else cls.model_construct
+        self = func(
             diff_solar_radiation=group['diffSolarRadiation'][()],
             longwave_down_radiation=group['longwaveDownRadiation'][()],
             solar_hours=group['solarHours'][()],

@@ -1,6 +1,4 @@
-from dataclasses import fields
-from pydantic import conint
-from pydantic.fields import Field
+from pydantic import Field
 
 import numpy as np
 
@@ -9,10 +7,11 @@ from .trajectory import Trajectory
 from ..settings import DefaultValues
 from ..enums import ReferenceTypes
 from ..geometry import BBXCornersClass
-from ..reference_resolving import *
+from ..reference_resolving import InputClassBase, ReferenceElement
 import xarray as xr
 from typing import Optional
 from h5py import Group
+from typing_extensions import Annotated
 
 def in_timespan(obj, birth, death):
     """
@@ -41,7 +40,7 @@ def timespan_to_cutoff_idxs(obj, birth, death):
 class DynamicObject(InputClassBase, BBXCornersClass):
     bb: BoundingBox = Field(default_factory=BoundingBox)
     tr: Trajectory = Field(default_factory=Trajectory)
-    birth: conint(ge=0)
+    birth: Annotated[int, Field(ge=0)]
     connected_to: Optional[ReferenceElement] = None
     attached_to: Optional[ReferenceElement] = None
     """first timestamp idx"""
@@ -99,7 +98,7 @@ class DynamicObject(InputClassBase, BBXCornersClass):
             return self.bb.width
 
     def to_xarray(self, rr):
-        return xr.Dataset({f: ('time', getattr(self.tr,f)) for f in self.tr.__fields__.keys()},
+        return xr.Dataset({k: ('time', v) for k, v in self.tr.model_dump().items()},
                           coords={'time':rr.timestamps.val[self.birth:self.end+1]})
 
     def to_hdf5(self, group: Group):

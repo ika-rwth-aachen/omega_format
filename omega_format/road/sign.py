@@ -1,7 +1,6 @@
 import warnings
 from h5py import Group
 from pydantic.dataclasses import Field
-from pydantic.types import confloat
 
 from .lane import Lane
 from .state import State
@@ -9,8 +8,9 @@ from ..settings import DefaultValues
 from ..dynamics.dynamic_object import BBXCornersClass
 from ..enums import ReferenceTypes
 from ..geometry import Position
-from ..reference_resolving import *
-
+from ..reference_resolving import ReferenceDict, InputClassBase, raise_not_resolved
+from typing_extensions import Annotated
+from typing import Optional
 
 class Sign(InputClassBase, BBXCornersClass):
     type: ReferenceTypes.SignType
@@ -20,11 +20,11 @@ class Sign(InputClassBase, BBXCornersClass):
     position: Position
     heading: float
     size_class: int
-    size: confloat(ge=0) = 1.0
+    size: Annotated[float, Field(ge=0)] = 1.0
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Sign))
     overrides: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Sign))
     connected_to: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Sign))
-    state: State = None
+    state: Optional[State] = None
     layer_flag: ReferenceTypes.LayerFlag = ReferenceTypes.LayerFlag.PERMANENT_GENERAL
     fallback: bool = False
     weather_dependent: bool = False
@@ -42,7 +42,7 @@ class Sign(InputClassBase, BBXCornersClass):
             warnings.warn(warn_text)
             type_ = ReferenceTypes.SignType.UNKNOWN
 
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             type=type_,
             value=group.attrs["value"].astype(int),

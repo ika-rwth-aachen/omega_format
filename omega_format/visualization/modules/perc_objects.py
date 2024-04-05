@@ -1,14 +1,9 @@
-from typing import List
-
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QGraphicsItem
 
 from .base import VisualizationModule, SnippetContainer
 from ..pyqt_helper import visualize_perc_object, visualize_perc_trajectory, get_pen
-from ...reference_recording import ReferenceRecording
 from ...perception import Object
-from ...perception_recording import PerceptionRecording
 from ...timestamps import Timestamps
 
 

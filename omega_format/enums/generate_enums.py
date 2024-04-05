@@ -9,7 +9,7 @@ from . import reference_types as ReferenceTypes
 
 def relevant_enum_classes(module):
     return [getattr(module, cls_name) for cls_name in dir(module)
-            if not cls_name.startswith('_') and not cls_name in ['Enum', 'IntEnum', 'get_versions_with_clean'] and issubclass(getattr(module, cls_name), Enum)]
+            if not cls_name.startswith('_') and cls_name not in ['Enum', 'IntEnum', 'get_versions_with_clean'] and issubclass(getattr(module, cls_name), Enum)]
 
 
 def enum2c(obj, c_name='VVM'):
@@ -55,4 +55,4 @@ def generate_enums():
 
 
 if __name__ == '__main__':
-    main()
+    generate_enums()

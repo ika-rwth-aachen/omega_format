@@ -1,5 +1,4 @@
 from collections import UserDict
-from pydantic import BaseModel
 import io
 from pydantic.fields import Field
 from pathlib import Path
@@ -13,15 +12,13 @@ from .perception.misc_info import MiscInfo
 from .perception.object import Object
 from .perception.sensor import Sensor
 from .timestamps import Timestamps
-from .pydantic_utils.pydantic_config import PydanticConfig
 from .settings import get_settings
+from .reference_resolving import InputClassBase
 
-class PerceptionRecording(BaseModel):
+class PerceptionRecording(InputClassBase):
     """
     Class that represents the OMEGA-PerceptionDB-Format in an object-oriented manner.
     """
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
     format_version: str = "1.3"
     converter_version: str = ""
     recorder_number: str = ""
@@ -41,8 +38,8 @@ class PerceptionRecording(BaseModel):
     def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True, legacy=None):
         if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
-                func = cls if validate else cls.construct
-                tfunc = Timestamps if validate else Timestamps.construct
+                func = cls if validate else cls.model_construct
+                tfunc = Timestamps if validate else Timestamps.model_construct
                 self = func(
                     format_version=file.attrs['formatVersion'],
                     converter_version=file.attrs['converterVersion'],

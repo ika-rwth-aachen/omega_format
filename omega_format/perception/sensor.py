@@ -1,15 +1,11 @@
-from pydantic import BaseModel
-from pydantic.types import confloat
-from pydantic import validator
+from pydantic import field_validator, Field
 from h5py import Group
 
 from ..enums import PerceptionTypes
-from ..pydantic_utils.pydantic_config import PydanticConfig
+from typing_extensions import Annotated
+from ..reference_resolving import InputClassBase
 
-
-class Sensor(BaseModel):
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
+class Sensor(InputClassBase):
     id: int = 0
     sensor_modality: PerceptionTypes.SensorModality = PerceptionTypes.SensorModality.LIDAR
     fusion_information: str = ""
@@ -23,30 +19,31 @@ class Sensor(BaseModel):
     sensor_pitch: float = 0.
     sensor_roll: float = 0.
 
-    max_range: confloat(ge=0) = 0.
-    min_range: confloat(ge=0) = 0.
-    fov_vertical: confloat(ge=0) = 0.
-    fov_horizontal: confloat(ge=0) = 0.
-    max_velocity: confloat(ge=0) = 0.
+    max_range: Annotated[float, Field(ge=0)] = 0.
+    min_range: Annotated[float, Field(ge=0)] = 0.
+    fov_vertical: Annotated[float, Field(ge=0)] = 0.
+    fov_horizontal: Annotated[float, Field(ge=0)] = 0.
+    max_velocity: Annotated[float, Field(ge=0)] = 0.
     min_velocity: float = 0.
-    angle_resolution_vertical: confloat(ge=0) = 0.
-    angle_resolution_horizontal: confloat(ge=0) = 0.
-    range_resolution: confloat(ge=0) = 0.
-    vertical_resolution: confloat(ge=0) = 0.
-    velocity_resolution: confloat(ge=0) = 0.
-    angle_accuracy: confloat(ge=0) = 0.
-    vertical_accuracy: confloat(ge=0) = 0.
-    range_accuracy: confloat(ge=0) = 0.
-    velocity_accuracy: confloat(ge=0) = 0.
-    angle_precision: confloat(ge=0) = 0.
-    range_precision: confloat(ge=0) = 0.
-    vertical_precision: confloat(ge=0) = 0.
-    velocity_precision: confloat(ge=0) = 0.
-    track_confirmation_latency: confloat(ge=0) = 0.
-    track_drop_latency: confloat(ge=0) = 0.
-    max_object_tracks: confloat(ge=0) = 0.
+    angle_resolution_vertical: Annotated[float, Field(ge=0)] = 0.
+    angle_resolution_horizontal: Annotated[float, Field(ge=0)] = 0.
+    range_resolution: Annotated[float, Field(ge=0)] = 0.
+    vertical_resolution: Annotated[float, Field(ge=0)] = 0.
+    velocity_resolution: Annotated[float, Field(ge=0)] = 0.
+    angle_accuracy: Annotated[float, Field(ge=0)] = 0.
+    vertical_accuracy: Annotated[float, Field(ge=0)] = 0.
+    range_accuracy: Annotated[float, Field(ge=0)] = 0.
+    velocity_accuracy: Annotated[float, Field(ge=0)] = 0.
+    angle_precision: Annotated[float, Field(ge=0)] = 0.
+    range_precision: Annotated[float, Field(ge=0)] = 0.
+    vertical_precision: Annotated[float, Field(ge=0)] = 0.
+    velocity_precision: Annotated[float, Field(ge=0)] = 0.
+    track_confirmation_latency: Annotated[float, Field(ge=0)] = 0.
+    track_drop_latency: Annotated[float, Field(ge=0)] = 0.
+    max_object_tracks: Annotated[float, Field(ge=0)] = 0.
 
-    @validator('sensor_heading', 'sensor_pitch', 'sensor_roll')
+    @field_validator('sensor_heading', 'sensor_pitch', 'sensor_roll')
+    @classmethod
     def check_angle(cls, v):
         assert v.size==0 or -360 <= v <= 360, f'{v} is not a valid angle'
         return v
@@ -54,7 +51,7 @@ class Sensor(BaseModel):
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         sub_group_name = group.name.rpartition('/')[-1]
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             id=int(sub_group_name),
             sensor_modality=PerceptionTypes.SensorModality(group.attrs['sensorModality']),

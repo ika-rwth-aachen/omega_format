@@ -1,13 +1,10 @@
-from pydantic import BaseModel
 from h5py import Group
 
 from ..enums import PerceptionTypes
-from ..pydantic_utils.pydantic_config import PydanticConfig
+from ..reference_resolving import InputClassBase
 
 
-class MetaObject(BaseModel):
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
+class MetaObject(InputClassBase):
     dist_longitudinal_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     dist_longitudinal_var_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
     dist_lateral_val_type: PerceptionTypes.PerceptionType = PerceptionTypes.PerceptionType.NOT_PROVIDED
@@ -50,7 +47,7 @@ class MetaObject(BaseModel):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             dist_longitudinal_val_type=PerceptionTypes.PerceptionType(group.attrs['distLongitudinalValType']),
             dist_longitudinal_var_type=PerceptionTypes.PerceptionType(group.attrs['distLongitudinalVarType']),

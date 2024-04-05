@@ -1,29 +1,25 @@
 import os
-import random
 import tempfile
 from collections import UserDict
 from copy import deepcopy
 from json import load
-from pathlib import Path
-from typing import Union, Optional
+from typing import Union
 import shapely.geometry
 import shapely.affinity
 import h5py
 import numpy as np
-import omega_format
 import pyproj
-import typer
 from ..dynamics import RoadUser
 from ..reference_recording import ReferenceRecording
 from ..perception_recording import PerceptionRecording
 from ..enums import PerceptionTypes, ReferenceTypes
 from .object import Object
 from .sensor import Sensor
-from tqdm import tqdm
+import importlib 
+
 
 perc_format_ver = "1.3"
-format_version = omega_format.__clean_version__
-
+format_version = importlib.metadata.version('ase_engine')
 
 class Converter:
     perception_recording: PerceptionRecording
@@ -167,7 +163,7 @@ class Converter:
 
 
     def add_objects(self):
-        for rid, road_user in self.reference_recording.road_users.items():  # type: int, RoadUser
+        for rid, road_user in self.reference_recording.road_users.items():
             if rid == self.ego_id:
                 continue
 

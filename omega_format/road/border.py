@@ -1,9 +1,7 @@
-from pydantic.dataclasses import dataclass
 from h5py import Group
 
 from ..geometry.polyline import Polyline
 from ..reference_resolving import InputClassBase, raise_not_resolved
-from ..pydantic_utils.pydantic_config import PydanticConfig
 
 
 class Border(InputClassBase):
@@ -16,7 +14,7 @@ class Border(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             polyline=Polyline.from_hdf5(group),
         )

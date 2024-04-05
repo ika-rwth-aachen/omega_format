@@ -2,8 +2,8 @@ from h5py import Group
 from pydantic.fields import Field
 
 from ..enums import ReferenceTypes
-from ..geometry import *
-from ..reference_resolving import *
+from ..geometry import Polyline
+from ..reference_resolving import ReferenceDict, InputClassBase, raise_not_resolved
 
 
 class FlatMarking(InputClassBase):
@@ -18,7 +18,7 @@ class FlatMarking(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             color=ReferenceTypes.FlatMarkingColor(group.attrs["color"]),
             condition=ReferenceTypes.FlatMarkingCondition(group.attrs["condition"]),

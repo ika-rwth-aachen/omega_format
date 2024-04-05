@@ -1,11 +1,11 @@
 from pydantic.fields import Field
 
-from pydantic.types import confloat
 from h5py import Group
 
 from ..enums import ReferenceTypes
-from ..geometry import *
+from ..geometry import Polyline
 from ..reference_resolving import ReferenceDict, InputClassBase
+from typing_extensions import Annotated
 
 
 class StructuralObject(InputClassBase):
@@ -13,12 +13,12 @@ class StructuralObject(InputClassBase):
     polyline: Polyline
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], StructuralObject))
     overrides: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], StructuralObject))
-    height: confloat(ge=0) = 0
+    height: Annotated[float, Field(ge=0)] = 0
     layer_flag: ReferenceTypes.LayerFlag = ReferenceTypes.LayerFlag.PERMANENT_GENERAL
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             type=ReferenceTypes.StructuralObjectType(group.attrs["type"]),
             polyline=Polyline.from_hdf5(group),

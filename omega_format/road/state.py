@@ -4,15 +4,17 @@ from h5py import Group
 
 from ..reference_resolving import InputClassBase, ReferenceElement
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
 
 class State(InputClassBase):
     sign: ReferenceElement
-    value: np.ndarray
+    value: pnd.NpNDArray
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
-        self = cls(
+        from .sign import Sign
+        func = cls if validate else cls.model_construct
+        self = func(
             sign=ReferenceElement(group.attrs["referenceId"], Sign),
             value=group['value'][()],
         )
@@ -26,6 +28,7 @@ class State(InputClassBase):
         self.values = self.values[birth:death+1]
 
     def __deepcopy__(self, memodict={}):
+        from .sign import Sign
         dp = copy(self)
         dp.sign = ReferenceElement(self.sign.reference, Sign)
         dp.value = deepcopy(self.values, memodict)

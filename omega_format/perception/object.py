@@ -1,36 +1,34 @@
 from typing import List
-from warnings import warn
 
 import numpy as np
 from h5py import Group
-from pydantic import validator, BaseModel, Field
+from pydantic import field_validator, model_validator, Field
+from typing import Optional
 
 from .valvar import ValVar
 from ..enums import PerceptionTypes
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+from ..reference_resolving import InputClassBase
+import pydantic_numpy.typing as pnd
 
-class ObjectClassification(BaseModel):
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
+class ObjectClassification(InputClassBase):
     val: List[PerceptionTypes.ObjectClassification] = Field(default_factory=list)
-    confidence: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    confidence: pnd.NpNDArray = Field(default_factory=np.array)
 
-    @validator('confidence')
+    @field_validator('confidence')
+    @classmethod
     def check_confidence_values(cls, v):
         assert v.size==0 or np.all(np.logical_and(0<=v, v<=1)), f"confidence value should be between 0 and 1, but is {v}"
         return v
 
-    @validator('confidence')
-    def check_array_length(cls, v, values):
-        if len(v) != len(values.get('val')):
-            warn('length of confidence array does not match array length for classification. This is only possible if confidence is of type not_provided')
-        # assert len(v) == len(values.get('val')), f"length of confidence array does not match classifications array"
-        return v
+    @model_validator(mode='after')
+    def check_array_length(self):
+        assert len(self.val) == self.confidence.shape[0], 'confidence and  val do not have same length'
+        return self
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             val=list(map(PerceptionTypes.ObjectClassification, group['val'][()].tolist())),
             confidence=group['confidence'][()],
@@ -56,9 +54,7 @@ class ObjectClassification(BaseModel):
             self.confidence = self.confidence[birth:death + 1]
 
 
-class Object(BaseModel):
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
+class Object(InputClassBase):
     id: str = "RU-1"
     birth_stamp: int = 0
 
@@ -67,11 +63,11 @@ class Object(BaseModel):
     height: ValVar = Field(default_factory=ValVar)
     length: ValVar = Field(default_factory=ValVar)
 
-    rcs: np.ndarray = Field(default=np.array([]))
-    age: np.ndarray = Field(default=np.array([]))
+    rcs: Optional[pnd.NpNDArray] = Field(default=None)
+    age: Optional[pnd.NpNDArray] = Field(default=None)
     tracking_point: List[PerceptionTypes.TrackingPoint] = Field(default_factory=list)
 
-    confidence_of_existence: np.ndarray = Field(default=np.array([]))
+    confidence_of_existence: Optional[pnd.NpNDArray] = Field(default=None)
     movement_classification: List[PerceptionTypes.MovementClassification] = Field(default_factory=list)
     meas_state: List[PerceptionTypes.MeasState] = Field(default_factory=list)
 
@@ -116,7 +112,7 @@ class Object(BaseModel):
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         sub_group_name = group.name.rpartition('/')[-1]
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             id=sub_group_name,
             birth_stamp=group.attrs['birthStamp'].astype(int),

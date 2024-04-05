@@ -20,7 +20,7 @@ from .timestamps import Timestamps
 from .weather.weather import Weather
 from concurrent.futures import ThreadPoolExecutor
 from .settings import get_settings
-
+from typing import Dict
 
 class ReferenceRecording(InputClassBase):
     """
@@ -30,11 +30,11 @@ class ReferenceRecording(InputClassBase):
     timestamps: Timestamps = Field(default_factory=Timestamps)
     ego_id: Optional[str] = None
     ego_vehicle: Optional[RoadUser] = None
-    weather: Weather = None
-    misc_objects: DictWithProperties = Field(default_factory=DictWithProperties)
-    roads: DictWithProperties = Field(default_factory=DictWithProperties)
-    states: DictWithProperties = Field(default_factory=DictWithProperties)
-    road_users: DictWithProperties = Field(default_factory=DictWithProperties)
+    weather: Optional[Weather] = None
+    misc_objects: DictWithProperties[str, MiscObject] = Field(default_factory=DictWithProperties)
+    roads: DictWithProperties[str, Road] = Field(default_factory=DictWithProperties)
+    states: DictWithProperties[str, State] = Field(default_factory=DictWithProperties)
+    road_users: DictWithProperties[str, RoadUser] = Field(default_factory=DictWithProperties)
 
 
     @property 
@@ -45,8 +45,8 @@ class ReferenceRecording(InputClassBase):
     def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True, legacy=None):
         if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
-                func = cls if validate else cls.construct
-                tfunc = Timestamps if validate else Timestamps.construct
+                func = cls if validate else cls.model_construct
+                tfunc = Timestamps if validate else Timestamps.model_construct
                 if legacy is None and file.attrs['formatVersion'] in ['v3.1', 'v3.0']:
                     legacy='v3.1'
                     
@@ -145,7 +145,7 @@ class ReferenceRecording(InputClassBase):
         for prop in [p for p in [getattr(self,o) for o in dir(self) if not o.startswith('_')] if not callable(p) and not isinstance(p, ListWithProperties)]:
             try:
                 prop.cut_to_timespan(birth, death)
-            except AttributeError as e:
+            except AttributeError:
                 pass
         self.resolve()
 

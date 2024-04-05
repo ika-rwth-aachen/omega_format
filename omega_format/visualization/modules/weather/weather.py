@@ -1,16 +1,10 @@
 from pathlib import Path
 
-from PyQt5.QtGui import QPen, QBrush, QColor, QPixmap
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel
 
 from ..base import VisualizationModule, SnippetContainer, VisualizationModuleType
-from ...pyqt_helper import *
-from ....road import Lane, Sign, Border, LateralMarking, FlatMarking, Boundary
-from ....enums import ReferenceTypes
-from ....weather import Weather
-import pyqtgraph as pg
-
 
 class VisualizeWeather(VisualizationModule):
     def __init__(self, **kwargs):

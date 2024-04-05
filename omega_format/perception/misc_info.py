@@ -1,20 +1,18 @@
-from pydantic import BaseModel
-from pydantic.types import conint, confloat
+from pydantic import Field
 from h5py import Group
 
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+from typing_extensions import Annotated
+from ..reference_resolving import InputClassBase
 
-class MiscInfo(BaseModel):
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
-    id: conint(ge=0) = 0
-    light_intensity: confloat(ge=0) = 0.
-    acoustics: confloat(ge=0) = 0.
+class MiscInfo(InputClassBase):
+    id: Annotated[int, Field(ge=0)] = 0
+    light_intensity: Annotated[float, Field(ge=0)] = 0.
+    acoustics: Annotated[float, Field(ge=0)] = 0.
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         sub_group_name = group.name.rpartition('/')[-1]
         self = func(
             id=int(sub_group_name),

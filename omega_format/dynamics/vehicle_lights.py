@@ -1,5 +1,4 @@
 from pydantic.fields import Field
-from pydantic import BaseModel
 from typing import List
 from h5py import Group
 from ..enums import ReferenceTypes
@@ -18,7 +17,7 @@ class VehicleLights(InputClassBase):
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
         rf = lambda s: list(map(ReferenceTypes.RoadUserVehicleLights, group[s][:].tolist()))
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             indicator_right=rf('indicatorRight'),
             indicator_left=rf('indicatorLeft'),

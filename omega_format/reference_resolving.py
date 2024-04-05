@@ -4,7 +4,7 @@ from copy import deepcopy
 from collections import UserDict, UserList
 from .settings import get_settings
 from warnings import warn
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Any, Callable, Generator
 
 
@@ -31,11 +31,11 @@ def is_not_overridden(o):
     else:
         return True
 
-
-class InputClassBase(BaseModel, arbitrary_types_allowed=True, copy_on_model_validation=False, extra='allow'):
+class InputClassBase(BaseModel):
     """
 
     """
+    model_config = ConfigDict(arbitrary_types_allowed=True, extra='allow')
     def resolve(self, input_recording=None):
         """
         Iteratively searches for every `ReferenceDict` in the Class and resolves its references.
@@ -80,12 +80,13 @@ class ListWithProperties(UserList):
     position of the object in the list.
     It also implements `.values()` to be compatible to the interacting with `DictWithProperties`
     """
-    def __getattr__(self, name):
-        try:
-            if len(self) > 0 and self[0] is not None:
-                return ListWithProperties([getattr(o, name) for o in self])
-        except AttributeError as e:
-            return super().__getattribute__(name)
+    if False:
+        def __getattr__(self, name):
+            try:
+                if len(self) > 0 and self[0] is not None:
+                    return ListWithProperties([getattr(o, name) for o in self])
+            except AttributeError as e:
+                return super().__getattribute__(name)
 
     def values(self):
         return self
@@ -106,13 +107,13 @@ class DictWithProperties(UserDict):
     position of the object in the dict. It also propagets the `cut_to_timespan` directive, that cuts all objects in
     the dict to the specified timespan.
     """
-
-    def __getattr__(self, name):
-        try:
-            if len(self) > 0 and list(self.values())[0] is not None and not isinstance(list(self.values())[0], DictWithProperties):
-                return ListWithProperties([getattr(o, name) for o in self.values()])
-        except AttributeError as e:
-            return super().__getattribute__(name)
+    if False:
+        def __getattr__(self, name):
+            try:
+                if len(self) > 0 and list(self.values())[0] is not None and not isinstance(list(self.values())[0], DictWithProperties):
+                    return ListWithProperties([getattr(o, name) for o in self.values()])
+            except AttributeError as e:
+                return super().__getattribute__(name)
 
     def __deepcopy__(self, memodict={}):
         return DictWithProperties({k: deepcopy(v, memodict) for k, v in self.items()})
@@ -186,10 +187,14 @@ class ReferenceDict(DictWithProperties):
         return np.array(list(self.data.keys()))
 
 
-class ReferenceElement:
+class ReferenceElement():
     """
     `ReferenceElement` is the analog of `ReferenceDict` in cases only exactly one object should be referenced.
     """
+    
+    object_class: Any
+    reference: Any
+    
 
     def __init__(self, id: int, object_class: InputClassBase):
         self.object_class = object_class

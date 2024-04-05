@@ -1,28 +1,31 @@
 from pydantic.dataclasses import Field
-from pydantic import validator
+from pydantic import field_validator
 import numpy as np
 from h5py import Group
 from typing import List
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class Wind(InputClassBase):
     type: List[ReferenceTypes.Wind] = Field(default_factory=lambda: [ReferenceTypes.Wind.CALM])
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
-    wind_direction: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    wind_speed: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    wind_direction: pnd.NpNDArray = Field(default_factory=np.array)
+    wind_speed: pnd.NpNDArray = Field(default_factory=np.array)
 
-    @validator('wind_direction')
+    @field_validator('wind_direction')
+    @classmethod
     def check_degree(cls, v):
         for value in v:
             assert isinstance(value, float), f'wind direction should be of type float, but is {type(value)}: {value}'
             assert 0 <= value <= 360, f"wind direction should range from 0 to 360 degrees, but is {value}"
         return v
 
-    @validator('wind_speed')
+    @field_validator('wind_speed')
+    @classmethod
     def check_wind_speed(cls, v):
         for value in v:
             assert isinstance(value, float), f'wind speed should be of type float, but is {type(value)}: {value}'
@@ -31,7 +34,7 @@ class Wind(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             wind_speed=np.array(group['windSpeed'][()], dtype=float),
             wind_direction=np.array(group['windDirection'][()], dtype=float),

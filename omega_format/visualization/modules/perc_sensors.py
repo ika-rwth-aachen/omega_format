@@ -1,9 +1,8 @@
 import numpy as np
 import pyqtgraph as pg
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets
 
 from .base import VisualizationModule, SnippetContainer
-from ...perception import Sensor
 from ...timestamps import Timestamps
 
 
@@ -33,11 +32,9 @@ class VisualizePercSensors(VisualizationModule):
             offset_y = sensor.sensor_pos_longitudinal + ego_offset
 
             heading = sensor.sensor_heading
-            dist_min = sensor.min_range
             dist_max = sensor.max_range
             diameter = dist_max * 2
             fov_horizontal = sensor.fov_horizontal
-            fov_vertical = sensor.fov_vertical
 
             start_angle = -fov_horizontal/2
             span_angle = fov_horizontal

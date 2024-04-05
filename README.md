@@ -1,7 +1,7 @@
 # ![](./omega_format/visualization/ui/icon.svg) OMEGA Format - Python Library
 This module is developed by [ika - RWTH Aachen](https://www.ika.rwth-aachen.de/de/) as a contribution to the [VVM](https://www.vvm-projekt.de/projekt) project which aims to develop test procedures and to provide frameworks and methods for the safety verification of automated vehicles. VVM is working on the use case of Urban Intersections and focuses on driving functions up to full automation of vehicles (SAE Level 4 and 5).
 
-As part of the project a data format for storing reference and perception data from pilotings, test drives and simulation in urban traffic is developed. This module enables the creation, reading and visualization of data conforming to this data format. Additionally, it can check files for conformance and perform basic sanity checks on the data.
+As part of the project a data format for storing reference and perception data from pilotings, test drives and simulation in urban traffic is developed. This module enables the creation, and visualization of data conforming to this data format. Additionally, it can check files for conformance and perform basic sanity checks on the data.
 
 
 # Data Format
@@ -48,7 +48,7 @@ or
 omega_format verify --perception <FILENAME>
 ```
 
-When using the library and creating objects or rading from an hdf5 file, by default, sanity checks are performed. To circumvent those pass `validate=False` to the `from_hdf5` function or use or use `cls.construct` instead of `cls` as the constructor of an object. In the backend [pydantic](https://pydantic-docs.helpmanual.io/) is used for the sanity checks.
+When using the library and creating objects or rading from an hdf5 file, by default, sanity checks are performed. To circumvent those pass `validate=False` to the `from_hdf5` function or use or use `cls.model_construct` instead of `cls` as the constructor of an object. In the backend [pydantic](https://pydantic-docs.helpmanual.io/) is used for the sanity checks.
 ## Visualize your data
 To visualize a data file execute the following in your conda environment:
 ```bash
@@ -117,6 +117,6 @@ The library is published under the MIT license specified in [LICENSE](./LICENSE)
 In case of questions regarding the format, this repository or otherwise related feel free to raise an issue or contact Michael Schuldes (michael.schuldes@ika.rwth-aachen.de).
 
 # Acknowledgement
-The research leading to these results is funded by the German Federal Ministry for Economic Affairs and Energy within the project “Verifikations- und Validierungsmethoden automatisierter Fahrzeuge im urbanen Umfeld". The authors would like to thank the consortium for the successful cooperation. 
+The research leading to these results is funded by the German Federal Ministry for Economic Affairs and Energy within the project “Verifikations- und Validierungsmethoden automatisierter Fahrzesuge im urbanen Umfeld". The authors would like to thank the consortium for the successful cooperation. 
 
 <a href='https://www.bmwi.de/Navigation/EN/Home/home.html'><img src="bmwi_logo.gif" alt="bmwi_logo" height="200"/></a>

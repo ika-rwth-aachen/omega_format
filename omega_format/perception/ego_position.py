@@ -1,61 +1,55 @@
-from warnings import warn
 import numpy as np
 from h5py import Group
-from pydantic import validator, Field, BaseModel
+from pydantic import field_validator, model_validator, Field
 
 from .valvar import ValVar
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+from ..reference_resolving import InputClassBase
+import pydantic_numpy.typing as pnd
 
-class EgoPosition(BaseModel):
-    class Config(PydanticConfig):
-        arbitrary_types_allowed=True
+
+class EgoPosition(InputClassBase):
+    yaw_rate: pnd.NpNDArray
+    pitch: pnd.NpNDArray
     heading: ValVar = Field(default_factory=ValVar)
     pos_longitude: ValVar = Field(default_factory=ValVar)
     pos_latitude: ValVar = Field(default_factory=ValVar)
     pos_z: ValVar = Field(default_factory=ValVar)
-    yaw_rate: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    pitch: np.ndarray = Field(default=np.array([], dtype=np.float64))
 
-    if False:
-        @validator('heading', 'pos_longitude', 'pos_latitude')
-        def check_array_length(cls, v, values):
-            if isinstance(v, ValVar):
-                assert len(v.val) == len(v.var), f'length of val {len(v.val)} and length of var {len(v.var)} are not the same'
-                return v
-            else:
-                if not len(v) > 0:
-                    warn('received trajectory with empty array')
 
-                if len(values) > 0:
-                    # first array would be validated if len(values)=0 -> no length to compare against
-                    # use the length of pos_x to check equality with other array length
-                    length = len(values.get('heading'))
-                    if len(v) != length:
-                        raise ValueError(f'length of all EgoPosition arrays must match, expected len {len(v)}, actual len {length}')
-            return v
+    @field_validator('yaw_rate','pitch')
+    @classmethod
+    def check_array_length(cls, v):
+        assert v.shape[0]>0, 'size zero polyline'
+        return v
+    
+    @model_validator(mode='after')
+    def check_same_length(self):
+        assert self.pos_x.shape[0]==self.pos_y.shape[0]==self.pos_z.shape[0], 'Polyline has coordinates of different length'
+        return self
 
-    @validator('heading')
+    @field_validator('heading')
+    @classmethod
     def check_angle(cls, v):
         for val in v.val:
             assert val.size>0 and -360 <= val <= 360, f'{val} is not a valid angle'
         return v
 
-    @validator('pos_longitude')
+    @field_validator('pos_longitude')
+    @classmethod
     def check_longitude(cls, v):
-        for val in v.val:
-            assert val.size>0 and -180 <= val <= 180, f'{val} is not a valid longitude value, should be between -180 and 180 degrees'
+        assert np.all(np.logical_and(v>=-180, v<=180)), 'invalide longitude value found'
         return v
 
-    @validator('pos_latitude')
+    @field_validator('pos_latitude')
+    @classmethod
     def check_latitude(cls, v):
-        for val in v.val:
-            assert val.size>0 -90 <= val <= 90, f'{val} is not a valid latitude value, should be between -180 and 180 degrees'
+        assert np.all(np.logical_and(v>=-90, v<=90)), 'invalide latitude value found'
         return v
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             heading=ValVar.from_hdf5(group['heading'], validate=validate),
             pos_longitude=ValVar.from_hdf5(group['posLongitude'], validate=validate),

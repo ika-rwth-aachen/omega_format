@@ -1,18 +1,20 @@
-from pydantic import validator, Field
+from pydantic import field_validator, Field
 import numpy as np
 from h5py import Group
 
 from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
-from ..pydantic_utils.pydantic_config import PydanticConfig
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class AirPressure(InputClassBase):
-    air_pressure_nn: np.ndarray = Field(default=np.array([]))
-    air_pressure_zero: np.ndarray = Field(default=np.array([]))
+    air_pressure_nn: pnd.NpNDArray
+    air_pressure_zero: pnd.NpNDArray
     source: ReferenceTypes.WeatherSource = ReferenceTypes.WeatherSource.UNKNOWN
 
-    @validator('air_pressure_nn', 'air_pressure_zero')
+    @field_validator('air_pressure_nn', 'air_pressure_zero')
+    @classmethod
     def check_air_pressure_plausibility(cls, v):
         for value in v:
             assert value.size==0 or 500 <= value <= 1100, \
@@ -21,7 +23,7 @@ class AirPressure(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             air_pressure_nn=group["airPressureNN"][:],
             air_pressure_zero=group["airPressureZero"][:],

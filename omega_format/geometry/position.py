@@ -8,7 +8,7 @@ class Position(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             pos_x=group['posX'][()].astype(float),
             pos_y=group['posY'][()].astype(float),

@@ -3,15 +3,17 @@ from h5py import Group
 from pydantic import Field
 from ..reference_resolving import InputClassBase
 from ..settings import get_settings
+import pydantic_numpy.typing as pnd
+
 
 class RoadCondition(InputClassBase):
-    maintenance_status: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    spray: np.ndarray = Field(default=np.array([], dtype=np.float64))
-    surface_condition: np.ndarray = Field(default=np.array([], dtype=np.float64))
+    maintenance_status: pnd.NpNDArray = Field(default_factory=np.array)
+    spray: pnd.NpNDArray = Field(default_factory=np.array)
+    surface_condition: pnd.NpNDArray = Field(default_factory=np.array)
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             maintenance_status=group['maintenanceStatus'][()],
             spray=group['spray'][()],

@@ -1,18 +1,15 @@
-from ..enums import ReferenceTypes, PerceptionTypes
+from ..enums import ReferenceTypes
 from ..settings import DefaultValues
-from ..road import *
-from ..dynamics import *
+from ..road import Boundary, Lane, Border, Sign, FlatMarking, LateralMarking
+from ..dynamics import RoadUser, BoundingBox, Trajectory
 from ..perception import Object
-from ..perception_recording import PerceptionRecording
-from ..reference_recording import ReferenceRecording
-
+from typing import List
 import random
 import pyqtgraph as pg
 
-from PyQt5.QtWidgets import QGraphicsPathItem, QGraphicsSimpleTextItem, QGraphicsPolygonItem, QGraphicsRectItem, \
-    QGraphicsTextItem, QListWidget, QListWidgetItem, QGraphicsItemGroup
+from PyQt5.QtWidgets import QGraphicsPathItem, QGraphicsSimpleTextItem, QGraphicsPolygonItem, QGraphicsRectItem, QGraphicsItemGroup
 from PyQt5.QtGui import QPen, QBrush, QColor, QTransform, QPainterPath, QPolygonF
-from PyQt5.QtCore import QCoreApplication, QPointF
+from PyQt5.QtCore import QPointF
 
 import numpy as np
 
@@ -20,7 +17,7 @@ __all__ = ['color_random', 'polyline2d', 'polygon2d', 'get_pen', 'get_random_pen
            'bbx2d', 'bbx2d_text', 'visualize_objects', 'visualize_perc_object', 'visualize_perc_trajectory']
 
 
-def polyline2d(tuples: [tuple], pen: QPen = None, brush: QBrush = None, tooltip: str = None, text: str = None):
+def polyline2d(tuples: List[tuple], pen: QPen = None, brush: QBrush = None, tooltip: str = None, text: str = None):
     points = [QPointF(x, y) for x, y in tuples]
     path = QPainterPath(points[0])
     for p in points[1:]:
@@ -58,7 +55,7 @@ def polyline2d(tuples: [tuple], pen: QPen = None, brush: QBrush = None, tooltip:
     return path
 
 
-def polygon2d(tuples: [tuple], pen: QPen = None, brush: QBrush = None, text: str = None):
+def polygon2d(tuples: List[tuple], pen: QPen = None, brush: QBrush = None, text: str = None):
     points = [QPointF(x, y) for x, y in tuples]
     poly = QGraphicsPolygonItem(QPolygonF(points))
     poly.setPen(pen)

@@ -3,10 +3,9 @@ from pydantic.fields import Field, Any
 from .dynamic_object import DynamicObject
 from .vehicle_lights import VehicleLights
 from ..enums import ReferenceTypes
-from ..reference_resolving import *
+from ..reference_resolving import raise_not_resolved, ReferenceElement, ReferenceNotResolved
 from .trajectory import Trajectory
 from .bounding_box import BoundingBox
-from typing import Optional
 
 from h5py import Group
 
@@ -16,7 +15,7 @@ class RoadUser(DynamicObject):
     sub_type: Any = None # ReferenceTypes.RoadUserSubType
     is_data_recorder: bool = False
     vehicle_lights: VehicleLights = Field(default_factory=VehicleLights)
-    id: str = f'RU-1'
+    id: str = 'RU-1'
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
@@ -25,7 +24,7 @@ class RoadUser(DynamicObject):
         elif legacy is None:
             classification_type = ReferenceTypes.RoadUserType(group.attrs["type"])
             sub_group_name = group.name.rpartition('/')[-1]
-            func = cls if validate else cls.construct
+            func = cls if validate else cls.model_construct
             self = func(
                 id=sub_group_name,
                 type=classification_type,
@@ -47,7 +46,7 @@ class RoadUser(DynamicObject):
     def _legacy_from_hdf5_v3_1(cls, group: Group, validate: bool = True, legacy=None):
         classification_type = ReferenceTypes.RoadUserType(group.attrs["type"])
         sub_group_name = group.name.rpartition('/')[-1]
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             id=f'RU{sub_group_name}',
             type=classification_type,

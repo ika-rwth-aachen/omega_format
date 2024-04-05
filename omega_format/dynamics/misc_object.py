@@ -3,7 +3,7 @@ from pydantic.fields import Field
 
 from .dynamic_object import DynamicObject
 from ..enums import ReferenceTypes
-from ..reference_resolving import *
+from ..reference_resolving import ReferenceElement, raise_not_resolved
 from .trajectory import Trajectory
 from .bounding_box import BoundingBox
 
@@ -11,7 +11,7 @@ from .bounding_box import BoundingBox
 class MiscObject(DynamicObject):
     type: ReferenceTypes.MiscObjectType = Field(default_factory=ReferenceTypes.MiscObjectType)
     sub_type: ReferenceTypes.MiscObjectSubType = Field(default_factory=ReferenceTypes.MiscObjectSubType)
-    id: str = f'M-1'
+    id: str = 'M-1'
 
     @classmethod
     def from_hdf5(cls, group: Group, validate=True, legacy=None):
@@ -19,7 +19,7 @@ class MiscObject(DynamicObject):
             return cls._legacy_from_hdf5_v3_1(group, validate=validate, legacy=legacy)
         elif legacy is None:
             sub_group_name = group.name.rpartition('/')[-1]
-            func = cls if validate else cls.construct
+            func = cls if validate else cls.model_construct
             self = func(
                 id=sub_group_name,
                 tr=Trajectory.from_hdf5(group['trajectory'], validate=validate),
@@ -37,7 +37,7 @@ class MiscObject(DynamicObject):
     @classmethod
     def _legacy_from_hdf5_v3_1(cls, group: Group, validate=True, legacy=None):
         sub_group_name = group.name.rpartition('/')[-1]
-        func = cls if validate else cls.construct
+        func = cls if validate else cls.model_construct
         self = func(
             id=f'M{sub_group_name}',
             tr=Trajectory.from_hdf5(group['trajectory'], validate=validate, legacy=legacy),

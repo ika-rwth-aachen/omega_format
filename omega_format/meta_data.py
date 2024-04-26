@@ -36,7 +36,7 @@ class MetaData(InputClassBase):
     misc_object_converter_version: Optional[str] = None
 
     custom_information: str = ""
-    reference_modality: Optional[int] = None
+    reference_modality: int = -1
 
     @staticmethod
     def _none2string(x):
@@ -127,7 +127,7 @@ class MetaData(InputClassBase):
         group.attrs.create("refPointLong", data=self.reference_point_lon)
         group.attrs.create("naturalBehavior", data=self.natural_behavior)
         group.attrs.create("naturalExposure", data=self.natural_exposure)
-        group.attrs.create("formatVersion", data=omega_format.__version__)
+        group.attrs.create("formatVersion", data=self.format_version)
         if self.top_level_converter_version is not None:
             group.attrs.create("converterVersion", data=self.top_level_converter_version)
 

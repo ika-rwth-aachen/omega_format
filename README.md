@@ -78,7 +78,7 @@ rr.to_hdf5('path/where/to/store/current_version_reference_recording.hdf5')
 ### Extending the visualizer
 By subclassing [`omega_format.visualization.VisualizationModule`](./omega_format/visualization/modules/base.py) and adding an instance of your subclass to the `visualizers` list of the [`Visualizer` ](./omega_format/visualization/visualizer.py) you can extend the functionality of the visualizer. The subclass has to implement at least one of the functions `visualize_static` and `visualize_dynamics`, returning a list of pyqt widgets to plot. For more details take a look at the [`omega_format.vis.VisualizationModule`](./omega_format/visualization/modules/base.py) or the other modules defined in the `visualization.modules` directory.
 
-## Create a reference data
+## Create a reference data object
 This module maps the reference and perception data file specifications to a hierarchy of python classes. The root classes are `ReferenceRecording` and `PerceptionRecording` respectively. First initializing an object from that class and fill its properties with the objects of the classes in question (e.g. `Weather` `RoadUser`, `Lane`). After adding all your data, call `to_hdf5` on the `ReferenceRecording` or `PerceptionRecording` and a format compliant `hdf5` file will be created for you.
 ```python
 import numpy as np
@@ -87,7 +87,7 @@ from datetime import datetime
 
 rr = omega_format.ReferenceRecording(meta_data=omega_format.MetaData(recorder_number=1,
                                                                      recording_number=1,
-                                                                     daytime=datetime.now()
+                                                                     daytime=datetime.now(),
                                                                      reference_point_lat=50.786687,
                                                                      reference_point_lon=6.046312),
                                timestamps=omega_format.Timestamps(val=np.array([0])),

@@ -92,7 +92,7 @@ rr = omega_format.ReferenceRecording(meta_data=omega_format.MetaData(recorder_nu
                                                                      reference_point_lon=6.046312),
                                timestamps=omega_format.Timestamps(val=np.array([0])),
                                )
-rr.weather = omega_foramt.Weather()
+rr.weather = omega_format.Weather()
 rr.road_users[0] = omega_format.RoadUser(type=omega_format.ReferenceTypes.RoadUser.Type.CAR, sub_type=omega_format.ReferenceTypes.RoadUser.SubType.General.REGULAR,
                                     birth=0, bb=omega_format.BoundingBox(np.array([2,3,0])),
                                     tr=omega_format.Trajectory(pos_x=np.array([0]),pos_y=np.array([0]),pos_z=np.array([0]),

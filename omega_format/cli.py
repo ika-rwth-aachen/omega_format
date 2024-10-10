@@ -9,7 +9,7 @@ from omega_format.reference_recording import ReferenceRecording
 from omega_format.perception_recording import PerceptionRecording
 from omega_format.enums import generate_enums
 from pathlib import Path
-
+from omega_format.converters.from_asam_opendrive import convert_odr_app
 import importlib.util
 
 visualization_available = importlib.util.find_spec("PyQt5") is not None and \
@@ -109,5 +109,6 @@ def _generate_enums():
     generate_enums()
 
 
+app.registered_commands = app.registered_commands + convert_odr_app.registered_commands
 if __name__ == "__main__":
     app()

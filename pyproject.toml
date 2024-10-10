@@ -32,8 +32,8 @@ dependencies = [
     'pydantic-settings',
     'pydantic-numpy',
     'parse',
-    'shapely'
-
+    'shapely',
+    'lxml',
 ]
 version = "4.2"
 

@@ -1,6 +1,6 @@
 import json
 import os
-from enum import Enum, IntEnum
+from enum import Enum
 from pathlib import Path
 
 from . import perception_types as PerceptionTypes

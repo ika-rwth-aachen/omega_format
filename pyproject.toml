@@ -40,7 +40,7 @@ version = "4.1"
 [project.optional-dependencies]
 visualization = ['pyqtgraph', 'pyqt5']
 doc = ['pdoc3']
-test = ['pytest', 'pycoverage']
+test = ['pytest', 'pytest-sugar', 'pytest-env','pytest-cov']
 complete = ['pyqtgraph', 'pyqt5', 'pdoc3', 'pytest']
 
 [project.scripts]

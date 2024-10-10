@@ -104,7 +104,7 @@ rr.road_users[0] = omega_format.RoadUser(type=omega_format.ReferenceTypes.RoadUs
                                                                     vel_z=np.array([0]),
                                                                     acc_longitudinal=np.array([0]),
                                                                     acc_lateral=np.array([0])))
-rr.roads[0] = omega_format.Road(location=omega_format.ReferenceTypes.RoadLocation.URBAN, num_lanes=1)
+rr.roads[0] = omega_format.Road(location=omega_format.ReferenceTypes.RoadLocation.URBAN)
 rr.to_hdf5('test.hdf5')
 ```
 # Further Help

@@ -35,7 +35,7 @@ dependencies = [
     'shapely'
 
 ]
-version = "4.1"
+version = "4.2"
 
 [project.optional-dependencies]
 visualization = ['pyqtgraph', 'pyqt5']

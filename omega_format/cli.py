@@ -104,7 +104,7 @@ def version():
     return omega_format.__version__
 
 
-@app.command('generate_c_headers_and_json', help='Generate .h and .json from python enums.')
+@app.command('generate_json', help='Generate .h and .json from python enums.')
 def _generate_enums():
     generate_enums()
 

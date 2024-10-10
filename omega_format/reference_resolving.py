@@ -85,7 +85,7 @@ class ListWithProperties(UserList):
             try:
                 if len(self) > 0 and self[0] is not None:
                     return ListWithProperties([getattr(o, name) for o in self])
-            except AttributeError as e:
+            except AttributeError:
                 return super().__getattribute__(name)
 
     def values(self):
@@ -112,7 +112,7 @@ class DictWithProperties(UserDict):
             try:
                 if len(self) > 0 and list(self.values())[0] is not None and not isinstance(list(self.values())[0], DictWithProperties):
                     return ListWithProperties([getattr(o, name) for o in self.values()])
-            except AttributeError as e:
+            except AttributeError:
                 return super().__getattribute__(name)
 
     def __deepcopy__(self, memodict={}):

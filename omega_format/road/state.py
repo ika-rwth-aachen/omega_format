@@ -1,5 +1,4 @@
 from copy import deepcopy, copy
-import numpy as np
 from h5py import Group
 
 from ..reference_resolving import InputClassBase, ReferenceElement

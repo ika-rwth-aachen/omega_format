@@ -1,6 +1,5 @@
 from pydantic import field_validator, Field
 from typing import List
-import numpy as np
 from h5py import Group
 
 from ..enums import ReferenceTypes

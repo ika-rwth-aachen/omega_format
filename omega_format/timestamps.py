@@ -1,5 +1,4 @@
 import numpy as np
-from pydantic import Field
 from .reference_resolving import InputClassBase
 import pydantic_numpy.typing as pnd
 

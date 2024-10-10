@@ -1,5 +1,4 @@
 from pydantic import field_validator, model_validator
-import numpy as np
 from h5py import Group
 from ..reference_resolving import InputClassBase
 from ..settings import get_settings

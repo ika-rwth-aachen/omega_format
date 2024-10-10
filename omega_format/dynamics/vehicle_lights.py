@@ -5,6 +5,10 @@ from ..enums import ReferenceTypes
 from ..reference_resolving import InputClassBase
 from ..settings import get_settings
 
+
+def map_lights(group, s):
+    return list(map(ReferenceTypes.RoadUserVehicleLights, group[s][:].tolist()))
+
 class VehicleLights(InputClassBase):
     indicator_right: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
     indicator_left: List[ReferenceTypes.RoadUserVehicleLights] = Field(default_factory=list)
@@ -16,16 +20,15 @@ class VehicleLights(InputClassBase):
 
     @classmethod
     def from_hdf5(cls, group: Group, validate: bool = True, legacy=None):
-        rf = lambda s: list(map(ReferenceTypes.RoadUserVehicleLights, group[s][:].tolist()))
         func = cls if validate else cls.model_construct
         self = func(
-            indicator_right=rf('indicatorRight'),
-            indicator_left=rf('indicatorLeft'),
-            brake_lights=rf('brakeLights'),
-            headlights=rf('headlights'),
-            reverseing_lights=rf('reversingLights'),
-            blue_light=rf('blueLight'),
-            **({} if legacy=='v3.1' else {'orange_light': rf('orangeLight')})
+            indicator_right=map_lights(group, 'indicatorRight'),
+            indicator_left=map_lights(group, 'indicatorLeft'),
+            brake_lights=map_lights(group, 'brakeLights'),
+            headlights=map_lights(group, 'headlights'),
+            reverseing_lights=map_lights(group, 'reversingLights'),
+            blue_light=map_lights(group, 'blueLight'),
+            **({} if legacy=='v3.1' else {'orange_light': map_lights(group, 'orangeLight')})
         )
         return self
 

@@ -3,6 +3,21 @@ image: "python:3.9"
 before_script:
   - pip install -e .['test']
 
+lint:
+  stage: test
+  before_script:
+    - pip install ruff
+  script:
+      - ruff check --output-format=gitlab --output-file=codequality.json || ruff check --output-format=concise --output-file=codequality.txt || ruff check --output-format=concise
+  artifacts:
+      paths:
+      - "codequality.*"
+      reports:
+          codequality: codequality.json
+      when: always
+      expire_in: '30 days'
+  allow_failure: false
+
 test:
   stage: test
   script:

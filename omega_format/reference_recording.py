@@ -20,7 +20,6 @@ from .timestamps import Timestamps
 from .weather.weather import Weather
 from concurrent.futures import ThreadPoolExecutor
 from .settings import get_settings
-from typing import Dict
 
 class ReferenceRecording(InputClassBase):
     """

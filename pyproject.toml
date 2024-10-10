@@ -40,7 +40,7 @@ version = "4.1"
 [project.optional-dependencies]
 visualization = ['pyqtgraph', 'pyqt5']
 doc = ['pdoc3']
-test = ['pytest']
+test = ['pytest', 'pycoverage']
 complete = ['pyqtgraph', 'pyqt5', 'pdoc3', 'pytest']
 
 [project.scripts]
@@ -48,10 +48,9 @@ omega_format = "omega_format.cli:app"
 
 [tool.pytest]
 addopts = "-ra -q"
-[tool.pytest.ini_options]
 
 [tool.ruff]
-ignore = ["E741"]
+lint.ignore = ["E741"]
 
 [tool.setuptools.package-data]
 "omega_format" = [

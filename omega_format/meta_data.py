@@ -5,7 +5,6 @@ from h5py import Group, File
 from .reference_resolving import InputClassBase
 from .settings import get_settings
 import parse
-import omega_format
 from typing import Optional
 import importlib
 

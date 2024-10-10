@@ -1,4 +1,4 @@
-from pydantic import field_validator, Field
+from pydantic import field_validator
 import numpy as np
 from h5py import Group
 

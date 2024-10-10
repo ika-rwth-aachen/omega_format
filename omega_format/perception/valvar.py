@@ -1,10 +1,8 @@
-import numpy as np
 from h5py import Group
-from pydantic import model_validator, Field
+from pydantic import model_validator
 from ..settings import get_settings
 from ..reference_resolving import InputClassBase
 import pydantic_numpy.typing as pnd
-from typing import Optional
 
 class ValVar(InputClassBase):
     val: pnd.NpNDArray

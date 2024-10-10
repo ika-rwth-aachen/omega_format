@@ -11,10 +11,9 @@ class Trajectory(InputClassBase):
     pos_x: pnd.NpNDArray
     pos_y: pnd.NpNDArray
     pos_z: pnd.NpNDArray
-    roll: pnd.NpNDArray 
-    pitch: pnd.NpNDArray
     heading: pnd.NpNDArray
-
+    roll: Optional[pnd.NpNDArray] = Field(default=None)
+    pitch: Optional[pnd.NpNDArray] = Field(default=None)
     vel_longitudinal: Optional[pnd.NpNDArray] = Field(default=None)
     vel_lateral: Optional[pnd.NpNDArray] = Field(default=None)
     vel_z: Optional[pnd.NpNDArray] = Field(default=None)
@@ -59,37 +58,45 @@ class Trajectory(InputClassBase):
             pos_x=group["posX"][:],
             pos_y=group["posY"][:],
             pos_z=group["posZ"][:],
-            roll=group["roll"][:],
-            pitch=group["pitch"][:],
             heading=group["heading"][:],
-            vel_longitudinal=group["velLongitudinal"][:],
-            vel_lateral=group["velLateral"][:],
-            vel_z=group["velZ"][:],
-            acc_longitudinal=group["accLongitudinal"][:],
-            acc_lateral=group["accLateral"][:],
-            acc_z=group["accZ"][:],
-            roll_der=group["rollDer"][:],
-            pitch_der=group["pitchDer"][:],
-            heading_der=group["headingDer"][:],
+            **{
+                name: group[h5_name][:] for name, h5_name in (
+                    ('roll', 'roll'),
+                    ('pitch', 'pitch'),
+                    ('vel_longitudinal', 'velLongitudinal'),
+                    ('vel_lateral', 'velLateral'),
+                    ('vel_z', 'velZ'),
+                    ('acc_longitudinal', 'accLongitudinal'),
+                    ('acc_lateral', 'accLateral'),
+                    ('acc_z', 'accZ'),
+                    ('roll_der', 'rollDer'),
+                    ('pitch_der', 'pitchDer'),
+                    ('heading_der', 'headingDer'),
+                ) if h5_name in group
+            }
         )
         return self
 
     def to_hdf5(self, group: Group):
-        group.create_dataset('posX', data=self.pos_x, **get_settings().hdf5_compress_args)
-        group.create_dataset('posY', data=self.pos_y, **get_settings().hdf5_compress_args)
-        group.create_dataset('posZ', data=self.pos_z, **get_settings().hdf5_compress_args)
-        group.create_dataset('roll', data=self.roll, **get_settings().hdf5_compress_args)
-        group.create_dataset('pitch', data=self.pitch, **get_settings().hdf5_compress_args)
-        group.create_dataset('heading', data=self.heading, **get_settings().hdf5_compress_args)
-        group.create_dataset('velLongitudinal', data=self.vel_longitudinal, **get_settings().hdf5_compress_args)
-        group.create_dataset('velLateral', data=self.vel_lateral, **get_settings().hdf5_compress_args)
-        group.create_dataset('velZ', data=self.vel_z, **get_settings().hdf5_compress_args)
-        group.create_dataset('accLateral', data=self.acc_lateral, **get_settings().hdf5_compress_args)
-        group.create_dataset('accLongitudinal', data=self.acc_longitudinal, **get_settings().hdf5_compress_args)
-        group.create_dataset('accZ', data=self.acc_z, **get_settings().hdf5_compress_args)
-        group.create_dataset('rollDer', data=self.roll_der, **get_settings().hdf5_compress_args)
-        group.create_dataset('pitchDer', data=self.pitch_der, **get_settings().hdf5_compress_args)
-        group.create_dataset('headingDer', data=self.heading_der, **get_settings().hdf5_compress_args)
+        for h5_name, data in (
+            ('posX', self.pos_x),
+            ('posY', self.pos_y),
+            ('posZ', self.pos_z),
+            ('heading', self.heading),
+            ('roll', self.roll),
+            ('pitch', self.pitch),
+            ('velLongitudinal', self.vel_longitudinal),
+            ('velLateral', self.vel_lateral),
+            ('velZ', self.vel_z),
+            ('accLateral', self.acc_lateral),
+            ('accLongitudinal', self.acc_longitudinal),
+            ('accZ', self.acc_z),
+            ('rollDer', self.roll_der),
+            ('pitchDer', self.pitch_der),
+            ('headingDer', self.heading_der),
+        ):
+            if data is not None:
+                group.create_dataset(h5_name, data=data, **get_settings().hdf5_compress_args)
 
     @property
     def vel(self):

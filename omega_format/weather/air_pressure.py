@@ -1,5 +1,4 @@
-from pydantic import field_validator, Field
-import numpy as np
+from pydantic import field_validator
 from h5py import Group
 
 from ..enums import ReferenceTypes

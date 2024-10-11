@@ -14,7 +14,7 @@ authors = [
 ]
 description = "OMEGA Format Library (read/write/visualize)"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.7"
 keywords = ["one", "two"]
 license = {text = "BSD-3-Clause"}
 classifiers = [
@@ -33,7 +33,7 @@ dependencies = [
     'pydantic-numpy',
     'parse',
     'shapely',
-    'lxml',
+    'lxml'
 ]
 version = "4.2"
 

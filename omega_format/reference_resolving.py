@@ -73,7 +73,7 @@ class InputClassBase(BaseModel):
         return self.__repr_name__()
 
 
-class ListWithProperties(UserList):
+class ListWithProperties(UserList, BaseModel):
     """
     This list is designed to only take objects of the same class. It enables the direct access to attributes of
     the objects in the list as a list of the attributes, where the position of the attributes corresponds to the

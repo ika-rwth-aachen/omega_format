@@ -2,7 +2,7 @@ import numpy as np
 import copy
 from ..logger import logger
 
-from eulerspiral import eulerspiral
+from omega_format.converters.from_asam_opendrive.eulerspiral import EulerSpiral
 
 
 def calculate_s_index(center_line_points, s_value):
@@ -122,10 +122,9 @@ def sample_points(geometry_entry, step_size):
         #delta_s *= geometry_entry.length
 
     elif geometry_entry.spiral.curv_end is not None:
-        # https://github.com/stefan-urban/pyeulerspiral/blob/master/eulerspiral/eulerspiral.py
         # normalize curvature to geometry length, as it increases linear along its length from start to end
 
-        spiral = eulerspiral.EulerSpiral.createFromLengthAndCurvature(geometry_entry.length, geometry_entry.spiral.curv_start, geometry_entry.spiral.curv_end)
+        spiral = EulerSpiral.createFromLengthAndCurvature(geometry_entry.length, geometry_entry.spiral.curv_start, geometry_entry.spiral.curv_end)
 
         
         center_line_points = np.stack(spiral.calc(delta_s, geometry_entry.x, geometry_entry.y, geometry_entry.spiral.curv_start, geometry_entry.hdg))

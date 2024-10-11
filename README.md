@@ -65,6 +65,14 @@ visualizer.start_gui_and_visualization()
 A window will open that lets you interact with and inspect your data.
 ![](visualizer_ui.png)
 
+## Utilzie existing data
+
+This library contains converters from existing map formats ASAM OpenDRIVE and the data format of LevelXData (tested with highD, inD, exiD). 
+
+To convert an ASAM OpenDRIVE file into the omega format, run `omega_format convert-odr <path_to_xodr_file> <desired_output_file_name>`.
+
+To convert a LevelXData dataset, run `omega_format convert-level-x-data <path to root folder of the dataset> <desired output path>`.
+
 ## Load data in older versions
 
 ```python

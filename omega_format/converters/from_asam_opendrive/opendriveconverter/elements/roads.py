@@ -59,8 +59,8 @@ class Roads:
                              reference_point_lon=longitude,
                              road_converter_version=converter_version,
                              daytime=datetime.datetime.now(),
-                             recorder_number=0,
-                             recording_number=0,
+                             recorder_number=str(0),
+                             recording_number=str(0),
                              reference_modality=6)
         self = cls(
             meta_data=meta_data,

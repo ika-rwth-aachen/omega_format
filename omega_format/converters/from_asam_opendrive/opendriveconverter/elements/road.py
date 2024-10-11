@@ -115,8 +115,6 @@ def extract_road_data(index, center_line_points, end_point_index, start_point_in
     my_road = calculate_borders(road.lanes.lane_section[index], center_line_points, end_point_index, start_point_index,
                                 my_road, road, step_size)
 
-    # set number of lanes (only works after borders have been extracted)
-    my_road.num_lanes = len(my_road.borders)-1
 
     # get lane class (junction etc.)
     lane_class = get_lane_class(road.junction, junction_group)

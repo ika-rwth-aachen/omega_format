@@ -619,7 +619,7 @@ def parse_opendrive_road_objects_object(new_object, road_objects_object):
 
         for corner_local in odr_outline.findall("cornerLocal"):
             new_object_outline_geom_local = OutlineCornerLocal()
-            new_object_outline_geom_local.height = float(corner_local.get("height"))
+            new_object_outline_geom_local.height = float(corner_local.get("height", default=0))
             if corner_local.get("id"):
                 new_object_outline_geom_local.id = int(corner_local.get("id"))
             new_object_outline_geom_local.u = float(corner_local.get("u"))

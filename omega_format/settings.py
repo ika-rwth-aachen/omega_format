@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     ALLOW_MISSING_TL_GROUPS: bool  = True  # allow e.g. weather not to be present
     ALLOW_INCOMPLETE_META_DATA: bool = True
     COMPRESS_HDF5: bool = True
-    model_config = SettingsConfigDict(env_prefix='omega_format_', env_file=".env")
+    model_config = SettingsConfigDict(env_prefix='omega_format_', env_file=".env", extra="ignore")
 
     @property
     def hdf5_compress_args(self):

@@ -133,7 +133,13 @@ def convert_from_levelx_like(recMeta, tracksMeta, tracks):
     if is_highd:
         start_time = datetime.strptime(str(recMeta.iloc[0].startTime) + ' ' + str(recMeta.iloc[0].month) + ' ' + str(recMeta.iloc[0].weekDay), '%H:%M %m.%Y %a')
     else:
-        start_time = datetime.strptime(str(recMeta.iloc[0].startTime) + ' ' + str(recMeta.iloc[0].weekday), '%H %A')
+        try:
+            start_time = datetime.strptime(str(recMeta.iloc[0].startTime) + ' ' + str(recMeta.iloc[0].weekday), '%H %A')
+        except ValueError:
+            try:
+                start_time = datetime.strptime(str(recMeta.iloc[0].weekday), '%A')
+            except ValueError:
+                 start_time = datetime.strptime(str(recMeta.iloc[0].weekday[:-1]), '%A')
     meta = omega_format.MetaData(daytime=start_time,
                                 recorder_number="ika",                                recording_number=str(recMeta.iloc[0][cm['recordingId']]),
                                 reference_point_lat=0,
@@ -148,6 +154,9 @@ def convert_from_levelx_like(recMeta, tracksMeta, tracks):
     reference.resolve()
     return reference
 
+
+def rec_path2map_path(rec_path, recMeta, zfill=1):
+    return list((rec_path.parent/'maps'/'opendrive').glob(f'{str(recMeta.locationId.values[0]).zfill(zfill)}*/*.xodr'))[0]
 
 @app.command('convert-level-x-data')
 def convert_level_x_like(input_path: Path, output_path: Path):
@@ -167,13 +176,15 @@ def convert_level_x_like(input_path: Path, output_path: Path):
             rec.roads = parse_highD_road(recMeta=recMeta, tracks=tracks)
         else:
             try:
-                map_path = list((pre.parent/'maps'/'opendrive').glob(f'{recMeta.locationId.values[0]}*/*.xodr'))[0]
-            except IndexError as e:
-                raise ValueError(f'No Map Data could be found for recording {idx}.') from e
-            else:
-                if map_path not in map_dict:
-                    map_dict[map_path] = opendrive2roads(map_path).roads_list
-                rec.roads = map_dict[map_path]
+                map_path = rec_path2map_path(pre, recMeta, zfill=1)
+            except IndexError:
+                try:
+                    map_path = rec_path2map_path(pre, recMeta, zfill=2)
+                except IndexError as e:
+                    raise ValueError(f'No Map Data could be found for recording {idx}.') from e
+            if map_path not in map_dict:
+                map_dict[map_path] = opendrive2roads(map_path).roads_list
+            rec.roads = map_dict[map_path]
   
         rec.resolve()
         rec.to_hdf5(output_path/f'{idx}_tracks.hdf5')

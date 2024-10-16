@@ -16,7 +16,7 @@ import importlib.util
 visualization_available = importlib.util.find_spec("PyQt5") is not None and \
     importlib.util.find_spec("pyqtgraph") is not None
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
 def get_snippets_for_vis(reference, perception, snip, max_snippets, legacy=None):

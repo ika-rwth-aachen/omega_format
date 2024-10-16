@@ -176,7 +176,7 @@ def create_new_signal(signal_position, hdg, applicable_lanes, signal_type, signa
         value = signal_value
 
     if signal_position is not None:
-        new_signal = Sign(type=signal_type, value=value, history=0, applicable_lanes=applicable_lanes,
+        new_signal = Sign(type=signal_type, value=value, history="0", applicable_lanes=applicable_lanes,
                           position=signal_position, heading=hdg, size_class=signal_size)
         new_signal.weather_dependent = dynamic
         new_signal.time_dependent = dynamic

@@ -43,13 +43,11 @@ class InputClassBase(BaseModel):
         if input_recording is None:
             raise ValueError('You have to provide a `ReferenceRecording` for this function to work!')
         for p, v in vars(self).items():
-            if isinstance(v, ReferenceDict):
+            if isinstance(v, ReferenceDict) or isinstance(v, ReferenceElement):
                 v.resolve(input_recording)
             elif isinstance(v, DictWithProperties) and len(v) > 0 and isinstance(list(v.values())[0], InputClassBase):
                 for o in v.values():
                     o.resolve(input_recording)
-            elif isinstance(v, ReferenceElement):
-                v.resolve(input_recording)
 
     @classmethod
     def convert2objects(cls, file, group_name=None, check_require=False, validate=True, legacy=None):
@@ -107,13 +105,6 @@ class DictWithProperties(UserDict):
     position of the object in the dict. It also propagets the `cut_to_timespan` directive, that cuts all objects in
     the dict to the specified timespan.
     """
-    if False:
-        def __getattr__(self, name):
-            try:
-                if len(self) > 0 and list(self.values())[0] is not None and not isinstance(list(self.values())[0], DictWithProperties):
-                    return ListWithProperties([getattr(o, name) for o in self.values()])
-            except AttributeError:
-                return super().__getattribute__(name)
 
     def __deepcopy__(self, memodict={}):
         return DictWithProperties({k: deepcopy(v, memodict) for k, v in self.items()})
@@ -163,6 +154,9 @@ class ReferenceDict(DictWithProperties):
         """
         for k in self.keys():
             self[k] = self.object_class.resolve_func(input_recording, k)
+            
+        
+            
 
     def __deepcopy__(self, memodict={}):
         return ReferenceDict(list(self.keys()), self.object_class)

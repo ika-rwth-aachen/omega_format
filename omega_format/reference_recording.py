@@ -115,6 +115,11 @@ class ReferenceRecording(InputClassBase):
                 self.weather.to_hdf5(f.require_group('weather'))
 
     def resolve(self, input_recording=None):
+        for kr, r in self.roads.items():
+            r.idx = kr
+            for lr, l in r.lanes.items():
+                l.idx = (kr, lr)
+                l.road = r
         super().resolve(input_recording=self)
 
     @property

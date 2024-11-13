@@ -38,7 +38,8 @@ Gefördert durch: <br /> *[Logo: BMWI]* *[Logo: VDA]*
 | Maike Scholtes | 23.03.2021 | V3.0 | Introduction of attributes in hdf5 for scalar metainformation |
 | Maike Scholtes | 18.08.2021 | V3.0 | Provide information on the direction of the pitch angle. <br /> Clarify information on the heading angle and on which signals are provided in utm coordinate systems <br /> and which in the vehicle coordinate system. <br /> Included Image of global coordinate system. |
 | Maike Scholtes | 10.09.2021 | V3.1 | Added customInformation and referenceModality field. |
-| Michael Schuldes | | V4 | AttachedTO/ConnectedTo, TrafficSignsUpdated, enusm TODO to UNKOWN, recorder_id and recording_id to id, recording and recorder id are now strings and must be set uniuqe, add orange light | 
+| Michael Schuldes | | V4 | AttachedTO/ConnectedTo, TrafficSignsUpdated, enusm TODO to UNKOWN, recorder_id and recording_id to id, recording and recorder id are now strings and must be set uniuqe, add orange light |
+| Michael Schuldes | 13.11.2024 | V4.3 | No changes to specification. Added converters for OpenDrive and LevelXData datasets. Tooling changes: `road.idx` and `lane.idx` are now set to the object ids on calling `reference_recording.resolve()`; Use pyproject.toml; update pydantic to v2 |
 -   [Specification OMEGA Format - Reference
     Data](#specification-omega-format---reference-data)
 -   [Table of Contents](#table-of-contents)

@@ -122,6 +122,7 @@ There are plenty of tools, e.g.
 - [silx](http://www.silx.org/doc/silx/latest/install.html) (also available on "Ubuntu Software")
 - [ViTables](https://vitables.org/)
 - [HDFView](https://www.hdfgroup.org/download-hdfview/)
+- [Online-Viewer: MyHDF5](https://myhdf5.hdfgroup.org/)
 
 
 ## Documentation

@@ -15,7 +15,7 @@ from .perception_recording import PerceptionRecording
 from .settings import DefaultValues
 from .reference_resolving import *
 from warnings import warn
-from .enums import ReferenceTypes, PerceptionTypes
+from .enums import *
 
 import importlib.util
 visualization_available = importlib.util.find_spec("PyQt5") is not None and \

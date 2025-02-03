@@ -67,7 +67,7 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
            perception: Optional[Path] = typer.Option(None, exists=True, readable=True, dir_okay=False),
            legacy: Optional[str] = typer.Option(None)):
     """
-    Test if a OMEGA Format file conforms to specification
+    Test if a OMEGAFormat file conforms to specification
     """
     if reference is not None:
         try:
@@ -76,10 +76,10 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
             raise e
         except Exception as e:
             raise ValueError('An error occurred while trying to read the reference recording file. '
-                            'Make sure it conforms to the OMEGA Format reference recording format. '
+                            'Make sure it conforms to the OMEGAFormat reference recording format. '
                             'If you are sure it does, please file an issue.') from e
         else: 
-            typer.echo(typer.style(f'The OMEGA Format reference file {reference} conforms to the specification and passes basic sanity checks.', fg=typer.colors.GREEN, bold=True))
+            typer.echo(typer.style(f'The OMEGAFormat reference file {reference} conforms to the specification and passes basic sanity checks.', fg=typer.colors.GREEN, bold=True))
 
 
     if perception is not None:
@@ -89,16 +89,16 @@ def verify(reference: Optional[Path] = typer.Option(None, exists=True, readable=
             raise e
         except Exception as e:
             raise ValueError('An error occurred while trying to read the perception recording file. '
-                             'Make sure it conforms to the OMEGA Format perception recording format. '
+                             'Make sure it conforms to the OMEGAFormat perception recording format. '
                              'If you are sure it does, please file an issue.') from e
         else: 
-            typer.echo(typer.style(f'The OMEGA Format perception file {reference} conforms to the specification and passes basic sanity checks.', fg=typer.colors.GREEN, bold=True))
+            typer.echo(typer.style(f'The OMEGAFormat perception file {reference} conforms to the specification and passes basic sanity checks.', fg=typer.colors.GREEN, bold=True))
 
 
 @app.command("version")
 def version():
     """
-        Returns the version of the OMEGA Format
+        Returns the version of the OMEGAFormat
     """
     import omega_format
     print(omega_format.__version__)

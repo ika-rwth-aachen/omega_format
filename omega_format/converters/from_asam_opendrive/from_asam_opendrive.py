@@ -31,12 +31,13 @@ def opendrive2roads(odr_file: Path, junction_id: Optional[int] = None,
     return roads
 
 @app.command("convert-odr", help='Convert ASAM OpenDRIVE to OMEGAFormat')
-def convert_opendrive_to_omega(
+def from_opendrive(
     input: Path = typer.Option(exists=True, readable=True, dir_okay=True),
-    output: Path = typer.Option(exists=True),
+    output: Path = typer.Option(),
     junction_id: Optional[int] = None,
     step_size: Optional[float] = 0.1):
-
+    input = Path(input)
+    output = Path(output)
     assert input.is_dir()==output.is_dir()
     if input.is_dir():
         inputs = list(input.glob('*.xodr'))

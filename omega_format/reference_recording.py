@@ -21,9 +21,14 @@ from .weather.weather import Weather
 from concurrent.futures import ThreadPoolExecutor
 from .settings import get_settings
 
+def is_road_user(obj):
+    return 'is_data_recorder' in obj.attrs or 'isDataRecorder' in obj.attrs
+def is_misc_object(obj):
+    return 'is_data_recorder' not in obj.attrs and 'isDataRecorder' not in obj.attrs
+
 class ReferenceRecording(InputClassBase):
     """
-    Class that represents the OMEGA Format Reference Recording in an object-oriented manner.
+    Class that represents the OMEGAFormat Reference Recording in an object-oriented manner.
     """
     meta_data: MetaData = Field(default_factory=MetaData)
     timestamps: Timestamps = Field(default_factory=Timestamps)
@@ -38,7 +43,7 @@ class ReferenceRecording(InputClassBase):
 
     @property 
     def dynamic_objects(self):
-        return {k: v for pre, d in zip(['M', "RU"], [self.misc_objects, self.road_users]) for k,v in d.items()}
+        return {k: v for d in [self.misc_objects, self.road_users] for k,v in d.items()}
 
     @classmethod
     def from_hdf5(cls, filename: Union[str, Path, io.BytesIO], validate: bool = True, legacy=None):
@@ -62,20 +67,14 @@ class ReferenceRecording(InputClassBase):
                 elif legacy is not None:
                     raise NotImplementedError()
                 else:
-                    if require_group(file, 'dynamicObjects'):
-                        misc_objects=DictWithProperties({k: MiscObject.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file['dynamicObjects'].items() if k.startswith('M')})
-                        road_users=DictWithProperties({k: RoadUser.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file['dynamicObjects'].items() if k.startswith('RU')})
-                    else:
-                        misc_objects = DictWithProperties([])
-                        road_users = DictWithProperties([])
                     self = func(
                         roads=Road.convert2objects(file, "road", True, validate=validate),
                         states=State.convert2objects(file, "state", True, validate=validate),
                         weather=Weather.from_hdf5(file['weather'], validate=validate) if require_group(file, "weather") else None,
                         timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
                         meta_data=MetaData.from_hdf5(file, validate=validate),
-                        misc_objects=misc_objects,
-                        road_users=road_users
+                        misc_objects=DictWithProperties({k: MiscObject.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file.get('dynamicObjects', {}).items() if is_misc_object(o)}),
+                        road_users=DictWithProperties({k: RoadUser.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file.get('dynamicObjects', {}).items() if is_road_user(o)})
                     )
 
                 self.ego_id = cls.extract_ego_id(road_users=self.road_users)
@@ -97,6 +96,7 @@ class ReferenceRecording(InputClassBase):
             raise ValueError('Only one data recorder is allowed')
 
     def to_hdf5(self, filename):
+        self.resolve()
         with h5py.File(filename, 'w') as f:
             self.meta_data.to_hdf5(f)
 

@@ -1,6 +1,7 @@
 from enum import Enum, IntEnum
 import warnings
 import importlib
+from typing import Union
 
 
 class ReferenceTypesSpecification(Enum):
@@ -580,23 +581,20 @@ class RoadUserType(IntEnum):
             sub_type = RoadUserSubTypeGeneral
         return sub_type(sub_type_int)
 
-class _RoadUserSubType():
-    pass
-
-class RoadUserSubTypeGeneral(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeGeneral(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
 
 
-class RoadUserSubTypeTRUCK(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeTRUCK(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
     STREET_CLEANING = 3
 
 
-class RoadUserSubTypeBUS(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeBUS(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
@@ -604,7 +602,7 @@ class RoadUserSubTypeBUS(_RoadUserSubType,IntEnum):
     BENDY_BUS = 4
 
 
-class RoadUserSubTypeMOTORCYCLE(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeMOTORCYCLE(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
@@ -612,7 +610,7 @@ class RoadUserSubTypeMOTORCYCLE(_RoadUserSubType,IntEnum):
     WITHOUT_RIDER = 4
 
 
-class RoadUserSubTypeBICYCLE(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeBICYCLE(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
@@ -620,7 +618,7 @@ class RoadUserSubTypeBICYCLE(_RoadUserSubType,IntEnum):
     WITHOUT_RIDER = 4
 
 
-class RoadUserSubTypePEDESTRIAN(_RoadUserSubType,IntEnum):
+class RoadUserSubTypePEDESTRIAN(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
@@ -628,7 +626,7 @@ class RoadUserSubTypePEDESTRIAN(_RoadUserSubType,IntEnum):
     ADULT = 4
 
 
-class RoadUserSubTypeWHEELCHAIR(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeWHEELCHAIR(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
@@ -636,15 +634,14 @@ class RoadUserSubTypeWHEELCHAIR(_RoadUserSubType,IntEnum):
     WITHOUT_RIDER = 4
 
 
-class RoadUserSubTypePERSONAL_MOBILITY_DEVICE(_RoadUserSubType,IntEnum):
+class RoadUserSubTypePERSONAL_MOBILITY_DEVICE(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
     WITH_RIDER = 3
     WITHOUT_RIDER = 4
 
-
-class RoadUserSubTypeTRAILER(_RoadUserSubType,IntEnum):
+class RoadUserSubTypeTRAILER(IntEnum):
     REGULAR = 0
     EMERGENCY = 1
     CONSTRUCTION = 2
@@ -653,6 +650,9 @@ class RoadUserSubTypeTRAILER(_RoadUserSubType,IntEnum):
     TRUCK_TRAILER = 5
     TRAIN_TRAILER = 6
     BENDY_BUS_TRAILER = 7
+
+
+RoadUserSubType = Union[RoadUserSubTypeGeneral,RoadUserSubTypeBICYCLE,RoadUserSubTypeBUS,RoadUserSubTypeMOTORCYCLE,RoadUserSubTypePEDESTRIAN,RoadUserSubTypePERSONAL_MOBILITY_DEVICE,RoadUserSubTypeTRAILER,RoadUserSubTypeTRUCK,RoadUserSubTypeWHEELCHAIR]
 
 class MiscObjectType(IntEnum):
     UNKNOWN = 0

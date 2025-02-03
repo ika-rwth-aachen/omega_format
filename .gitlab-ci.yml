@@ -1,12 +1,17 @@
-image: "python:3.9"
+variables:
+  UV_VERSION: 0.5
+  PYTHON_VERSION: 3.12
+  BASE_LAYER: bookworm
+default:
+  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
-before_script:
-  - pip install -e .['test']
+
+
 
 lint:
   stage: test
   before_script:
-    - pip install ruff
+    - uv pip install --system ruff
   script:
       - ruff check --output-format=gitlab --output-file=codequality.json || ruff check --output-format=concise --output-file=codequality.txt || ruff check --output-format=concise
   artifacts:
@@ -18,7 +23,31 @@ lint:
       expire_in: '30 days'
   allow_failure: false
 
+
+licensecheck:
+  stage: test
+  before_script:
+    - uv pip install --system -e .['visualization'] licensecheck
+  script:
+      - licensecheck
+  allow_failure: true
+
 test:
   stage: test
+  before_script: 
+    - uv pip install --system -e .['test']
   script:
     - pytest
+
+
+create_doc:
+  stage: test
+  before_script:
+    - apt-get update -q -y && apt-get install -y libgl1-mesa-dev
+    - uv pip install --system -e .[doc,visualization]
+  script:
+    - pdoc ./omega_format --html -o omegadoc --template-dir ./doc/templates/
+  artifacts:
+    when: always
+    paths:
+     - "omegadoc/**/*"

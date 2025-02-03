@@ -18,7 +18,7 @@ def in_timespan(obj, birth, death):
     birth = first timestamp idx
     death = last timestamp idx
     """
-    return birth <= obj.end and death >= obj.birth
+    return bool(birth <= obj.end and death >= obj.birth)
 
 
 def timespan_to_cutoff_idxs(obj, birth, death):
@@ -106,7 +106,7 @@ class DynamicObject(InputClassBase, BBXCornersClass):
         if self.connected_to is not None:
             group.attrs.create('connectedTo', data=self.connected_to.reference)
         else:
-            group.attrs.create('attachedTo', data=-1)
+            group.attrs.create('connectedTo', data=-1)
         if self.attached_to is not None:
             group.attrs.create('attachedTo', data=self.connected_to.reference)
         else:

@@ -28,17 +28,33 @@ class BoundingBox(InputClassBase):
         )
         return self
 
+    @classmethod 
+    def create(cls, length, width, height):
+        return cls(vec=np.array([length, width, height]))
+
     @property
     def length(self):
         return self.vec[0]
+    
+    @length.setter
+    def length(self, val):
+        self.vec[0] = val
 
     @property
     def width(self):
         return self.vec[1]
+    
+    @width.setter
+    def length(self, val):
+        self.vec[1] = val
 
     @property
     def height(self):
         return self.vec[2]
+    
+    @height.setter
+    def heigth(self, val):
+        self.vec[2] = val
 
     def to_hdf5(self, group: Group):
         dset_length = group.create_dataset('length', data=self.length)

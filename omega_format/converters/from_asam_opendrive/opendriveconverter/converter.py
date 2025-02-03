@@ -7,7 +7,7 @@ from .logger import logger
 
 def convert_opendrive(my_opendrive, step_size, junction_id=None):
     """
-    Converts the opendrive XML input into a omega format road network
+    Converts the opendrive XML input into a OMEGAFormat road network
     :param my_opendrive: opendrive XML
     :param step_size: resolution in which the maps points are sampled in meters
     :param junction_id: if set to a value (other than None), the conversion process will be restricted to the roads
@@ -29,7 +29,7 @@ def convert_opendrive(my_opendrive, step_size, junction_id=None):
     lookup_table = []   # [road id | lane_section | laneID | road id VVM | lane id VVM]
     reference_table = []    # [omega signal id | omega road id | odr signal id | odr reference id | odr connected_to id]
 
-    logger.info(f'Starting conversion of {len(my_opendrive.roads)} opendrive roads into omega format.')
+    logger.info(f'Starting conversion of {len(my_opendrive.roads)} opendrive roads into OMEGAFormat.')
     with tqdm(total=len(my_opendrive.roads), desc='roads', leave=False) as progress:
 
         # loop over individual opendrive roads and add them to omega roads dictionary in my_roads

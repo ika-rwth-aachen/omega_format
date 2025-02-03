@@ -19,5 +19,6 @@ cpp/build-*
 *CMakeLists.txt.user
 .idea/
 
+test/test_readme.py
 *.DS_store
 commit_template.txt

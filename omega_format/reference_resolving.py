@@ -3,7 +3,6 @@ from h5py import Group
 from copy import deepcopy
 from collections import UserDict, UserList
 from .settings import get_settings
-from warnings import warn
 from pydantic import BaseModel, ConfigDict
 from typing import Any, Callable, Generator
 
@@ -13,8 +12,6 @@ __all__ = ['ReferenceDict', 'require_group', 'ReferenceElement', 'InputClassBase
 
 def require_group(h5file, group_str):
     require_group = False if get_settings().ALLOW_MISSING_TL_GROUPS and group_str not in h5file.keys() else True
-    if not require_group:
-        warn(f'{group_str} not parsed.')
     return require_group
 
 

@@ -1,4 +1,4 @@
-from pydantic.fields import Field, Any
+from pydantic.fields import Field
 
 from .dynamic_object import DynamicObject
 from .vehicle_lights import VehicleLights
@@ -11,8 +11,8 @@ from h5py import Group
 
 
 class RoadUser(DynamicObject):
-    type: ReferenceTypes.RoadUserType = ReferenceTypes.RoadUserType.REGULAR
-    sub_type: Any = None # ReferenceTypes.RoadUserSubType
+    type: ReferenceTypes.RoadUserType
+    sub_type: ReferenceTypes.RoadUserSubType = ReferenceTypes.RoadUserSubTypeGeneral.REGULAR
     is_data_recorder: bool = False
     vehicle_lights: VehicleLights = Field(default_factory=VehicleLights)
     id: str = 'RU-1'

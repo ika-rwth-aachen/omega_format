@@ -19,7 +19,7 @@ import importlib
 
 
 perc_format_ver = "1.3"
-format_version = importlib.metadata.version('ase_engine')
+format_version = importlib.metadata.version('omega_format')
 
 class Converter:
     perception_recording: PerceptionRecording

@@ -15,8 +15,8 @@ from ..reference_resolving import InputClassBase, ReferenceDict, ReferenceElemen
 class Lane(InputClassBase):
     border_right: Optional[ReferenceElement] = None
     border_left: Optional[ReferenceElement] = None
-    type: Optional[ReferenceTypes.LaneType] = None
-    sub_type: Optional[ReferenceTypes.LaneSubType] = None
+    type: Optional[ReferenceTypes.LaneType] = ReferenceTypes.LaneType.UNKNOWN
+    sub_type: Optional[ReferenceTypes.LaneSubType] = ReferenceTypes.LaneSubType.UNKNOWN
     boundaries: DictWithProperties = Field(default_factory=DictWithProperties)
     predecessors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     successors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
@@ -104,8 +104,8 @@ class Lane(InputClassBase):
 
     def to_hdf5(self, group: Group):
         group.attrs.create('class', data=self.classification)
-        group.attrs.create('type', data=self.type)
-        group.attrs.create('subtype', data=self.sub_type)
+        group.attrs.create('type', data=self.type if self.type is not None else ReferenceTypes.LaneType.UNKNOWN)
+        group.attrs.create('subtype', data=int(self.sub_type if self.sub_type is not None else ReferenceTypes.LaneSubType.UNKNOWN))
         group.create_dataset('borderRight', data=self.border_right.reference)
         group.create_dataset('borderLeft', data=self.border_left.reference)
         group.attrs.create('invertedLeft', data=self.border_left_is_inverted)

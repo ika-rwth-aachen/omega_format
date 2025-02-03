@@ -20,7 +20,7 @@ class Visualizer(QMainWindow):
         self._app = pg.mkQApp()
         self._app.setOrganizationName('Institut für Kraftfahrzeuge Aachen')
         self._app.setOrganizationDomain('www.ika.rwth-aachen.de')
-        self._app.setApplicationName('OMEGA Format Visualizer')
+        self._app.setApplicationName('OMEGAFormat Visualizer')
         self._app.setStyle("Fusion")
         self._app.setWindowIcon(QIcon(str(Path(__file__).parent.resolve()/'ui/icon.svg')))
 

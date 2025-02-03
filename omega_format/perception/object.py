@@ -93,7 +93,7 @@ class Object(InputClassBase):
         return self.birth_stamp + self.len
 
     def in_timespan(obj, birth, death):
-        return birth < (obj.birth_stamp + len(obj.dist_lateral.val)) and death >= obj.birth_stamp
+        return bool(birth < (obj.birth_stamp + len(obj.dist_lateral.val)) and death >= obj.birth_stamp)
 
     def cut_to_timespan(self, birth, death):
         # local timespan of the object, not recording!

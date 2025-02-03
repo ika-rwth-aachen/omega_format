@@ -288,7 +288,7 @@ def process_object(my_road, center_line_points, odr_object, lookup_table, index,
         if odr_object.borders:
             """
             In OpenDrive Objects can have a separate border defined in object.borders. This is not transferable into
-            omega format usually. Maybe some detailed information of the object can be extracted through the border.
+            OMEGAFormat usually. Maybe some detailed information of the object can be extracted through the border.
             """
             pass
 
@@ -296,7 +296,7 @@ def process_object(my_road, center_line_points, odr_object, lookup_table, index,
         if odr_object.validity:
             """
             In OpenDrive Objects can be rendered to be valid for specific lanes only. For objects this is not
-            provided in omega format.
+            provided in OMEGAFormat.
             """
             pass
 

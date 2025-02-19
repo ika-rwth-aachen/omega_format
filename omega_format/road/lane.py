@@ -1,22 +1,29 @@
-from pydantic.fields import Field
-import numpy as np
-from h5py import Group
 from typing import Optional
 
+import numpy as np
+import shapely
+from h5py import Group
+from pydantic.fields import Field
+
+from ..enums import ReferenceTypes
+from ..reference_resolving import (
+    DictWithProperties,
+    InputClassBase,
+    ReferenceDict,
+    ReferenceElement,
+    raise_not_resolved,
+)
 from .border import Border
 from .boundary import Boundary
 from .flat_marking import FlatMarking
 from .surface import Surface
-from ..enums import ReferenceTypes
-from ..reference_resolving import DictWithProperties
-from ..reference_resolving import InputClassBase, ReferenceDict, ReferenceElement, raise_not_resolved
 
 
 class Lane(InputClassBase):
     border_right: Optional[ReferenceElement] = None
     border_left: Optional[ReferenceElement] = None
     type: Optional[ReferenceTypes.LaneType] = ReferenceTypes.LaneType.UNKNOWN
-    sub_type: Optional[ReferenceTypes.LaneSubType] = ReferenceTypes.LaneSubType.UNKNOWN
+    subtype: Optional[ReferenceTypes.LaneSubType] = ReferenceTypes.LaneSubType.UNKNOWN
     boundaries: DictWithProperties = Field(default_factory=DictWithProperties)
     predecessors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
     successors: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Lane))
@@ -34,7 +41,7 @@ class Lane(InputClassBase):
             border_right=ReferenceElement(group['borderRight'][:], Border),
             border_left=ReferenceElement(group['borderLeft'][:], Border),
             type=ReferenceTypes.LaneType(group.attrs["type"]),
-            sub_type=ReferenceTypes.LaneSubType(group.attrs["subtype"]),
+            subtype=ReferenceTypes.LaneSubType(group.attrs["subtype"]),
             boundaries=Boundary.convert2objects(group, 'boundary', validate=validate),
             predecessors=ReferenceDict(group['predecessor'], Lane),
             successors=ReferenceDict(group['successor'], Lane),
@@ -50,7 +57,7 @@ class Lane(InputClassBase):
     def to_dict(self):
         output: dict = dict()
         output["type"] = ReferenceTypes.LaneType(self.type).name
-        output["subtype"] = ReferenceTypes.LaneSubType(self.sub_type).name
+        output["subtype"] = ReferenceTypes.LaneSubType(self.subtype).name
         output["border_right"] = self.border_left.reference
         output["border_left"] = self.border_right.reference
         boundaries_dict = dict()
@@ -91,7 +98,7 @@ class Lane(InputClassBase):
         lb, rb = self.oriented_borders()
         return [lb[-1], rb[-1]]
 
-    def polygon(self):
+    def get_polygon(self):
         lb, rb = self.oriented_borders()
         rb = list(reversed(rb))
         return lb + rb
@@ -105,7 +112,7 @@ class Lane(InputClassBase):
     def to_hdf5(self, group: Group):
         group.attrs.create('class', data=self.classification)
         group.attrs.create('type', data=self.type if self.type is not None else ReferenceTypes.LaneType.UNKNOWN)
-        group.attrs.create('subtype', data=int(self.sub_type if self.sub_type is not None else ReferenceTypes.LaneSubType.UNKNOWN))
+        group.attrs.create('subtype', data=int(self.subtype if self.subtype is not None else ReferenceTypes.LaneSubType.UNKNOWN))
         group.create_dataset('borderRight', data=self.border_right.reference)
         group.create_dataset('borderLeft', data=self.border_left.reference)
         group.attrs.create('invertedLeft', data=self.border_left_is_inverted)
@@ -119,3 +126,21 @@ class Lane(InputClassBase):
         flat_marking_group = group.create_group('flatMarking')
         for id, flat_marking in self.flat_markings.items():
             flat_marking.to_hdf5(flat_marking_group.create_group(str(id)))
+
+    @property
+    def sub_type(self):
+        return self.subtype
+    
+    @sub_type.setter
+    def sub_type(self, v):
+        self.subtype = v
+        
+    @property
+    def polygon(self):
+        polygon = shapely.geometry.Polygon([(x, y) for x, y in self.get_polygon()])
+        if not polygon.is_valid:
+            lb, rb = self.oriented_borders()
+            polygon = shapely.geometry.Polygon(np.array(lb + list(reversed(rb))))
+            if not polygon.is_valid:
+                polygon = polygon.convex_hull
+        return polygon

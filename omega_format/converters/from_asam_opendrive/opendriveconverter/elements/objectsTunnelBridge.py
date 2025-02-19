@@ -19,7 +19,7 @@ def convert_objects_bridge(my_road, center_line_points, bridge, road):
         check_polyline(polyline, None)
         new_structural_object = StructuralObject(type=structural_obj_type, polyline=polyline)
         my_road.structural_objects.update({len(my_road.structural_objects): new_structural_object})
-        # Lane.sub_type is already identified in "extract_road_data"
+        # Lane.subtype is already identified in "extract_road_data"
 
     return my_road
 
@@ -39,7 +39,7 @@ def convert_objects_tunnel(my_road, center_line_points, tunnel, road):
         check_polyline(polyline)
         new_structural_object = StructuralObject(type = structural_obj_type, polyline = polyline)
         my_road.structural_objects.update({len(my_road.structural_objects): new_structural_object})
-        # Lane.sub_type is already identified in "extract_road_data"
+        # Lane.subtype is already identified in "extract_road_data"
     return my_road
 
 

@@ -126,7 +126,7 @@ def set_boundary(center_line_points, current_road_mark_s, next_road_mark_s, last
     my_boundary.type = 0x0
     my_boundary.condition = 0x0
     my_boundary.height = 0x0
-    my_boundary.sub_type = 0x0
+    my_boundary.subtype = 0x0
     my_boundary.color = 0x0
 
     if current_road_mark is not None:
@@ -149,7 +149,7 @@ def set_boundary(center_line_points, current_road_mark_s, next_road_mark_s, last
             my_boundary.color = boundary_color_mapping(current_road_mark.color)
 
         if current_road_mark.material is not None:
-            my_boundary.sub_type = boundary_subtype_mapping(current_road_mark.material)
+            my_boundary.subtype = boundary_subtype_mapping(current_road_mark.material)
 
     return my_boundary
 

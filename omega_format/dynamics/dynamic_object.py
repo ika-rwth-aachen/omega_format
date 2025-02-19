@@ -1,17 +1,29 @@
-from pydantic import Field
+from typing import Optional
 
 import numpy as np
+import shapely
+import xarray as xr
+from h5py import Group
+from pydantic import Field
+from typing_extensions import Annotated
 
+from ..enums import ReferenceTypes
+from ..reference_resolving import InputClassBase, ReferenceElement
+from ..settings import DefaultValues
 from .bounding_box import BoundingBox
 from .trajectory import Trajectory
-from ..settings import DefaultValues
-from ..enums import ReferenceTypes
-from ..geometry import BBXCornersClass
-from ..reference_resolving import InputClassBase, ReferenceElement
-import xarray as xr
-from typing import Optional
-from h5py import Group
-from typing_extensions import Annotated
+
+
+def rot_x(x, y, phi):
+    return x * np.cos(phi) - y * np.sin(phi)
+
+
+def rot_y(x, y, phi):
+    return x * np.sin(phi) + y * np.cos(phi)
+
+
+def rot_point(orig_x, orig_y, x, y, phi):
+    return np.array([orig_x + rot_x(x, y, phi), orig_y + rot_y(x, y, phi)])
 
 def in_timespan(obj, birth, death):
     """
@@ -37,13 +49,12 @@ def timespan_to_cutoff_idxs(obj, birth, death):
     return cutoff_start, cutoff_end, own_birth
 
 
-class DynamicObject(InputClassBase, BBXCornersClass):
+class DynamicObject(InputClassBase):
     bb: BoundingBox = Field(default_factory=BoundingBox)
     tr: Trajectory = Field(default_factory=Trajectory)
     birth: Annotated[int, Field(ge=0)]
     connected_to: Optional[ReferenceElement] = None
     attached_to: Optional[ReferenceElement] = None
-    """first timestamp idx"""
 
     @property
     def end(self):
@@ -97,10 +108,15 @@ class DynamicObject(InputClassBase, BBXCornersClass):
         else:
             return self.bb.width
 
-    def to_xarray(self, rr):
+    def to_xarray(self):
+        if self.timestamps is None:
+            raise RuntimeError('You have to run `set_timestamps()` of the associated recording')
         return xr.Dataset({k: ('time', v) for k, v in self.tr.model_dump().items()},
-                          coords={'time':rr.timestamps.val[self.birth:self.end+1]})
+                          coords={'time': self.timestamps})
 
+    def _set_timestamps(self, rr):
+        self.timestamps = rr.timestamps[self.birth:self.end+1]
+    
     def to_hdf5(self, group: Group):
         group.attrs.create('birthStamp', data=self.birth)
         if self.connected_to is not None:
@@ -113,3 +129,37 @@ class DynamicObject(InputClassBase, BBXCornersClass):
             group.attrs.create('attachedTo', data=-1)
         self.bb.to_hdf5(group.create_group('boundBox'))
         self.tr.to_hdf5(group.create_group('trajectory'))
+
+    def model_post_init(self, __context):
+        self._set_corners_and_polygon()
+        
+    def _set_corners_and_polygon(self):
+        try:
+            heading = self.tr.heading / 180 * np.pi
+            x = self.tr.pos_x
+            y = self.tr.pos_y
+        except AttributeError as e:
+            try:
+                heading = self.heading / 180 * np.pi
+                x = self.position.pos_x
+                y = self.position.pos_y
+            except AttributeError as ee:
+                raise AttributeError('Object must either have property Trajectory or position') from (e, ee)
+        c2f = self.length / 2
+        c2l = self.width / 2
+        front_left = rot_point(x, y, +c2f, +c2l, heading).T
+        front_right = rot_point(x, y, +c2f, -c2l, heading).T
+        back_right = rot_point(x, y, -c2f, -c2l, heading).T
+        back_left = rot_point(x, y, -c2f, +c2l, heading).T
+        self.tr.polygon = shapely.polygons(np.stack([front_left, front_right, back_right, back_left]).swapaxes(0,1))
+        
+    def __getattr__(self, k):
+        try:
+            return getattr(self.tr, k)
+        except AttributeError:
+            try:
+                return getattr(self.bb, k)
+            except AttributeError:
+                raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{k}")
+        
+        

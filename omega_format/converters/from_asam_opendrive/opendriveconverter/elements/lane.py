@@ -246,7 +246,7 @@ def set_lanes(my_road, direction_correct, left_index, right_index, opendrive_lan
 
     my_lane = Lane()
     my_lane.type = lane_type
-    my_lane.sub_type = lane_subtype
+    my_lane.subtype = lane_subtype
     reference_left = ReferenceElement((vvm_road_id, left_index), Border)
     reference_right = ReferenceElement((vvm_road_id, right_index), Border)
 

@@ -38,10 +38,10 @@ class SnippetContainer():
                 self.convert_perception_coordinates_to_reference_coordinates()
                 self.adjust_perception_object_birth_stamps()
 
-            self.timestamps = self.reference.timestamps.val
+            self.timestamps = self.reference.timestamps
             self.identifier = '' if self.reference.ego_id is None else f'ego_id: {self.reference.ego_id}'
         elif self.perception is not None:
-            self.timestamps = perception.timestamps.val
+            self.timestamps = perception.timestamps
             self.identifier = 'only_perception'
             self.convert_perception_coordinates_to_plot_coordinates()
         else:

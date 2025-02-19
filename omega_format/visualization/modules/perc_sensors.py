@@ -3,7 +3,6 @@ import pyqtgraph as pg
 from PyQt5 import QtWidgets
 
 from .base import VisualizationModule, SnippetContainer
-from ...timestamps import Timestamps
 
 
 class VisualizePercSensors(VisualizationModule):
@@ -12,7 +11,7 @@ class VisualizePercSensors(VisualizationModule):
         super().__init__("Perception: Sensors FOV", **kwargs)
         self.requires = [SnippetContainer.REQ_PERCEPTION]
 
-    def visualize_dynamics(self, snip, timestamp: Timestamps, visualizer):
+    def visualize_dynamics(self, snip, timestamp, visualizer):
         if snip.identifier != 'only_perception' and not snip.reference.ego_vehicle.in_timespan(timestamp, timestamp):
             return []
 

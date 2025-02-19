@@ -1,4 +1,21 @@
 # Changelog
+## v4.4
+- add `polygon` to dyanmic objects that contains sequence of shapely polygons over time
+- rename `sub_type` to `subtype`
+
+## v4.3
+- Added converters for OpenDrive and LevelXData datasets.
+- `road.idx` and `lane.idx` are now set to the object ids on calling `reference_recording.resolve()`; 
+- Use pyproject.toml
+- update pydantic to v2
+
+## v4
+- enum values TODO are renamed to UNKOWN, 
+- recorder_id and recording_id are now strings and must be set uniuqe
+- add orange light 
+
+## v3.1
+- Added customInformation and referenceModality field
 
 ## v3.0
 

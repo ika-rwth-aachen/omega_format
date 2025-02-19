@@ -172,7 +172,7 @@ def create_boundary_from_object(my_road, center_line_points, lookup_table, odr_o
     my_boundary.type = object_to_boundary_mapping(odr_object.type)
     my_boundary.condition = 0x0
     my_boundary.height = 0x0
-    my_boundary.sub_type = 0x0
+    my_boundary.subtype = 0x0
     my_boundary.color = 0x0
 
     # get start index

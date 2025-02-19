@@ -90,7 +90,7 @@ class Converter:
         self.perception_recording.recorder_number = self.reference_recording.meta_data.recorder_number
         self.perception_recording.recording_number = self.reference_recording.meta_data.recording_number
         self.perception_recording.ego_id = self.ego_id
-        self.perception_recording.timestamps.val = self.reference_recording.timestamps.val
+        self.perception_recording.timestamps = self.reference_recording.timestamps
         self.perception_recording.custom_information = 'artificially created sensor data'
 
     def add_ego_position(self):

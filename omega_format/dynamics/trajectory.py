@@ -12,6 +12,7 @@ class Trajectory(InputClassBase):
     pos_y: pnd.NpNDArray
     pos_z: pnd.NpNDArray
     heading: pnd.NpNDArray
+    timestamps: Optional[pnd.NpNDArray] = Field(default=None)
     roll: Optional[pnd.NpNDArray] = Field(default=None)
     pitch: Optional[pnd.NpNDArray] = Field(default=None)
     vel_longitudinal: Optional[pnd.NpNDArray] = Field(default=None)
@@ -24,6 +25,10 @@ class Trajectory(InputClassBase):
     roll_der: Optional[pnd.NpNDArray] = Field(default=None)
     pitch_der: Optional[pnd.NpNDArray] = Field(default=None)
     heading_der: Optional[pnd.NpNDArray] = Field(default=None)
+    
+    # set automatically
+    polygon: pnd.NpNDArray|None = None
+    
     @model_validator(mode='after')
     def check_array_length(self):
         assert np.all(np.diff([v.shape[0] for v in self.model_dump().values() if v is not None])==0), 'all fields in Trajectory need to have the same length!'

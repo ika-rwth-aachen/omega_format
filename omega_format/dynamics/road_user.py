@@ -12,7 +12,7 @@ from h5py import Group
 
 class RoadUser(DynamicObject):
     type: ReferenceTypes.RoadUserType
-    sub_type: ReferenceTypes.RoadUserSubType = ReferenceTypes.RoadUserSubTypeGeneral.REGULAR
+    subtype: ReferenceTypes.RoadUserSubType = ReferenceTypes.RoadUserSubTypeGeneral.REGULAR
     is_data_recorder: bool = False
     vehicle_lights: VehicleLights = Field(default_factory=VehicleLights)
     id: str = 'RU-1'
@@ -28,7 +28,7 @@ class RoadUser(DynamicObject):
             self = func(
                 id=sub_group_name,
                 type=classification_type,
-                sub_type=ReferenceTypes.RoadUserType.get_subtype(classification_type, group.attrs["subtype"]),
+                subtype=ReferenceTypes.RoadUserType.get_subtype(classification_type, group.attrs["subtype"]),
                 connected_to=ReferenceElement(id=group.attrs["connectedTo"], object_class=DynamicObject),
                 attached_to=ReferenceElement(id=group.attrs["attachedTo"], object_class=DynamicObject),
                 is_data_recorder=group.attrs["isDataRecorder"].astype(bool),
@@ -50,7 +50,7 @@ class RoadUser(DynamicObject):
         self = func(
             id=f'RU{sub_group_name}',
             type=classification_type,
-            sub_type=ReferenceTypes.RoadUserType.get_subtype(classification_type, group.attrs["subtype"]),
+            subtype=ReferenceTypes.RoadUserType.get_subtype(classification_type, group.attrs["subtype"]),
             connected_to=ReferenceElement(id=f'RU{group.attrs["connectedTo"]}', object_class=DynamicObject),
             is_data_recorder=group.attrs["isDataRecorder"].astype(bool),
             birth=group.attrs["birthStamp"].astype(int),
@@ -74,5 +74,13 @@ class RoadUser(DynamicObject):
         super().to_hdf5(group)
         group.attrs.create('isDataRecorder', data=self.is_data_recorder)
         group.attrs.create('type', data=self.type)
-        group.attrs.create('subtype', data=self.sub_type)
+        group.attrs.create('subtype', data=self.subtype)
         self.vehicle_lights.to_hdf5(group.create_group('vehicleLights'))
+
+    @property
+    def sub_type(self):
+        return self.subtype
+    
+    @sub_type.setter
+    def sub_type(self, v):
+        self.subtype = v

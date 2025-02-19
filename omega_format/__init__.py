@@ -7,7 +7,6 @@ from .geometry import *
 from .dynamics import *
 from .weather import *
 
-from .timestamps import Timestamps
 from .reference_recording import ReferenceRecording
 from .meta_data import MetaData
 from .perception_recording import PerceptionRecording

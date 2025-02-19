@@ -10,7 +10,7 @@ from .bounding_box import BoundingBox
 
 class MiscObject(DynamicObject):
     type: ReferenceTypes.MiscObjectType = Field(default_factory=ReferenceTypes.MiscObjectType)
-    sub_type: ReferenceTypes.MiscObjectSubType = Field(default_factory=ReferenceTypes.MiscObjectSubType)
+    subtype: ReferenceTypes.MiscObjectSubType = Field(default_factory=ReferenceTypes.MiscObjectSubType)
     id: str = 'M-1'
 
     @classmethod
@@ -27,7 +27,7 @@ class MiscObject(DynamicObject):
                 connected_to=ReferenceElement(id=group.attrs["connectedTo"], object_class=DynamicObject),
                 attached_to=ReferenceElement(id=group.attrs["attachedTo"], object_class=DynamicObject),
                 type=ReferenceTypes.MiscObjectType(group.attrs["type"]),
-                sub_type=ReferenceTypes.MiscObjectSubType(group.attrs["subtype"]),
+                subtype=ReferenceTypes.MiscObjectSubType(group.attrs["subtype"]),
                 birth=group.attrs["birthStamp"].astype(int)
             )
             return self
@@ -43,7 +43,7 @@ class MiscObject(DynamicObject):
             tr=Trajectory.from_hdf5(group['trajectory'], validate=validate, legacy=legacy),
             bb=BoundingBox.from_hdf5(group['boundBox'], validate=validate, legacy=legacy),
             type=ReferenceTypes.MiscObjectType(group.attrs["type"]),
-            sub_type=ReferenceTypes.MiscObjectSubType(group.attrs["subtype"]),
+            subtype=ReferenceTypes.MiscObjectSubType(group.attrs["subtype"]),
             birth=group.attrs["birthStamp"].astype(int)
         )
         return self
@@ -56,4 +56,12 @@ class MiscObject(DynamicObject):
     def to_hdf5(self, group: Group):
         super().to_hdf5(group)
         group.create_dataset('type', data=self.type)
-        group.create_dataset('subtype', data=self.sub_type)
+        group.create_dataset('subtype', data=self.subtype)
+
+    @property
+    def sub_type(self):
+        return self.subtype
+    
+    @sub_type.setter
+    def sub_type(self, v):
+        self.subtype = v

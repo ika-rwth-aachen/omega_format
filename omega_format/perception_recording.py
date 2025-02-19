@@ -1,19 +1,21 @@
-from collections import UserDict
 import io
-from pydantic.fields import Field
+from collections import UserDict
 from pathlib import Path
 from typing import Union
 
 import h5py
+import numpy as np
+import pydantic_numpy.typing as pnd
+from pydantic.fields import Field
 
 from .perception.ego_position import EgoPosition
 from .perception.meta_object import MetaObject
 from .perception.misc_info import MiscInfo
 from .perception.object import Object
 from .perception.sensor import Sensor
-from .timestamps import Timestamps
-from .settings import get_settings
 from .reference_resolving import InputClassBase
+from .settings import get_settings
+
 
 class PerceptionRecording(InputClassBase):
     """
@@ -27,7 +29,7 @@ class PerceptionRecording(InputClassBase):
     ego_offset: float = 0.
     custom_information: str = ""
 
-    timestamps: Timestamps = Field(default_factory=Timestamps)
+    timestamps: pnd.NpNDArray = Field(default_factory=np.array)
     meta_object: MetaObject = Field(default_factory=MetaObject)
     objects: UserDict = Field(default_factory=UserDict)
     sensors: UserDict = Field(default_factory=UserDict)
@@ -39,7 +41,6 @@ class PerceptionRecording(InputClassBase):
         if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
                 func = cls if validate else cls.model_construct
-                tfunc = Timestamps if validate else Timestamps.model_construct
                 self = func(
                     format_version=file.attrs['formatVersion'],
                     converter_version=file.attrs['converterVersion'],
@@ -48,7 +49,7 @@ class PerceptionRecording(InputClassBase):
                     ego_id=file.attrs['egoID'],
                     ego_offset=file.attrs['egoOffset'],
                     custom_information=file.attrs['customInformation'],
-                    timestamps=tfunc(val=file['timestamps'][()]),
+                    timestamps=file['timestamps'][()],
                     meta_object=MetaObject.from_hdf5(file['object'], validate=validate),
                     ego_position=EgoPosition.from_hdf5(file['egoPosition'], validate=validate),
                     sensors=UserDict({int(i): Sensor.from_hdf5(group, validate=validate) for i, group in file['sensor'].items()}),
@@ -69,7 +70,7 @@ class PerceptionRecording(InputClassBase):
             file.attrs.create('egoOffset', data=self.ego_offset)
             file.attrs.create('customInformation', data=self.custom_information)
 
-            file.create_dataset('timestamps', data=self.timestamps.val, **get_settings().hdf5_compress_args)
+            file.create_dataset('timestamps', data=self.timestamps, **get_settings().hdf5_compress_args)
 
             self.ego_position.to_hdf5(file.create_group('egoPosition'))
 

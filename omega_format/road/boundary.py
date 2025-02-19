@@ -12,7 +12,7 @@ class Boundary(InputClassBase):
     poly_index_start: Annotated[int, Field(ge=0)] = 0
     poly_index_end: Annotated[int, Field(ge=0)] = 0
     type: Optional[ReferenceTypes.BoundaryType] = None
-    sub_type: Optional[ReferenceTypes.BoundarySubType] = None
+    subtype: Optional[ReferenceTypes.BoundarySubType] = None
     is_right_boundary: Optional[bool]  = None
     overridden_by: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Boundary))
     overrides: ReferenceDict = Field(default_factory=lambda: ReferenceDict([], Boundary))
@@ -28,7 +28,7 @@ class Boundary(InputClassBase):
             poly_index_start=group.attrs["polyIndexStart"],
             poly_index_end=group.attrs["polyIndexEnd"],
             type=ReferenceTypes.BoundaryType(group.attrs["type"]),
-            sub_type=ReferenceTypes.BoundarySubType(group.attrs["subtype"]),
+            subtype=ReferenceTypes.BoundarySubType(group.attrs["subtype"]),
             is_right_boundary=group.attrs["right"].astype(bool),
             height=group.attrs["height"],
             layer_flag=ReferenceTypes.LayerFlag(group.attrs["layerFlag"]),
@@ -42,7 +42,7 @@ class Boundary(InputClassBase):
         output["type"] = ReferenceTypes.BoundaryType(self.type).name
         output["is_right_boundary"] = self.is_right_boundary
         output["height"] = self.height
-        output["sub_type"] = self.sub_type
+        output["subtype"] = self.subtype
         output["color"] = ReferenceTypes.BoundaryColor(self.color).name
         output["condition"] = ReferenceTypes.BoundaryCondition(self.condition).name
         output["overridden_by"] = self.overridden_by
@@ -66,7 +66,15 @@ class Boundary(InputClassBase):
         group.attrs.create('polyIndexStart', data=self.poly_index_start)
         group.attrs.create('polyIndexEnd', data=self.poly_index_end)
         group.attrs.create('type', data=self.type)
-        group.attrs.create('subtype', data=self.sub_type)
+        group.attrs.create('subtype', data=self.subtype)
         group.attrs.create('right', data=self.is_right_boundary)
         group.create_dataset('overriddenBy', data=self.overridden_by.reference)
         group.create_dataset('overrides', data=self.overrides.reference)
+
+    @property
+    def sub_type(self):
+        return self.subtype
+    
+    @sub_type.setter
+    def sub_type(self, v):
+        self.subtype = v

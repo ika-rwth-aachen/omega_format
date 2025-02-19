@@ -5,14 +5,13 @@ from pydantic.dataclasses import Field
 from .lane import Lane
 from .state import State
 from ..settings import DefaultValues
-from ..dynamics.dynamic_object import BBXCornersClass
 from ..enums import ReferenceTypes
 from ..geometry import Position
 from ..reference_resolving import ReferenceDict, InputClassBase, raise_not_resolved
 from typing_extensions import Annotated
 from typing import Optional
 
-class Sign(InputClassBase, BBXCornersClass):
+class Sign(InputClassBase):
     type: ReferenceTypes.SignType
     value: int
     history: str

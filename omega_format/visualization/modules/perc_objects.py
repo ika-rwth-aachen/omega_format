@@ -4,7 +4,6 @@ import pyqtgraph as pg
 from .base import VisualizationModule, SnippetContainer
 from ..pyqt_helper import visualize_perc_object, visualize_perc_trajectory, get_pen
 from ...perception import Object
-from ...timestamps import Timestamps
 
 
 def print_heading(obj: Object, index: int):
@@ -28,7 +27,7 @@ class VisualizePerc(VisualizationModule):
         return text
 
 
-    def visualize_dynamics(self, snip, timestamp: Timestamps, visualizer):
+    def visualize_dynamics(self, snip, timestamp, visualizer):
         items = []
 
         for id_, obj in snip.perception.objects.items():  # type: int, Object
@@ -56,7 +55,7 @@ class VisualizePercPath(VisualizationModule):
         self.pen = get_pen((255, 255, 255, 255))
 
 
-    def visualize_dynamics(self, snip, timestamp: Timestamps, visualizer):
+    def visualize_dynamics(self, snip, timestamp, visualizer):
         """
         Visualizes the full paths of the objects
         """

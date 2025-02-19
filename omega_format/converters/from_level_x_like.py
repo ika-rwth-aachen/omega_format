@@ -40,7 +40,7 @@ def parse_highD_road(recMeta, tracks):
                 border_right=ReferenceElement([rid,right_border_id], omega_format.Border),
                 border_left=ReferenceElement([rid,left_border_id], omega_format.Border),
                 type=omega_format.enums.reference_types.LaneType.DRIVING,
-                sub_type=omega_format.enums.reference_types.LaneSubType.UNKNOWN,
+                subtype=omega_format.enums.reference_types.LaneSubType.UNKNOWN,
                 classification=omega_format.enums.reference_types.LaneClass.NONE,
                 border_right_is_inverted=direction=='lowerLaneMarkings',
                 border_left_is_inverted=direction=='lowerLaneMarkings',
@@ -48,12 +48,12 @@ def parse_highD_road(recMeta, tracks):
                                                                         color=omega_format.enums.reference_types.BoundaryColor.WHITE,
                                                                         condition=omega_format.enums.reference_types.BoundaryCondition.FINE,
                                                                         type=bound_dashed if right_border_id not in [border_ids[0],border_ids[-1]] else bound_solid,
-                                                                        sub_type=omega_format.enums.reference_types.BoundarySubType.THICK,), 
+                                                                        subtype=omega_format.enums.reference_types.BoundarySubType.THICK,), 
                                                1: omega_format.Boundary(poly_index_start=0, poly_index_end=3, is_right_boundary=False,
                                                                         color=omega_format.enums.reference_types.BoundaryColor.WHITE,
                                                                         condition=omega_format.enums.reference_types.BoundaryCondition.FINE,
                                                                         type=bound_dashed if left_border_id not in [border_ids[0],border_ids[-1]] else bound_solid,
-                                                                        sub_type=omega_format.enums.reference_types.BoundarySubType.THICK,)})
+                                                                        subtype=omega_format.enums.reference_types.BoundarySubType.THICK,)})
             )
         roads[rid] = omega_format.Road(
             lanes=lanes,
@@ -129,7 +129,7 @@ def convert_from_levelx_like(recMeta, tracksMeta, tracks):
                 elif road_user['class'] == 'pedestrian':
                     bb[:2] = [.5, .5]
         bb = omega_format.dynamics.bounding_box.BoundingBox(vec=bb)
-        road_users[f'RU({road_user[cm["trackId"]]})'] = omega_format.RoadUser(bb=bb, tr=tr, birth=road_user.initialFrame , sub_type=ru.RoadUserSubTypeGeneral.REGULAR, type=type_mapping[road_user['class']], connected_to=ReferenceElement(-1, omega_format.RoadUser))
+        road_users[f'RU({road_user[cm["trackId"]]})'] = omega_format.RoadUser(bb=bb, tr=tr, birth=road_user.initialFrame , subtype=ru.RoadUserSubTypeGeneral.REGULAR, type=type_mapping[road_user['class']], connected_to=ReferenceElement(-1, omega_format.RoadUser))
     if is_highd:
         start_time = datetime.strptime(str(recMeta.iloc[0].startTime) + ' ' + str(recMeta.iloc[0].month) + ' ' + str(recMeta.iloc[0].weekDay), '%H:%M %m.%Y %a')
     else:
@@ -148,7 +148,7 @@ def convert_from_levelx_like(recMeta, tracksMeta, tracks):
                                 natural_behavior=True,
                                 natural_exposure=True,)
     reference = omega_format.ReferenceRecording(road_users=road_users,
-                                                timestamps=omega_format.Timestamps(val=tracks.frame.unique()/recMeta.iloc[0].frameRate),
+                                                timestamps=tracks.frame.unique()/recMeta.iloc[0].frameRate,
                                                 meta_data=meta
                                                )
     reference.resolve()

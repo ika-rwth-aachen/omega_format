@@ -1,25 +1,31 @@
+import io
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
-from pydantic.dataclasses import Field
 from itertools import chain
 from pathlib import Path
-from typing import Optional, Union, List
-import io
+from typing import List, Optional, Union
 import h5py
 import numpy as np
+import pydantic_numpy.typing as pnd
+from pydantic.dataclasses import Field
 from tqdm import tqdm
 
-from .dynamics.road_user import RoadUser
 from .dynamics.misc_object import MiscObject
+from .dynamics.road_user import RoadUser
 from .enums import ReferenceTypes
 from .meta_data import MetaData
-from .reference_resolving import InputClassBase, DictWithProperties, ListWithProperties, require_group
+from .reference_resolving import (
+    DictWithProperties,
+    InputClassBase,
+    ListWithProperties,
+    require_group,
+)
 from .road.road import Road
 from .road.state import State
-from .timestamps import Timestamps
-from .weather.weather import Weather
-from concurrent.futures import ThreadPoolExecutor
 from .settings import get_settings
+from .weather.weather import Weather
+
 
 def is_road_user(obj):
     return 'is_data_recorder' in obj.attrs or 'isDataRecorder' in obj.attrs
@@ -31,7 +37,7 @@ class ReferenceRecording(InputClassBase):
     Class that represents the OMEGAFormat Reference Recording in an object-oriented manner.
     """
     meta_data: MetaData = Field(default_factory=MetaData)
-    timestamps: Timestamps = Field(default_factory=Timestamps)
+    timestamps: pnd.NpNDArray = Field(default_factory=np.array)
     ego_id: Optional[str] = None
     ego_vehicle: Optional[RoadUser] = None
     weather: Optional[Weather] = None
@@ -50,10 +56,8 @@ class ReferenceRecording(InputClassBase):
         if isinstance(filename, io.BytesIO) or Path(filename).is_file():
             with h5py.File(filename, 'r') as file:
                 func = cls if validate else cls.model_construct
-                tfunc = Timestamps if validate else Timestamps.model_construct
                 if legacy is None and file.attrs['formatVersion'] in ['v3.1', 'v3.0']:
                     legacy='v3.1'
-                    
                 if legacy=='v3.1':
                     self = func(
                         roads=Road.convert2objects(file, "road", True, validate=validate, legacy=legacy),
@@ -61,7 +65,7 @@ class ReferenceRecording(InputClassBase):
                         misc_objects=DictWithProperties({f'M{k}': v for k, v in MiscObject.convert2objects(file, "miscObject", True, validate=validate, legacy=legacy).items()}),
                         road_users=DictWithProperties({f'RU{k}': v for k,v in RoadUser.convert2objects(file, "roadUser", True, validate=validate, legacy=legacy).items()}),
                         weather=Weather.from_hdf5(file['weather'], validate=validate, legacy=legacy) if require_group(file, "weather") else None,
-                        timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
+                        timestamps=file['timestamps'][:] if require_group(file, "timestamps") else np.array([]),
                         meta_data=MetaData.from_hdf5(file, validate=validate, legacy=legacy)
                     )
                 elif legacy is not None:
@@ -71,7 +75,7 @@ class ReferenceRecording(InputClassBase):
                         roads=Road.convert2objects(file, "road", True, validate=validate),
                         states=State.convert2objects(file, "state", True, validate=validate),
                         weather=Weather.from_hdf5(file['weather'], validate=validate) if require_group(file, "weather") else None,
-                        timestamps=tfunc(val=file['timestamps'][:]) if require_group(file, "timestamps") else Timestamps(),
+                        timestamps=file['timestamps'][:] if require_group(file, "timestamps") else np.array([]),
                         meta_data=MetaData.from_hdf5(file, validate=validate),
                         misc_objects=DictWithProperties({k: MiscObject.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file.get('dynamicObjects', {}).items() if is_misc_object(o)}),
                         road_users=DictWithProperties({k: RoadUser.from_hdf5(o, validate=validate, legacy=legacy) for k, o in file.get('dynamicObjects', {}).items() if is_road_user(o)})
@@ -100,7 +104,7 @@ class ReferenceRecording(InputClassBase):
         with h5py.File(filename, 'w') as f:
             self.meta_data.to_hdf5(f)
 
-            f.create_dataset('timestamps', data=self.timestamps.val, **get_settings().hdf5_compress_args)
+            f.create_dataset('timestamps', data=self.timestamps, **get_settings().hdf5_compress_args)
 
             self.road_users.to_hdf5(f.require_group('dynamicObjects'))
             if self.ego_vehicle is not None:
@@ -115,12 +119,28 @@ class ReferenceRecording(InputClassBase):
                 self.weather.to_hdf5(f.require_group('weather'))
 
     def resolve(self, input_recording=None):
+        self.set_timestamps()
+        #self.set_polys()
         for kr, r in self.roads.items():
             r.idx = kr
             for lr, l in r.lanes.items():
                 l.idx = (kr, lr)
                 l.road = r
         super().resolve(input_recording=self)
+
+    def set_polys(self):
+        for r in self.road_users.values():
+            if r.polygon is None:
+                r._set_corners_and_polygon()
+        for m in self.misc_objects.values():
+            if m.polygon is None:
+                m._set_corners_and_polygon()
+                
+    def set_timestamps(self):
+        for r in self.road_users.values():
+            r._set_timestamps(self)
+        for m in self.misc_objects.values():
+            m._set_timestamps(self)
 
     @property
     def movable_objects(self):
@@ -144,14 +164,17 @@ class ReferenceRecording(InputClassBase):
     def structural_objects(self):
         return ListWithProperties(chain.from_iterable([r.structural_objects.values() for r in self.roads.values()]))
 
-    def cut_to_timespan(self, birth, death):
+    def cut_to_timespan(self, birth, death, inplace=True):
         """Mutates the object itself: Cuts all Objects in structure to the given timespan."""
+        if not inplace:
+            self = deepcopy(self)
         for prop in [p for p in [getattr(self,o) for o in dir(self) if not o.startswith('_')] if not callable(p) and not isinstance(p, ListWithProperties)]:
             try:
                 prop.cut_to_timespan(birth, death)
             except AttributeError:
                 pass
         self.resolve()
+        return self
 
     def extract_snippet(self, tp_id):
         if tp_id == self.ego_id:

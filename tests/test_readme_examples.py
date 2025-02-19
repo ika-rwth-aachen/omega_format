@@ -9,9 +9,9 @@ def test_create_omega():
                                                                         daytime=datetime.now(),
                                                                         reference_point_lat=50.786687,
                                                                         reference_point_lon=6.046312),
-                                        timestamps=omega_format.Timestamps(val=np.array([0])))
+                                        timestamps=np.array([0]))
     rr.road_users[0] = omega_format.RoadUser(type=omega_format.ReferenceTypes.RoadUserType.CAR,
-                                            sub_type=omega_format.ReferenceTypes.RoadUserSubTypeGeneral.REGULAR,
+                                            subtype=omega_format.ReferenceTypes.RoadUserSubTypeGeneral.REGULAR,
                                             birth=0,
                                             bb=omega_format.BoundingBox(vec=np.array([2,3,1])),
                                             tr=omega_format.Trajectory(pos_x=np.array([0]),
@@ -49,7 +49,7 @@ def test_part_create_omega():
                                                                         daytime=datetime.now(),
                                                                         reference_point_lat=50.786687,
                                                                         reference_point_lon=6.046312),
-                                        timestamps=omega_format.Timestamps(val=np.array([0])))
+                                        timestamps=np.array([0]))
     rr.road_users[0] = omega_format.RoadUser(type=omega_format.ReferenceTypes.RoadUserType.CAR,
                                             birth=0,
                                             bb=omega_format.BoundingBox(vec=np.array([2,3,1])),

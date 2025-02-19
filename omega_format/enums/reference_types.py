@@ -574,12 +574,12 @@ class RoadUserType(IntEnum):
     CARRIAGE = 13
 
     @staticmethod
-    def get_subtype(_type, sub_type_int):
+    def get_subtype(_type, subtype_int):
         try:
-            sub_type = globals()['RoadUserSubType'+_type.name]
+            subtype = globals()['RoadUserSubType'+_type.name]
         except KeyError:
-            sub_type = RoadUserSubTypeGeneral
-        return sub_type(sub_type_int)
+            subtype = RoadUserSubTypeGeneral
+        return subtype(subtype_int)
 
 class RoadUserSubTypeGeneral(IntEnum):
     REGULAR = 0

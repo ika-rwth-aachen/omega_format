@@ -27,7 +27,7 @@ class Trajectory(InputClassBase):
     heading_der: Optional[pnd.NpNDArray] = Field(default=None)
     
     # set automatically
-    polygon: pnd.NpNDArray|None = None
+    polygon: Optional[pnd.NpNDArray] = None
     
     @model_validator(mode='after')
     def check_array_length(self):

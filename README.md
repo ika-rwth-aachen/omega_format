@@ -5,6 +5,9 @@ The OMEGAFormat itself is specified in the [OMEGAFormat specification](doc/speci
 
 The OMEGAFormat was developed in the [German VVMethods Project](https://www.vvm-projekt.de). For a detailed insight in the role of the OMEGAFormat for Validation and Verification of Automated Driving Systems proposed by VVMethods, take a look at [Deliverable 13: Scenario-based Model of the ODD through Scenario Databases](https://www.vvm-projekt.de/securedl/sdl-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3Mzg1NzcxNjcsImV4cCI6MTczODY2NzE2NywidXNlciI6MCwiZ3JvdXBzIjpbMCwtMV0sImZpbGUiOiJmaWxlYWRtaW4vdXNlcl91cGxvYWQvUGFwZXJzL0RlbGl2ZXJhYmxlMTMtU2NlbmFyaW8tYmFzZWRfTW9kZWxfb2ZfdGhlX09ERF90aHJvdWdoX1NjZW5hcmlvX0RhdGFiYXNlcy5wZGYiLCJwYWdlIjoyM30.gHKKVt8Ufaw54lPVu6UJAPucRkbHn822glI80KZPD0E/Deliverable13-Scenario-based_Model_of_the_ODD_through_Scenario_Databases.pdf)
 
+
+Reference: [OMEGAFormat: A comprehensive format of traffic recordings for scenario extraction, Scholtes et. al 2022](https://scholar.google.com/scholar?cluster=11817504218720105408)
+
 Check out the tutorials in `./tutorials`
 - **[01_Introduction](tutorials/01_Introduction.ipynb):** Introduction to using the library and basic knowledge about the OMEGAFormat.
 - **[02_CLI_Usage](tutorials/02_CLI_Usage.ipynb):** Examples of how to use the command line interface.

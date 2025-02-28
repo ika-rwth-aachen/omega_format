@@ -24,8 +24,6 @@ The python library allows the conversion of following data formats into the OMEG
 
 - OpenDrive
 - LevelXData [tested with inD, highD and exiD]
-- Lanelet2 [comming soon]
-- OSI [planned]
 
 # Data Format
 The base of both, the reference data format and the perception data format is the [HDF5](https://www.hdfgroup.org/solutions/hdf5) file format. This library utilizes [h5py](https://www.h5py.org/) to interact with those.

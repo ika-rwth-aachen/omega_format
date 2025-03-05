@@ -12,14 +12,18 @@ name = "omega_format"
 authors = [
     {name = "ika - RWTH Aachen", email = "michael.schuldes@ika.rwth-aachen.de"},
 ]
-description = "OMEGAFormat Library (read/write/visualize)"
+description = "OMEGAFormat Library (read/write/visualize): A Comprehensive Format of Traffic Recordings for Scenario Extraction"
 readme = "README.md"
 requires-python = ">=3.9"
-keywords = ["one", "two"]
-license = {text = "BSD-3-Clause"}
+keywords = ["automated driving", "traffic", "scenario"]
+license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: None",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
@@ -37,7 +41,7 @@ dependencies = [
     'pyproj',
     'lxml'
 ]
-version = "4.4"
+version = "4.4.0"
 
 [project.optional-dependencies]
 visualization = ['pyqtgraph', 'pyqt5']

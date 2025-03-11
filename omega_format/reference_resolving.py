@@ -114,7 +114,7 @@ class DictWithProperties(UserDict):
             if hasattr(self[k], 'in_timespan') and callable(self[k].in_timespan) and not self[k].in_timespan(birth,
                                                                                                              death, ):
                 del self[k]
-            else:
+            elif hasattr(self[k], 'in_timespan'):
                 self[k].cut_to_timespan(birth, death)
 
     def to_hdf5(self, group: Group):

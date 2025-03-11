@@ -168,11 +168,12 @@ class ReferenceRecording(InputClassBase):
         """Mutates the object itself: Cuts all Objects in structure to the given timespan."""
         if not inplace:
             self = deepcopy(self)
-        for prop in [p for p in [getattr(self,o) for o in dir(self) if not o.startswith('_')] if not callable(p) and not isinstance(p, ListWithProperties)]:
+        for prop in [getattr(self, o) for o in dir(self) if not o.startswith('_') if not callable(getattr(self,o)) and hasattr(getattr(self,o), 'cut_to_timespan')]:
             try:
                 prop.cut_to_timespan(birth, death)
             except AttributeError:
                 pass
+        self.timestamps = self.timestamps[birth:death+1]
         self.resolve()
         return self
 

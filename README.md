@@ -1,3 +1,6 @@
+> [!WARNING]
+> OMEGAFormat is deprecated in favor of [omega-prime](https://github.com/ika-rwth-aachen/omega-prime), which is developed as part of the [SYNERGIES project](https://synergies-ccam.eu/). Its utilization of [ASAM OpenDRIVE](https://publications.pages.asam.net/standards/ASAM_OpenDRIVE/ASAM_OpenDRIVE_Specification/latest/specification/index.html) and [ASAM Open-Simulation-Interface](https://www.asam.net/standards/detail/osi/), makes it easier to adopt and increases the compatibility with other tools.
+
 # ![](./omega_format/visualization/ui/icon.svg) OMEGAFormat - Python Library
 The OMEGAFormat is a data foramt for storing reference and perception data from pilotings, test drives and simulation in urban traffic (and highway). It stores object-list-based trajectory information about dynamic objects together with map information and more. This module enables the creation, and visualization of data conforming to this data format. Additionally, it can check files for conformance and perform basic sanity checks on the data and convert data in OpenDrive and LevelXData data format into the OMEGAFormat.
 
